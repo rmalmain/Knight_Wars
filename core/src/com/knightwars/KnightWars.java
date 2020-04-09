@@ -1,24 +1,18 @@
 package com.knightwars;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.knightwars.FrontEnd.*;
+import com.knightwars.userInterface.*;
 
 public class KnightWars extends Game {
 
-	public SpriteBatch batch;
-	public BitmapFont font;
-	private GameScreen front;
+	private Display display;
 	
 	@Override
 	public void create () {
-		front = new GameScreen(this);
-		batch = new SpriteBatch();
-		font = new BitmapFont(); //Use LibGDX's default Arial font.
-		this.setScreen(new MainMenuScreen(this));
+		display = new Display(this);
+		display.displayMainMenu();
 	}
 
 	@Override
@@ -28,6 +22,5 @@ public class KnightWars extends Game {
 	
 	@Override
 	public void dispose () {
-		front.dispose();
 	}
 }

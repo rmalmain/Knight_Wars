@@ -1,19 +1,28 @@
-package com.knightwars.FrontEnd;
+package com.knightwars.userInterface;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.GL20;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.knightwars.KnightWars;
 
 public class MainMenuScreen implements Screen {
 
+    private final Display display;
     private final KnightWars game;
-    private OrthographicCamera camera;
+    private final SpriteBatch batch;
+    private final BitmapFont font;
+    private final OrthographicCamera camera;
 
-    public MainMenuScreen(final KnightWars game) {
-        this.game = game;
+
+    public MainMenuScreen(Display display) {
+        this.display = display;
+        game = display.getGame();
+        batch = new SpriteBatch();
+        font = new BitmapFont();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 500, 500);
     }
@@ -29,15 +38,16 @@ public class MainMenuScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
 
-        game.batch.begin();
-        game.font.draw(game.batch, "Welcome to KnightWars! ", 100, 150);
-        game.font.draw(game.batch, "Tap anywhere to begin!", 100, 100);
-        game.batch.end();
+        batch.setProjectionMatrix(camera.combined);
+
+        batch.begin();
+        font.draw(batch, "Welcome to KnightWars! ", 100, 150);
+        font.draw(batch, "Tap anywhere to begin!", 100, 100);
+        batch.end();
 
         if (Gdx.input.isTouched()) {
-            game.setScreen(new GameScreen(game));
+            display.displayGame();
             dispose();
         }
     }
