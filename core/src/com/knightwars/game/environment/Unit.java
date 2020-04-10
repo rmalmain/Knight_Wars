@@ -1,5 +1,7 @@
 package com.knightwars.game.environment;
 
+import com.badlogic.gdx.math.Vector2;
+
 public class Unit {
     private Player player;
     private Path path;
@@ -13,7 +15,7 @@ public class Unit {
         return this.player;
     }
 
-    public Point getCoordinates() {
+    public Vector2 getCoordinates() {
         return this.path.getCoordinates();
     }
 
