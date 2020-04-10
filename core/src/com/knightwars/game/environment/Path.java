@@ -1,4 +1,4 @@
-package com.knightwars.BackEnd.Game.Map;
+package com.knightwars.game.environment;
 
 public class Path {
     private Point startingPoint;
