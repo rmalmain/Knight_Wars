@@ -7,7 +7,3 @@ public class GameManager {
 
     public void update(int dt) {}
 }
-
-/*
-init avec un map, nb de joueurs..
-interaction entre front et back */
