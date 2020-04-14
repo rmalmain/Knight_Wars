@@ -2,17 +2,14 @@ package com.knightwars.userInterface;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.GL20;
-
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.knightwars.KnightWars;
 
 public class MainMenuScreen implements Screen {
 
     private final Display display;
-    private final KnightWars game;
     private final SpriteBatch batch;
     private final BitmapFont font;
     private final OrthographicCamera camera;
@@ -20,7 +17,6 @@ public class MainMenuScreen implements Screen {
 
     public MainMenuScreen(Display display) {
         this.display = display;
-        game = display.getGame();
         batch = new SpriteBatch();
         font = new BitmapFont();
         camera = new OrthographicCamera();
