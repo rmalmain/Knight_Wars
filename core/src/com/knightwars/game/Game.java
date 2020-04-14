@@ -1,3 +1,5 @@
+/* Nom à changer ! Game déjà utilisé par Libgdx.
+
 package com.knightwars.game;
 
 public class Game {
@@ -11,4 +13,4 @@ public class Game {
 
         this.map = environment.MapFactory.createMap();
     }
-}
+}*/

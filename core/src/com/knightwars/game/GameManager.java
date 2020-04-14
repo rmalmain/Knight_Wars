@@ -1,3 +1,4 @@
+/*
 package com.knightwars.game;
 
 public class GameManager {
@@ -6,4 +7,4 @@ public class GameManager {
     GameManager() { this.game = new Game(); }
 
     public void update(int dt) {}
-}
+}*/
