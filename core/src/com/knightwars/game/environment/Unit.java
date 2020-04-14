@@ -1,3 +1,4 @@
+/*
 package com.knightwars.game.environment;
 
 import com.badlogic.gdx.math.Vector2;
@@ -24,3 +25,4 @@ public class Unit {
     }
 
 }
+*/
