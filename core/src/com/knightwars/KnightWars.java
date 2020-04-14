@@ -1,17 +1,18 @@
 package com.knightwars;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.knightwars.userInterface.*;
+import com.knightwars.game.KnightWarsGame;
+import com.knightwars.userInterface.Display;
 
 public class KnightWars extends Game {
 
-	private Display display;
-	
+	public KnightWarsGame gameState;
+
 	@Override
 	public void create () {
-		display = new Display(this);
+		gameState = new KnightWarsGame();
+
+		Display display = new Display(this, gameState);
 		display.displayMainMenu();
 	}
 

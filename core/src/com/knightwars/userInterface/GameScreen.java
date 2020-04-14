@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.knightwars.game.KnightWarsGame;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,8 @@ import java.util.List;
 public class GameScreen implements Screen {
 
     private final Display display;
+    private final KnightWarsGame gameState;
+
     private final FitViewport viewport;
     private final SpriteBatch batch;
     private final Sprite spriteRedUnit;
@@ -26,14 +29,15 @@ public class GameScreen implements Screen {
 
     public static final float SCALE = 320f;
 
-    public GameScreen(final Display display) {
+    public GameScreen(final Display display, KnightWarsGame gameState) {
         this.display = display;
+        this.gameState = gameState;
         batch = new SpriteBatch();
         spriteRedUnit = new Sprite(new Texture("red_unit.png"));
         spriteRedBuilding = new Sprite(new Texture("red_building.png"));
 
-        // TODO: Fetch the map size from the game state
-        mapSize = new Vector2(3f, 2f);
+        // Fetch the map size from the game state
+        mapSize = (Vector2) gameState.getMap().get("size"); //new Vector2(3f, 2f);
 
         // Constructs a new OrthographicCamera, using the given viewport width and height
         // Height is multiplied by aspect ratio.
@@ -59,8 +63,8 @@ public class GameScreen implements Screen {
      */
     @Override
     public void render(float delta) {
-        // TODO: Fetch the coordinates of the buildings and units
-        List<Vector2> buildingCoordinates = new ArrayList<>();
+        // Fetch the coordinates of the buildings and units
+        List<Vector2> buildingCoordinates = (List<Vector2>) gameState.getMap().get("buildingsPositions");
         List<Vector2> unitCoordinates = new ArrayList<>();
         buildingCoordinates.add(new Vector2(0.5f, 0.5f));
         buildingCoordinates.add(new Vector2(0f, 0f));
