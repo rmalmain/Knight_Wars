@@ -10,7 +10,13 @@ import java.util.List;
 public class MapFactory {
 
     /**
-     * Generates map procedurally based on map's properties. Elements positions are stored into map's properties.
+     * Generates map procedurally based on map's properties.
+     * @param width Width or the map
+     * @param height Height of the map
+     * @param buildings Number of buildings on the map
+     * @param defaultPlayer Default owner of buildings
+     * @param threshold Minimum distance between buildings
+     * @return The map procedurally generated
      */
     public static Map createProceduralMap(float width, float height, int buildings, Player defaultPlayer, float threshold) {
         Map proceduralMap = new Map(width, height);
@@ -25,7 +31,7 @@ public class MapFactory {
         do {
             x = ((float) Math.random() * 0.9f + 0.05f) * width;
             y = ((float) Math.random() * 0.9f + 0.05f) * height;
-        } while (!isValidPoint(map, new Vector2(x, y), 0.4f)); // generating points until it is
+        } while (!isValidPoint(map, new Vector2(x, y), threshold)); // generating points until it is
         // not too close to other buildings
         return new Vector2(x, y);
     }
