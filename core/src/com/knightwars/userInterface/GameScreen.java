@@ -69,6 +69,7 @@ public class GameScreen implements Screen {
         List<Vector2> unitCoordinates = new ArrayList<>();
         unitCoordinates.add(new Vector2(1f, 1f));
 
+        // Clear last screen
         Gdx.gl.glClearColor(0, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
