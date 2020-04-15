@@ -25,6 +25,8 @@ public class GameScreen implements Screen {
     private final SpriteBatch batch;
     private final Sprite spriteRedUnit;
     private final Sprite spriteRedBuilding;
+    private final Sprite spriteBlueBuilding;
+    private final Sprite spriteNeutralBuilding;
     private final Camera camera;
     private final Vector2 mapSize;
 
@@ -36,6 +38,8 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
         spriteRedUnit = new Sprite(new Texture("red_unit.png"));
         spriteRedBuilding = new Sprite(new Texture("red_building.png"));
+        spriteBlueBuilding = new Sprite(new Texture("blue_building.png"));
+        spriteNeutralBuilding = new Sprite(new Texture("neutral_building.png"));
 
         // Fetch the map size from the game state
         mapSize = gameState.getMap().getSize(); //new Vector2(3f, 2f);
@@ -92,7 +96,7 @@ public class GameScreen implements Screen {
         batch.begin();
         for (Building building : buildings) {
             Vector2 buildingCoordinates = building.getCoordinates();
-            batch.draw(spriteRedBuilding, buildingCoordinates.x * SCALE - spriteRedBuilding.getWidth() / 2f,
+            batch.draw(determineBuildingSprite(building), buildingCoordinates.x * SCALE - spriteRedBuilding.getWidth() / 2f,
                     buildingCoordinates.y * SCALE - spriteRedUnit.getHeight() / 2f);
         }
         for (Vector2 unitCoordinate : unitCoordinates) {
@@ -100,6 +104,21 @@ public class GameScreen implements Screen {
                     unitCoordinate.y * SCALE - spriteRedBuilding.getHeight() / 2f);
         }
         batch.end();
+    }
+
+    private Sprite determineBuildingSprite(Building building) {
+        if (building.getOwner() == gameState.getPlayerRed()) {
+            return spriteRedBuilding;
+        }
+        else if (building.getOwner() == gameState.getPlayerBlue()) {
+            return spriteBlueBuilding;
+        }
+        else if (building.getOwner() == gameState.getPlayerNeutral()) {
+            return spriteNeutralBuilding;
+        }
+        else {
+            throw new UnknownPlayerException("There is no player associated with the building.");
+        }
     }
 
     /**
