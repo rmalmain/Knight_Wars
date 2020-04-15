@@ -22,7 +22,6 @@ public class MapFactory {
                 y = ((float) Math.random() * 0.9f + 0.05f) * height;
             } while (!isValidPoint(proceduralMap, new Vector2(x, y), 0.4f)); // generating points until it is
                                                                                 // not too close to other buildings
-
             proceduralMap.addBuilding(new Building(defaultPlayer, new Vector2(x, y)));
         }
         return proceduralMap;
@@ -34,7 +33,6 @@ public class MapFactory {
                 return false;
             }
         }
-
         return true;
     }
 
