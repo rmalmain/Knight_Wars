@@ -28,9 +28,9 @@ public class GameActorBuildings extends Actor {
         this.gameState = gameState;
 
         // Create the sprites
-        spriteRedBuilding = new Sprite(new Texture("red_building.png"));
-        spriteBlueBuilding = new Sprite(new Texture("blue_building.png"));
-        spriteNeutralBuilding = new Sprite(new Texture("neutral_building.png"));
+        spriteRedBuilding = new Sprite(new Texture("buildings/red_building.png"));
+        spriteBlueBuilding = new Sprite(new Texture("buildings/blue_building.png"));
+        spriteNeutralBuilding = new Sprite(new Texture("buildings/neutral_building.png"));
     }
 
     @Override
