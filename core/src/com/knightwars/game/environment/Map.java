@@ -16,5 +16,9 @@ public class Map {
         buildings.add(new Building(building));
     }
 
+    public Vector2 getSize() {
+        return new Vector2(size);
+    }
+
     public ArrayList<Building> getBuildings() { return buildings; }
 }
