@@ -21,3 +21,8 @@ Add the following line to gradle.properties
 ```
 org.gradle.java.home=PATH_TO_JAVA_1.8_JDK
 ```
+### Error "Could not reserve enough space for 1536000KB object heap"
+Please try to lower in gradle.properties the number in option '-Xmx1500m' in the following line :
+```
+org.gradle.jvmargs=-Xms128m -Xmx1500m
+```
