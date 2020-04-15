@@ -2,18 +2,15 @@ package com.knightwars;
 
 import com.badlogic.gdx.Game;
 import com.knightwars.game.GameManager;
-import com.knightwars.game.KnightWarsGame;
 import com.knightwars.userInterface.Display;
 
 public class KnightWars extends Game {
 
-	private GameManager gameManager;
-
 	@Override
 	public void create () {
-		gameManager = new GameManager();
+		GameManager gameManager = new GameManager();
 
-		Display display = new Display(this, gameManager.getKnightWarsGame());
+		Display display = new Display(this, gameManager);
 		display.displayMainMenu();
 	}
 

@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.knightwars.game.KnightWarsGame;
+import com.knightwars.game.GameManager;
 
 import static com.knightwars.userInterface.GameScreen.SCALE;
 
@@ -24,11 +24,11 @@ public class MainMenuScreen implements Screen {
     private final Stage stage;
 
 
-    public MainMenuScreen(final Display display, KnightWarsGame gameState) {
+    public MainMenuScreen(final Display display, GameManager gameManager) {
         SpriteBatch batch = new SpriteBatch();
 
         // Fetch the map size from the game state
-        Vector2 mapSize = gameState.getMap().getSize();
+        Vector2 mapSize = gameManager.getKnightWarsGame().getMap().getSize();
 
         // Constructs a new OrthographicCamera, using the given viewport width and height
         // Height is multiplied by aspect ratio.

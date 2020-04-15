@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.knightwars.game.GameManager;
 import com.knightwars.game.KnightWarsGame;
 import com.knightwars.userInterface.gameActors.GameActorBuildings;
 import com.knightwars.userInterface.gameActors.GameActorHUD;
@@ -29,14 +30,17 @@ public class GameScreen implements Screen {
     private final SpriteBatch batch;
     private final Camera camera;
     private final Vector2 mapSize;
+    private final GameManager gameManager;
 
     public static final float SCALE = 320f;
 
-    public GameScreen(final Display display, KnightWarsGame gameState) {
+    public GameScreen(final Display display, GameManager gameManager) {
         this.display = display;
+        this.gameManager = gameManager;
         batch = new SpriteBatch();
 
         // Fetch the map size from the game state
+        KnightWarsGame gameState = gameManager.getKnightWarsGame();
         mapSize = gameState.getMap().getSize();
 
         // Create a new camera
@@ -68,6 +72,10 @@ public class GameScreen implements Screen {
      */
     @Override
     public void render(float delta) {
+        // Update the backend
+        float dt = Gdx.graphics.getDeltaTime();
+        gameManager.update(dt);
+
         // Clear last screen
         Gdx.gl.glClearColor(0, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

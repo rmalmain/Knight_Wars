@@ -18,8 +18,8 @@ public class MainMenuBackground extends Actor {
     public MainMenuBackground(Camera camera, Vector2 mapSize) {
         this.camera = camera;
         this.mapSize = mapSize;
-        background = new Texture("menu-background.jpg");
-        title = new Texture("title.png");
+        background = new Texture("menu/menu-background.jpg");
+        title = new Texture("menu/title.png");
     }
 
     @Override
