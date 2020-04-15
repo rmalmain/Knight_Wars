@@ -4,6 +4,8 @@ import com.knightwars.game.environment.Map;
 import com.knightwars.game.environment.MapFactory;
 import com.knightwars.game.environment.Player;
 
+import java.util.ArrayList;
+
 import static com.badlogic.gdx.math.MathUtils.random;
 
 public class KnightWarsGame {
@@ -13,14 +15,15 @@ public class KnightWarsGame {
     public static final float BUILDING_GENERATION_THRESHOLD = 0.9f;
     public static final float BUILDING_COLLISION_THRESHOLD = 0.1f;
 
+    private ArrayList<Player> players;
     private Player playerRed, playerBlue, playerNeutral;
     private Map map;
 
     public KnightWarsGame() {
         // Players initialization
-        this.playerRed = new Player("Red Player", Player.ColorPlayer.RED);
-        this.playerBlue = new Player("Blue Player", Player.ColorPlayer.BLUE);
-        this.playerNeutral = new Player("Neutral Player", Player.ColorPlayer.NEUTRAL);
+        playerRed = new Player("Red Player", Player.ColorPlayer.RED);
+        playerBlue = new Player("Blue Player", Player.ColorPlayer.BLUE);
+        playerNeutral = new Player("Neutral Player", Player.ColorPlayer.NEUTRAL);
 
         this.map = MapFactory.createProceduralMap( // Map generation
                 WIDTH, HEIGHT, BUILDINGS_NUMBER, this.playerNeutral,
@@ -49,4 +52,8 @@ public class KnightWarsGame {
     public Player getPlayerNeutral() { return this.playerNeutral; }
 
     public Map getMap() { return map; }
+
+    public void update(float dt) {
+        map.update(dt);
+    }
 }

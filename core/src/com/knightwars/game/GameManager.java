@@ -9,7 +9,9 @@ public class GameManager {
     /** Update the game
      * @param dt time parameter
      */
-    public void update(float dt) {}
+    public void update(float dt) {
+        game.update(dt);
+    }
 
     public KnightWarsGame getKnightWarsGame() { return this.game; }
 }
