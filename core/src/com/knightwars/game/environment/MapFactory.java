@@ -14,17 +14,20 @@ public class MapFactory {
      */
     public static Map createProceduralMap(float width, float height, int buildings, Player defaultPlayer) {
         Map proceduralMap = new Map(width, height);
-
-        float x, y;
         for (int i = 0; i < buildings; i++) {
-            do {
-                x = ((float) Math.random() * 0.9f + 0.05f) * width;
-                y = ((float) Math.random() * 0.9f + 0.05f) * height;
-            } while (!isValidPoint(proceduralMap, new Vector2(x, y), 0.4f)); // generating points until it is
-                                                                                // not too close to other buildings
-            proceduralMap.addBuilding(new Building(defaultPlayer, new Vector2(x, y)));
+            proceduralMap.addBuilding(new Building(defaultPlayer, generateValidPoint(proceduralMap, width, height), 0));
         }
         return proceduralMap;
+    }
+
+    private static Vector2 generateValidPoint(Map map, float width, float height) {
+        float x, y;
+        do {
+            x = ((float) Math.random() * 0.9f + 0.05f) * width;
+            y = ((float) Math.random() * 0.9f + 0.05f) * height;
+        } while (!isValidPoint(map, new Vector2(x, y), 0.4f)); // generating points until it is
+        // not too close to other buildings
+        return new Vector2(x, y);
     }
 
     private static Boolean isValidPoint(Map map, Vector2 point, float threshold) {
