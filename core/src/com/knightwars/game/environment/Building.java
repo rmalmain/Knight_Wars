@@ -7,6 +7,7 @@ public class Building {
     private Vector2 coordinates;
     private int knights;
     private float hitPoints;
+    private float goldGeneration;
 
     /** Building constructor.
      * @param owner the owner of the building
@@ -18,6 +19,7 @@ public class Building {
         this.coordinates = new Vector2(coordinates);
         this.knights = knights;
         this.hitPoints = (float) knights;
+        this.goldGeneration = 1;
     }
 
     /** Copy a building.
@@ -28,6 +30,7 @@ public class Building {
         this.coordinates = new Vector2(building.coordinates);
         this.knights = building.knights;
         this.hitPoints = building.getHitPoints();
+        this.goldGeneration = building.getGoldGeneration();
     }
 
     /** owner setter
@@ -40,6 +43,8 @@ public class Building {
 
     /** Coordinates getter */
     public Vector2 getCoordinates() { return new Vector2(this.coordinates); }
+
+    public float getGoldGeneration() { return this.goldGeneration; }
 
     /** Number of knights setter
      * @param knights The number of knights of the building
@@ -65,7 +70,9 @@ public class Building {
     /** update building-related objects
      * @param dt time parameter
      */
-    public void update(float dt) {}
+    public void update(float dt) {
+        this.owner.addGold(goldGeneration*dt);
+    }
 
     /** Knights number getter */
     public int getKnights () { return this.knights; }
