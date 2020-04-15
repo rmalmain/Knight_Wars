@@ -37,7 +37,7 @@ public class GameScreen implements Screen {
         spriteRedBuilding = new Sprite(new Texture("red_building.png"));
 
         // Fetch the map size from the game state
-        mapSize = (Vector2) gameState.getMap().get("size"); //new Vector2(3f, 2f);
+        mapSize = (Vector2) gameState.getMap().get("size");
 
         // Constructs a new OrthographicCamera, using the given viewport width and height
         // Height is multiplied by aspect ratio.
@@ -66,10 +66,9 @@ public class GameScreen implements Screen {
         // Fetch the coordinates of the buildings and units
         List<Vector2> buildingCoordinates = (List<Vector2>) gameState.getMap().get("buildingsPositions");
         List<Vector2> unitCoordinates = new ArrayList<>();
-        buildingCoordinates.add(new Vector2(0.5f, 0.5f));
-        buildingCoordinates.add(new Vector2(0f, 0f));
         unitCoordinates.add(new Vector2(1f, 1f));
 
+        // Clear last screen
         Gdx.gl.glClearColor(0, 0.3f, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
