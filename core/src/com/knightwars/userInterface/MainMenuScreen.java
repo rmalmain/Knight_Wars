@@ -34,7 +34,7 @@ public class MainMenuScreen implements Screen {
         font = new BitmapFont();
 
         // Fetch the map size from the game state
-        mapSize = (Vector2) gameState.getMap().get("size");
+        mapSize = gameState.getMap().getSize();
 
         // Constructs a new OrthographicCamera, using the given viewport width and height
         // Height is multiplied by aspect ratio.
