@@ -4,7 +4,7 @@ public class Player {
 
     public enum ColorPlayer {NEUTRAL, BLUE, RED}
 
-    private int gold;
+    private float gold;
     private String name;
     private ColorPlayer color;
     private int unitLevel;
@@ -17,7 +17,7 @@ public class Player {
         this.name = name;
         this.color = color;
         this.unitLevel = 0;
-        this.gold = 50; // Default golds, to modify if necessary
+        this.gold = 50f; // Default golds, to modify if necessary
     }
 
     /* Name getter */
@@ -27,7 +27,25 @@ public class Player {
     public ColorPlayer getColor() { return this.color; }
 
     /* Gold getter */
-    public int getGold() { return this.gold; }
+    public float getGold() { return this.gold; }
+
+    /** Add golds to the player
+     * @param gold golds to give at the player.
+     */
+    public void addGold(float gold) { this.gold += gold; }
+
+    /** remove golds from the player
+     * @param gold golds to remove
+     * @throws NotEnoughGoldException raised if the player has not enough golds
+     */
+    public void removeGold(float gold) throws NotEnoughGoldException {
+        if (this.gold < gold) {
+            throw new NotEnoughGoldException("The player has not enough gold.");
+        }
+        else {
+            this.gold -= gold;
+        }
+    }
 
     public int getUnitLevel() { return this.unitLevel; }
 
