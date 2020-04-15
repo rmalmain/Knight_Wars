@@ -53,7 +53,7 @@ public class MainMenuScreen implements Screen {
         });
 
         // Create the options button
-        TextButton optionsButton = new TextButton("Options", skin);
+        TextButton optionsButton = new TextButton("Settings", skin);
 
         // Create the quit button
         TextButton quitButton = new TextButton("Quit", skin);
@@ -70,7 +70,7 @@ public class MainMenuScreen implements Screen {
         final float buttonPadding = 10f; // Padding between each button
         final float buttonPosY = 400f;   //  Vertical position of the lowest button
 
-        // Create a table to contain the buttons
+        // Create a table to contain the buttons, scale the buttons and add padding
         Table menuTable = new Table();
         menuTable.add(playButton).width(playButton.getWidth()*buttonScale).height(playButton.getHeight()*buttonScale).pad(buttonPadding).row();
         menuTable.add(optionsButton).width(playButton.getWidth()*buttonScale).height(playButton.getHeight()*buttonScale).pad(buttonPadding).row();
@@ -110,6 +110,8 @@ public class MainMenuScreen implements Screen {
     public void hide() {}
 
     @Override
-    public void dispose() {}
+    public void dispose() {
+        stage.dispose();
+    }
 
 }
