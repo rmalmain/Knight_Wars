@@ -11,6 +11,12 @@ public class Building {
         this.coordinates = new Vector2(coordinates);
     }
 
+    public Building(Building building)
+    {
+        this.owner = building.owner;
+        this.coordinates = new Vector2(building.coordinates);
+    }
+
     /* Owner getter */
     public Player getOwner() { return this.owner; }
 
