@@ -6,6 +6,9 @@ public class GameManager {
 
     public GameManager() { this.game = new KnightWarsGame(); }
 
+    /* Update the game by a certain value */
     public void update(int dt) {}
 
+    /* KnightWarsGame getter */
+    public KnightWarsGame getKnightWarsGame() { return this.game; }
 }
