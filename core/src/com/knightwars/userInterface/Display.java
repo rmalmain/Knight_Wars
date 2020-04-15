@@ -22,6 +22,6 @@ public class Display {
     }
 
     public void displayMainMenu() {
-        gameDisplay.setScreen(new MainMenuScreen(this));
+        gameDisplay.setScreen(new MainMenuScreen(this, gameState));
     }
 }
