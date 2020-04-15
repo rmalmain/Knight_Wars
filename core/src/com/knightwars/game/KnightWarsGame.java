@@ -23,8 +23,8 @@ public class KnightWarsGame {
     *  Every other buildings are attributed to the neutral player.
     */
     public void attributeBuildings() {
-        int randomRed = random(map.getBuildings().size());
-        int randomBlue = random(map.getBuildings().size());
+        int randomRed = random(map.getBuildings().size()-1);
+        int randomBlue = random(map.getBuildings().size()-1);
         if (randomBlue == randomRed) {
             randomBlue++;
             randomBlue = randomBlue%(map.getBuildings().size());
