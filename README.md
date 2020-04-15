@@ -1,6 +1,8 @@
 # Knight Wars
 Knight Wars gameplay centers on capturing castles and other buildings by armies overwhelming the defending forces.
 
+![Menu screen](/android/assets/preview/menu-screen.jpg)
+
 ## Run on desktop (Linux)
 ```
 git clone https://github.com/rmalmain/Knight_Wars.git
