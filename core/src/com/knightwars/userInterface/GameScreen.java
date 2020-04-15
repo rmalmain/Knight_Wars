@@ -16,6 +16,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.knightwars.game.KnightWarsGame;
+import com.knightwars.userInterface.gameActors.GameActorBuildings;
+import com.knightwars.userInterface.gameActors.GameActorHUD;
+import com.knightwars.userInterface.gameActors.GameActorUnits;
 
 
 public class GameScreen implements Screen {
@@ -44,8 +47,9 @@ public class GameScreen implements Screen {
 
         // Create a stage and add all the actors to display
         stage = new Stage(viewport, batch);
-        stage.addActor(new GameScreenMapDisplay(gameState));
-        stage.addActor(new GameScreenHUD(gameState));
+        stage.addActor(new GameActorBuildings(gameState));
+        stage.addActor(new GameActorHUD(gameState));
+        stage.addActor(new GameActorUnits(gameState));
     }
 
 
@@ -122,5 +126,6 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         batch.dispose();
+        stage.dispose();
     }
 }
