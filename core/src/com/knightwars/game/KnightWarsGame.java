@@ -14,7 +14,7 @@ public class KnightWarsGame {
         this.playerBlue = new Player("Blue Player", Player.ColorPlayer.BLUE);
         this.playerNeutral = new Player("Neutral Player", Player.ColorPlayer.NEUTRAL);
 
-        this.map = MapFactory.createProceduralMap(3f, 2f, 10, this.playerNeutral);
+        this.map = MapFactory.createProceduralMap(3f, 2f, 10, this.playerNeutral, 0.4f);
 
         attributeBuildings();
     }

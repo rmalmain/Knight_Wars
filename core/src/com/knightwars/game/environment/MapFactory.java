@@ -12,15 +12,15 @@ public class MapFactory {
     /**
      * Generates map procedurally based on map's properties. Elements positions are stored into map's properties.
      */
-    public static Map createProceduralMap(float width, float height, int buildings, Player defaultPlayer) {
+    public static Map createProceduralMap(float width, float height, int buildings, Player defaultPlayer, float threshold) {
         Map proceduralMap = new Map(width, height);
         for (int i = 0; i < buildings; i++) {
-            proceduralMap.addBuilding(new Building(defaultPlayer, generateValidPoint(proceduralMap, width, height), 0));
+            proceduralMap.addBuilding(new Building(defaultPlayer, generateValidPoint(proceduralMap, width, height, threshold), 0));
         }
         return proceduralMap;
     }
 
-    private static Vector2 generateValidPoint(Map map, float width, float height) {
+    private static Vector2 generateValidPoint(Map map, float width, float height, float threshold) {
         float x, y;
         do {
             x = ((float) Math.random() * 0.9f + 0.05f) * width;
