@@ -4,51 +4,82 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.knightwars.game.KnightWarsGame;
 
 import static com.knightwars.userInterface.GameScreen.SCALE;
 
 public class MainMenuScreen implements Screen {
 
-    private final Display display;
-    private final SpriteBatch batch;
-    private final BitmapFont font;
-    private final OrthographicCamera camera;
     private final FillViewport viewport;
-    private final Vector2 mapSize;
-    private final Texture background;
-    private final Texture title;
+    private final Stage stage;
 
 
-    public MainMenuScreen(Display display, KnightWarsGame gameState) {
-        this.display = display;
-        batch = new SpriteBatch();
-        font = new BitmapFont();
+    public MainMenuScreen(final Display display, KnightWarsGame gameState) {
+        SpriteBatch batch = new SpriteBatch();
 
         // Fetch the map size from the game state
-        mapSize = gameState.getMap().getSize();
+        Vector2 mapSize = gameState.getMap().getSize();
 
         // Constructs a new OrthographicCamera, using the given viewport width and height
         // Height is multiplied by aspect ratio.
-        camera = new OrthographicCamera();
-        camera.position.set(mapSize.x * SCALE / 2, mapSize.y * SCALE / 2, 0);
+        OrthographicCamera camera = new OrthographicCamera();
         viewport = new FillViewport(mapSize.x * SCALE, mapSize.y * SCALE, camera);
 
-        background = new Texture("menu-background.jpg");
-        title = new Texture("title.png");
-    }
+        // Add the skin of the buttons
+        Skin skin = new Skin(Gdx.files.internal("buttons/glassy-ui.json"));
 
-    @Override
-    public void show() {
+        // Create the stage
+        stage = new Stage(viewport, batch);
+        Gdx.input.setInputProcessor(stage);
 
+        // Create the play button
+        TextButton playButton = new TextButton("Play", skin);
+        playButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stage.dispose();
+                display.displayGame();
+            }
+        });
+
+        // Create the options button
+        TextButton optionsButton = new TextButton("Options", skin);
+
+        // Create the quit button
+        TextButton quitButton = new TextButton("Quit", skin);
+        quitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stage.dispose();
+                Gdx.app.exit();
+            }
+        });
+
+        // Properties of the buttons
+        final float buttonScale = 1.3f;  // Scale of the buttons
+        final float buttonPadding = 10f; // Padding between each button
+        final float buttonPosY = 400f;   //  Vertical position of the lowest button
+
+        // Create a table to contain the buttons
+        Table menuTable = new Table();
+        menuTable.add(playButton).width(playButton.getWidth()*buttonScale).height(playButton.getHeight()*buttonScale).pad(buttonPadding).row();
+        menuTable.add(optionsButton).width(playButton.getWidth()*buttonScale).height(playButton.getHeight()*buttonScale).pad(buttonPadding).row();
+        menuTable.add(quitButton).width(playButton.getWidth()*buttonScale).height(playButton.getHeight()*buttonScale).pad(buttonPadding).row();
+        menuTable.setPosition(mapSize.x*SCALE/2f, buttonPosY, Align.center);
+
+        // Add the background and the buttons to the stage
+        stage.addActor(new MainMenuBackground(viewport.getCamera(), mapSize));
+        stage.addActor(menuTable);
     }
 
     @Override
@@ -57,23 +88,8 @@ public class MainMenuScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Update the camera and the inverse window projection
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
-        Vector3 pos = new Vector3();
-        pos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-        viewport.unproject(pos);
-
-        batch.begin();
-        batch.draw(background, 0, 0,mapSize.x * SCALE, mapSize.y * SCALE);
-        batch.draw(title, 0, 0,mapSize.x * SCALE, mapSize.y * SCALE);
-        font.draw(batch, "Tap anywhere to begin!", 420, 100);
-        batch.end();
-
-        if (Gdx.input.isTouched()) {
-            display.displayGame();
-            dispose();
-        }
+        // Draw the menu screen
+        stage.draw();
     }
 
     @Override
@@ -82,22 +98,18 @@ public class MainMenuScreen implements Screen {
     }
 
     @Override
-    public void pause() {
-
-    }
+    public void show() {}
 
     @Override
-    public void resume() {
-
-    }
+    public void pause() {}
 
     @Override
-    public void hide() {
-
-    }
+    public void resume() {}
 
     @Override
-    public void dispose() {
+    public void hide() {}
 
-    }
+    @Override
+    public void dispose() {}
+
 }
