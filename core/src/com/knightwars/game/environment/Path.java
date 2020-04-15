@@ -16,7 +16,6 @@ public class Path {
 
         this.totalTime = totalTime;
         this.elapsedTime = 0;
-
     }
 
     public Vector2 getArrivalPoint() { return this.arrivalPoint; }
@@ -31,7 +30,6 @@ public class Path {
 
     public void update(float dt) {
         elapsedTime += dt;
-        this.currentPosition = startingPoint.sub( arrivalPoint.sub(startingPoint).scl(elapsedTime/totalTime)); //current = start - (elapsed/total)*(arrival - start)
+        this.currentPosition = startingPoint.add((arrivalPoint.sub(startingPoint)).scl(elapsedTime/totalTime)); //current = start + (elapsed/total)*(arrival - start)
     }
-
 }
