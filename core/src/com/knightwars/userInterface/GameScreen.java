@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.knightwars.game.KnightWarsGame;
+import com.knightwars.game.environment.Building;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class GameScreen implements Screen {
         spriteRedBuilding = new Sprite(new Texture("red_building.png"));
 
         // Fetch the map size from the game state
-        mapSize = (Vector2) gameState.getMap().get("size"); //new Vector2(3f, 2f);
+        mapSize = gameState.getMap().getSize(); //new Vector2(3f, 2f);
 
         // Constructs a new OrthographicCamera, using the given viewport width and height
         // Height is multiplied by aspect ratio.
@@ -64,10 +65,8 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         // Fetch the coordinates of the buildings and units
-        List<Vector2> buildingCoordinates = (List<Vector2>) gameState.getMap().get("buildingsPositions");
+        ArrayList<Building> buildings = gameState.getMap().getBuildings();
         List<Vector2> unitCoordinates = new ArrayList<>();
-        buildingCoordinates.add(new Vector2(0.5f, 0.5f));
-        buildingCoordinates.add(new Vector2(0f, 0f));
         unitCoordinates.add(new Vector2(1f, 1f));
 
         Gdx.gl.glClearColor(0, 0.3f, 0, 1);
@@ -90,9 +89,10 @@ public class GameScreen implements Screen {
 
         // Draw the map elements
         batch.begin();
-        for (Vector2 buildingCoordinate : buildingCoordinates) {
-            batch.draw(spriteRedBuilding, buildingCoordinate.x * SCALE - spriteRedBuilding.getWidth() / 2f,
-                    buildingCoordinate.y * SCALE - spriteRedUnit.getHeight() / 2f);
+        for (Building building : buildings) {
+            Vector2 buildingCoordinates = building.getCoordinates();
+            batch.draw(spriteRedBuilding, buildingCoordinates.x * SCALE - spriteRedBuilding.getWidth() / 2f,
+                    buildingCoordinates.y * SCALE - spriteRedUnit.getHeight() / 2f);
         }
         for (Vector2 unitCoordinate : unitCoordinates) {
             batch.draw(spriteRedUnit, unitCoordinate.x * SCALE - spriteRedBuilding.getWidth() / 2f,
