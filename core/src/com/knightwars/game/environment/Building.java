@@ -17,6 +17,8 @@ public class Building {
         this.coordinates = new Vector2(building.coordinates);
     }
 
+    public void setOwner(Player player) { this.owner = player; }
+
     /* Owner getter */
     public Player getOwner() { return this.owner; }
 
