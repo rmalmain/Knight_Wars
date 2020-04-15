@@ -3,33 +3,29 @@ package com.knightwars.game.environment;
 import com.badlogic.gdx.math.Vector2;
 
 public class Path {
-    private Vector2 startingPoint;
-    private Vector2 arrivalPoint;
     private Vector2 currentPosition;
-    private float totalTime;
-    private float elapsedTime;
+    private Vector2 arrivalPoint;
+    private Unit unit;
 
-    public Path(Vector2 startingPoint, Vector2 arrivalPoint, float totalTime) {
-        this.startingPoint = startingPoint;
-        this.currentPosition = startingPoint;
-        this.arrivalPoint = arrivalPoint;
-
-        this.totalTime = totalTime;
-        this.elapsedTime = 0;
+    /** Path constructor
+     * @param startingPoint the starting point of the path
+     * @param arrivalPoint the arrival point of the path
+     * @param unit the unit being into the path
+     */
+    public Path(Vector2 startingPoint, Vector2 arrivalPoint, Unit unit) {
+        this.currentPosition = new Vector2(startingPoint);
+        this.arrivalPoint = new Vector2(arrivalPoint);
+        this.unit = unit;
     }
 
     public Vector2 getArrivalPoint() { return this.arrivalPoint; }
 
-    public Vector2 getStartingPoint() { return this.startingPoint; }
+    public Vector2 getCurrentPosition() { return this.currentPosition; }
 
-    public float getElapsedTime() { return this.elapsedTime; }
-
-    public float getTotalTime() { return this.totalTime; }
-
-    public Vector2 getCoordinates() { return this.currentPosition; }
-
+    /** Update the position of the unit
+     * @param dt time parameter
+     */
     public void update(float dt) {
-        elapsedTime += dt;
-        this.currentPosition = startingPoint.add((arrivalPoint.sub(startingPoint)).scl(elapsedTime/totalTime)); //current = start + (elapsed/total)*(arrival - start)
+        this.currentPosition = currentPosition.add(unit.getSpeed().scl(dt)); //current = current + speed*dt
     }
 }

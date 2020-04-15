@@ -15,30 +15,41 @@ public class MapFactory {
      * @param height Height of the map
      * @param buildings Number of buildings on the map
      * @param defaultPlayer Default owner of buildings
-     * @param threshold Minimum distance between buildings
+     * @param buildingGenerationThreshold Minimum distance between buildings
      * @return The map procedurally generated
      */
-    public static Map createProceduralMap(float width, float height, int buildings, Player defaultPlayer, float threshold) {
-        Map proceduralMap = new Map(width, height);
+    public static Map createProceduralMap(float width, float height, int buildings, Player defaultPlayer, float buildingGenerationThreshold, float buildingCollisionThreshold) {
+        Map proceduralMap = new Map(width, height, buildingCollisionThreshold);
         for (int i = 0; i < buildings; i++) {
-            proceduralMap.addBuilding(new Building(defaultPlayer, generateValidPoint(proceduralMap, width, height, threshold), 0));
+            proceduralMap.addBuilding(new Building(defaultPlayer, generateValidPoint(proceduralMap, buildingGenerationThreshold), 0));
         }
         return proceduralMap;
     }
 
-    private static Vector2 generateValidPoint(Map map, float width, float height, float threshold) {
+    /** Generate coordinates not too close to others buildings on a map.
+     * @param map The map where buildings are
+     * @param threshold threshold to know if a point is valid or not
+     * @return a valid point
+     */
+    private static Vector2 generateValidPoint(Map map, float threshold) {
         float x, y;
         do {
-            x = ((float) Math.random() * 0.9f + 0.05f) * width;
-            y = ((float) Math.random() * 0.9f + 0.05f) * height;
+            x = ((float) Math.random() * 0.9f + 0.05f) * map.getSize().x;
+            y = ((float) Math.random() * 0.9f + 0.05f) * map.getSize().y;
         } while (!isValidPoint(map, new Vector2(x, y), threshold)); // generating points until it is
         // not too close to other buildings
         return new Vector2(x, y);
     }
 
+    /** Know if a point is valid or not.
+     * @param map the map where buildings are
+     * @param point is this point valid ?
+     * @param threshold threshold to know if a point is valid or not
+     * @return true if the point is valid, false otherwise
+     */
     private static Boolean isValidPoint(Map map, Vector2 point, float threshold) {
         for (int i=0; i<map.getBuildings().size(); i++) {
-            if (point.dst(map.getBuildings().get(i).coordinates) < threshold) {
+            if (point.dst(map.getBuildings().get(i).getCoordinates()) < threshold) {
                 return false;
             }
         }
