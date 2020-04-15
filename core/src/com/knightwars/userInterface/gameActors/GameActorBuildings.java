@@ -2,7 +2,7 @@
  * Actor to display the buildings and units
  */
 
-package com.knightwars.userInterface;
+package com.knightwars.userInterface.gameActors;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -11,25 +11,23 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.knightwars.game.KnightWarsGame;
 import com.knightwars.game.environment.Building;
+import com.knightwars.userInterface.UnknownPlayerException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.knightwars.userInterface.GameScreen.SCALE;
 
-public class GameScreenMapDisplay extends Actor {
+public class GameActorBuildings extends Actor {
 
-    private final Sprite spriteRedUnit;
     private final Sprite spriteRedBuilding;
     private final Sprite spriteBlueBuilding;
     private final Sprite spriteNeutralBuilding;
     private final KnightWarsGame gameState;
 
-    public GameScreenMapDisplay(KnightWarsGame gameState) {
+    public GameActorBuildings(KnightWarsGame gameState) {
         this.gameState = gameState;
 
         // Create the sprites
-        spriteRedUnit = new Sprite(new Texture("red_unit.png"));
         spriteRedBuilding = new Sprite(new Texture("red_building.png"));
         spriteBlueBuilding = new Sprite(new Texture("blue_building.png"));
         spriteNeutralBuilding = new Sprite(new Texture("neutral_building.png"));
@@ -37,20 +35,14 @@ public class GameScreenMapDisplay extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        // Fetch the coordinates of the buildings and units
-        ArrayList<Building> buildings = gameState.getMap().getBuildings();
-        List<Vector2> unitCoordinates = new ArrayList<>();
-        unitCoordinates.add(new Vector2(1f, 1f));
+        // Fetch the coordinates of the buildings
+        List<Building> buildings = gameState.getMap().getBuildings();
 
-        // Draw the map elements
+        // Draw the buildings
         for (Building building : buildings) {
             Vector2 buildingCoordinates = building.getCoordinates();
             batch.draw(determineBuildingSprite(building), buildingCoordinates.x * SCALE - spriteRedBuilding.getWidth() / 2f,
-                    buildingCoordinates.y * SCALE - spriteRedUnit.getHeight() / 2f);
-        }
-        for (Vector2 unitCoordinate : unitCoordinates) {
-            batch.draw(spriteRedUnit, unitCoordinate.x * SCALE - spriteRedBuilding.getWidth() / 2f,
-                    unitCoordinate.y * SCALE - spriteRedBuilding.getHeight() / 2f);
+                    buildingCoordinates.y * SCALE - spriteRedBuilding.getHeight() / 2f);
         }
     }
 
