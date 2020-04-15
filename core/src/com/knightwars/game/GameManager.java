@@ -1,9 +1,11 @@
 package com.knightwars.game;
 
 public class GameManager {
-    private Game game;
 
-    GameManager() { this.game = new Game(); }
+    private KnightWarsGame game;
+
+    public GameManager() { this.game = new KnightWarsGame(); }
 
     public void update(int dt) {}
+
 }

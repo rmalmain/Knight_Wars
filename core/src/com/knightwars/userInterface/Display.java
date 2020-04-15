@@ -1,24 +1,27 @@
 package com.knightwars.userInterface;
 
 import com.knightwars.KnightWars;
+import com.knightwars.game.KnightWarsGame;
 
 public class Display {
 
-    public final KnightWars game;
+    public final KnightWars gameDisplay;
+    private final KnightWarsGame gameState;
 
-    public Display(KnightWars game) {
-        this.game = game;
+    public Display(KnightWars gameDisplay, KnightWarsGame gameState) {
+        this.gameDisplay = gameDisplay;
+        this.gameState = gameState;
     }
 
-    public KnightWars getGame() {
-        return game;
+    public KnightWars getGameDisplay() {
+        return gameDisplay;
     }
 
     public void displayGame() {
-        game.setScreen(new GameScreen(this));
+        gameDisplay.setScreen(new GameScreen(this, gameState));
     }
 
     public void displayMainMenu() {
-        game.setScreen(new MainMenuScreen(this));
+        gameDisplay.setScreen(new MainMenuScreen(this));
     }
 }
