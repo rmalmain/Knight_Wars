@@ -1,7 +1,9 @@
 package com.knightwars.game;
 
-import com.knightwars.game.environment.*;
-import java.util.HashMap;
+import com.knightwars.game.environment.Map;
+import com.knightwars.game.environment.MapFactory;
+import com.knightwars.game.environment.Player;
+
 import static com.badlogic.gdx.math.MathUtils.random;
 
 public class KnightWarsGame {
@@ -14,7 +16,7 @@ public class KnightWarsGame {
         this.playerBlue = new Player("Blue Player", Player.ColorPlayer.BLUE);
         this.playerNeutral = new Player("Neutral Player", Player.ColorPlayer.NEUTRAL);
 
-        this.map = MapFactory.createProceduralMap(3f, 2f, 10, this.playerNeutral, 0.6f);
+        this.map = MapFactory.createProceduralMap(6f, 4f, 10, this.playerNeutral, 0.4f);
 
         attributeBuildings();
     }
