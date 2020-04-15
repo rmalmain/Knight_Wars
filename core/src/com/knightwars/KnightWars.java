@@ -8,14 +8,12 @@ import com.knightwars.userInterface.Display;
 public class KnightWars extends Game {
 
 	private GameManager gameManager;
-	private KnightWarsGame game;
 
 	@Override
 	public void create () {
 		gameManager = new GameManager();
-		game = gameManager.getKnightWarsGame();
 
-		Display display = new Display(this, game);
+		Display display = new Display(this, gameManager.getKnightWarsGame());
 		display.displayMainMenu();
 	}
 
