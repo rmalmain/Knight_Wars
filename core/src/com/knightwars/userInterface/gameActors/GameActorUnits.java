@@ -12,9 +12,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.knightwars.game.KnightWarsGame;
+import com.knightwars.game.environment.Unit;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.knightwars.userInterface.GameScreen.SCALE;
 
@@ -22,6 +22,7 @@ public class GameActorUnits extends Actor {
 
     private final KnightWarsGame gameState;
     private final Animation<TextureRegion> unitAnimation;
+    private ArrayList<Unit> units;
     private float elapsedTime = 0;
 
     private static final float WALK_ANIM_WIDTH = 100f;
@@ -38,11 +39,11 @@ public class GameActorUnits extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         // Fetch the coordinates of the units
-        List<Vector2> unitCoordinates = new ArrayList<>();
-        unitCoordinates.add(new Vector2(1f, 1f));
+        units = gameState.getMap().getUnits();
 
         // Draw the units
-        for (Vector2 unitCoordinate : unitCoordinates) {
+        for (Unit unit : units) {
+            Vector2 unitCoordinate = unit.getCoordinates();
             elapsedTime += Gdx.graphics.getDeltaTime();
             TextureRegion currentUnitFrame = unitAnimation.getKeyFrame(elapsedTime, true);
             batch.draw(currentUnitFrame, unitCoordinate.x*SCALE - WALK_ANIM_WIDTH/2f,
