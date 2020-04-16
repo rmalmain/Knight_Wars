@@ -6,6 +6,7 @@ package com.knightwars.userInterface.gameActors;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -23,6 +24,7 @@ public class GameActorBuildings extends Actor {
     private final Sprite spriteBlueBuilding;
     private final Sprite spriteNeutralBuilding;
     private final KnightWarsGame gameState;
+    private final BitmapFont font;
 
     public GameActorBuildings(KnightWarsGame gameState) {
         this.gameState = gameState;
@@ -31,6 +33,7 @@ public class GameActorBuildings extends Actor {
         spriteRedBuilding = new Sprite(new Texture("buildings/red_building.png"));
         spriteBlueBuilding = new Sprite(new Texture("buildings/blue_building.png"));
         spriteNeutralBuilding = new Sprite(new Texture("buildings/neutral_building.png"));
+        font = new BitmapFont();
     }
 
     @Override
@@ -41,8 +44,12 @@ public class GameActorBuildings extends Actor {
         // Draw the buildings
         for (Building building : buildings) {
             Vector2 buildingCoordinates = building.getCoordinates();
+            // Draw the building
             batch.draw(determineBuildingSprite(building), buildingCoordinates.x * SCALE - spriteRedBuilding.getWidth() / 2f,
                     buildingCoordinates.y * SCALE - spriteRedBuilding.getHeight() / 2f);
+            // Draw the number of knights
+            font.draw(batch, String.valueOf(building.getKnights()), buildingCoordinates.x * SCALE,
+                    buildingCoordinates.y * SCALE + spriteRedBuilding.getHeight());
         }
     }
 
