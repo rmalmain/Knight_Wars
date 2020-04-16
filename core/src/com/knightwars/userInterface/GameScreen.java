@@ -31,12 +31,15 @@ public class GameScreen implements Screen {
     private final Camera camera;
     private final Vector2 mapSize;
     private final GameManager gameManager;
+    private final ShapeRenderer shapeRenderer;
+
 
     public static final float SCALE = 320f;
 
     public GameScreen(final Display display, GameManager gameManager) {
         this.display = display;
         this.gameManager = gameManager;
+        shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
 
         // Fetch the map size from the game state
@@ -85,7 +88,6 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Draw the map boundaries
-        ShapeRenderer shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(0f, 0.5f, 0f, 1f);
