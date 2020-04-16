@@ -59,7 +59,7 @@ public class GameScreen implements Screen {
         stage.addActor(new GameActorUnits(gameState));
 
         // Create the event handler and input processor to deal with mouse movements
-        EventHandler eventHandler = new EventHandler(gameState, camera);
+        EventHandler eventHandler = new EventHandler(gameState, viewport);
         Gdx.input.setInputProcessor(new GameInputProcessor(eventHandler));
     }
 
@@ -80,8 +80,7 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         // Update the backend
-        float dt = Gdx.graphics.getDeltaTime();
-        gameManager.update(dt);
+        gameManager.update(delta);
 
         // Clear last screen
         Gdx.gl.glClearColor(0, 0.3f, 0, 1);
