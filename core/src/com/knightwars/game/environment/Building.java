@@ -13,14 +13,14 @@ public abstract class Building {
     private float goldGeneration;
     private float knightGeneration;
     private float defenceLevel;
-    private boolean knightGrowth;
+    private boolean growableKnights;
 
     /** Building constructor.
      * @param owner the owner of the building
      * @param coordinates the coordinates of the building
      * @param knights the number of knights in the building
      */
-    public Building(Player owner, Vector2 coordinates, int knights, boolean knightGrowth) {
+    public Building(Player owner, Vector2 coordinates, int knights, boolean growableKnights) {
         this.owner = owner;
         this.coordinates = new Vector2(coordinates);
         this.knights = knights;
@@ -28,7 +28,7 @@ public abstract class Building {
         this.goldGeneration = 1;
         this.knightGeneration = 1;
         this.defenceLevel = 1f;
-        this.knightGrowth = knightGrowth;
+        this.growableKnights = growableKnights;
     }
 
     /** Copy a building.
@@ -42,12 +42,12 @@ public abstract class Building {
         this.goldGeneration = building.getGoldGeneration();
         this.knightGeneration = building.getKnightGeneration();
         this.defenceLevel = building.getDefenceLevel();
-        this.knightGrowth = building.getKnightGrowth();
+        this.growableKnights = building.getGrowableKnights();
     }
 
-    public boolean getKnightGrowth() { return this.knightGrowth; }
+    public boolean getGrowableKnights() { return this.growableKnights; }
 
-    public void setKnightGrowth(boolean knightGrowth) { this.knightGrowth = knightGrowth; }
+    public void setGrowableKnights(boolean growableKnights) { this.growableKnights = growableKnights; }
 
     public float getKnightGeneration() {
         return this.knightGeneration;
@@ -130,13 +130,13 @@ public abstract class Building {
      */
     public void update(float dt) {
         this.owner.addGold(this.getGoldGeneration()*dt);
-        if(this.knightGrowth) {
+        if(this.growableKnights) {
             this.addHitPoints(this.knightGeneration * dt);
         }
     }
 
     /** When it is called, the number of knights decreases by one. */
-    public void knightLeaves() throws NotEnoughKnightsException {
+    public void unitDeparture() throws NotEnoughKnightsException {
         this.removeKnights(1);
     }
 
@@ -154,12 +154,16 @@ public abstract class Building {
     /** Called when a unit arrives near the destination building
      * @param unit The unit which arrived near the building
      */
-    public void unitArrival(Unit unit) throws NotEnoughKnightsException {
+    public void unitArrival(Unit unit) throws AttackerWonFightException {
         if (unit.getOwner() == this.owner) {
             addKnights(1);
         }
         else {
-            this.fight(unit);
+            try {
+                this.fight(unit);
+            } catch (NotEnoughKnightsException e) {
+                throw new AttackerWonFightException("The attacker won the fight", unit.getOwner(), this);
+            }
         }
     }
 

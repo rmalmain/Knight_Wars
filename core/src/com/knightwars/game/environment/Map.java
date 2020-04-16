@@ -56,8 +56,8 @@ public class Map {
             if (unit.isArrived(BUILDING_COLLISION_THRESHOLD)) { // if units arrived to the building
                 try {
                     unit.getDestinationBuilding().unitArrival(unit);
-                } catch (NotEnoughKnightsException e) {
-                    // To complete...
+                } catch (AttackerWonFightException e) {
+                    e.getAttackedBuilding().setOwner(e.getAttackingPlayer());
                 }
                 this.deleteUnit(unit);
             }
@@ -65,5 +65,11 @@ public class Map {
         for(Building building : buildings) { // Update buildings
             building.update(dt);
         }
+    }
+
+    public void changeBuilding(Building oldBuilding, Building newBuilding) {
+        newBuilding.setKnights(oldBuilding.getKnights());
+        newBuilding.setGrowableKnights(oldBuilding.getGrowableKnights());
+        newBuilding.setOwner(oldBuilding.getOwner());
     }
 }
