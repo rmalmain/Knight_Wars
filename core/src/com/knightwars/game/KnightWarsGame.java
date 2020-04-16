@@ -12,8 +12,6 @@ public class KnightWarsGame {
     public static final float WIDTH = 6f;
     public static final float HEIGHT = 4f;
     public static final int BUILDINGS_NUMBER = 10;
-    public static final float BUILDING_GENERATION_THRESHOLD = 0.9f;
-    public static final float BUILDING_COLLISION_THRESHOLD = 0.1f;
 
     private ArrayList<Player> players;
     private Player playerRed, playerBlue, playerNeutral;
@@ -26,8 +24,7 @@ public class KnightWarsGame {
         playerNeutral = new Player("Neutral Player", Player.ColorPlayer.NEUTRAL);
 
         this.map = MapFactory.createProceduralMap( // Map generation
-                WIDTH, HEIGHT, BUILDINGS_NUMBER, this.playerNeutral,
-                BUILDING_GENERATION_THRESHOLD, BUILDING_COLLISION_THRESHOLD);
+                WIDTH, HEIGHT, BUILDINGS_NUMBER, this.playerNeutral);
 
         // Buildings attribution
         attributeBuildings();
