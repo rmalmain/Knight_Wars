@@ -7,7 +7,7 @@ public class Player {
     private float gold;
     private String name;
     private ColorPlayer color;
-    private int unitLevel;
+    private float unitLevel;
 
     /** Player constructor.
      * @param name The name of the player
@@ -16,7 +16,7 @@ public class Player {
     public Player(String name, ColorPlayer color) {
         this.name = name;
         this.color = color;
-        this.unitLevel = 0;
+        this.unitLevel = 0f;
         this.gold = 50f; // Default golds, to modify if necessary
     }
 
@@ -47,7 +47,7 @@ public class Player {
         }
     }
 
-    public int getUnitLevel() { return this.unitLevel; }
+    public float getUnitLevel() { return this.unitLevel; }
 
     /** Upgrade the units of a player by a level.
      */

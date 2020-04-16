@@ -3,26 +3,26 @@ package com.knightwars.game.environment;
 import com.badlogic.gdx.math.Vector2;
 
 public class Unit {
-    private Player player;
+    private Player owner;
     private Path path;
     private Vector2 speed;
     private Building destinationBuilding;
 
     /** Unit constructor.
-     * @param player the player owning the unit
+     * @param owner the player owning the unit
      * @param startingPoint the stating point of the unit
      * @param speed the speed of the unit
      * @param destinationBuilding the building where the unit goes
      */
-    public Unit(Player player, Vector2 startingPoint, float speed, Building destinationBuilding) {
-        this.player = player;
+    public Unit(Player owner, Vector2 startingPoint, float speed, Building destinationBuilding) {
+        this.owner = owner;
         this.destinationBuilding = destinationBuilding;
         this.speed = new Vector2(speed, speed);
         this.path = new Path(startingPoint, destinationBuilding.getCoordinates(), this);
     }
 
     public Player getOwner() {
-        return this.player;
+        return this.owner;
     }
 
     public Vector2 getSpeed() {
@@ -52,5 +52,9 @@ public class Unit {
      */
     public boolean isArrived(float threshold) {
         return this.getCoordinates().dst(this.getDestinationBuilding().getCoordinates()) < threshold;
+    }
+
+    public float getTotalAttack() {
+        return this.owner.getUnitLevel();
     }
 }
