@@ -2,8 +2,10 @@ package com.knightwars.game.environment;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
+import com.knightwars.game.KnightWarsGame;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 public class Map {
     public static final float BUILDING_COLLISION_THRESHOLD = 0.1f;
@@ -76,6 +78,7 @@ public class Map {
                     unit.getDestinationBuilding().unitArrival(unit);
                 } catch (AttackerWonFightException e) {
                     e.getAttackedBuilding().setOwner(e.getAttackingPlayer());
+                    e.getAttackedBuilding().setCanGenerateUnits(true);
                 }
                 unitsToDelete.add(unit);
             }
@@ -94,8 +97,10 @@ public class Map {
             ArrayList<Queue<Unit>> unitGroupToDelete = new ArrayList<>();
 
             for(Queue<Unit> unitGroup : unitsToSend){ // all units waiting are sent
-                addUnit(unitGroup.first());
-                unitGroup.removeFirst();
+                try {
+                    addUnit(unitGroup.first());
+                    unitGroup.removeFirst();
+                } catch (NoSuchElementException e){ continue; } // May be a bad idea ?
                 if (unitGroup.isEmpty()) {
                     unitGroupToDelete.add(unitGroup);
                 }
@@ -130,7 +135,7 @@ public class Map {
 
     public void changeBuilding(Building oldBuilding, Building newBuilding) {
         newBuilding.setKnights(oldBuilding.getKnights());
-        newBuilding.setGrowableKnights(oldBuilding.getGrowableKnights());
+        newBuilding.setCanGenerateUnits(oldBuilding.getCanGenerateUnits());
         newBuilding.setOwner(oldBuilding.getOwner());
     }
 }

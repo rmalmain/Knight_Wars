@@ -13,14 +13,14 @@ public abstract class Building {
     private float goldGeneration;
     private float knightGeneration;
     private float defenceLevel;
-    private boolean growableKnights;
+    private boolean canGenerateUnits;
 
     /** Building constructor.
      * @param owner the owner of the building
      * @param coordinates the coordinates of the building
      * @param knights the number of knights in the building
      */
-    public Building(Player owner, Vector2 coordinates, int knights, boolean growableKnights) {
+    public Building(Player owner, Vector2 coordinates, int knights, boolean canGenerateUnits) {
         this.owner = owner;
         this.coordinates = new Vector2(coordinates);
         this.knights = knights;
@@ -28,7 +28,7 @@ public abstract class Building {
         this.goldGeneration = 1;
         this.knightGeneration = 1;
         this.defenceLevel = 1f;
-        this.growableKnights = growableKnights;
+        this.canGenerateUnits = canGenerateUnits;
     }
 
     /** Copy a building.
@@ -42,12 +42,12 @@ public abstract class Building {
         this.goldGeneration = building.getGoldGeneration();
         this.knightGeneration = building.getKnightGeneration();
         this.defenceLevel = building.getDefenceLevel();
-        this.growableKnights = building.getGrowableKnights();
+        this.canGenerateUnits = building.getCanGenerateUnits();
     }
 
-    public boolean getGrowableKnights() { return this.growableKnights; }
+    public boolean getCanGenerateUnits() { return this.canGenerateUnits; }
 
-    public void setGrowableKnights(boolean growableKnights) { this.growableKnights = growableKnights; }
+    public void setCanGenerateUnits(boolean canGenerateUnits) { this.canGenerateUnits = canGenerateUnits; }
 
     public float getKnightGeneration() {
         return this.knightGeneration;
@@ -130,7 +130,7 @@ public abstract class Building {
      */
     public void update(float dt) {
         this.owner.addGold(this.getGoldGeneration()*dt);
-        if(this.growableKnights) {
+        if(this.canGenerateUnits) {
             this.addHitPoints(this.knightGeneration * dt);
         }
     }
