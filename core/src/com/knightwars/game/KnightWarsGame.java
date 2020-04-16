@@ -41,11 +41,11 @@ public class KnightWarsGame {
 
         map.getBuildings().get(randomRed).setOwner(playerRed);
         map.getBuildings().get(randomRed).setKnights(50);
-        map.getBuildings().get(randomRed).setGrowableKnights(true);
+        map.getBuildings().get(randomRed).setCanGenerateUnits(true);
 
         map.getBuildings().get(randomBlue).setOwner(playerBlue);
         map.getBuildings().get(randomBlue).setKnights(50);
-        map.getBuildings().get(randomBlue).setGrowableKnights(true);
+        map.getBuildings().get(randomBlue).setCanGenerateUnits(true);
     }
 
     public Player getPlayerRed() { return this.playerRed; }
