@@ -41,15 +41,7 @@ public class EventHandler {
         // Move the units from one building to another
         if (selectedBuilding != null && destinationBuilding != null) {
             System.out.println("Move from building at " + selectedBuildingCoords + " to building at " + destinationBuildingCoords);
-            try {
-                while(selectedBuilding.getKnights() > 0) {
-                    gameState.getMap().getUnits().add(new Unit(selectedBuilding.getOwner(),
-                            selectedBuilding.getCoordinates(), 1f, destinationBuilding));
-                    selectedBuilding.unitDeparture();
-                }
-            } catch (NotEnoughKnightsException e) {
-                e.printStackTrace();
-            }
+            gameState.getMap().sendUnit(selectedBuilding, destinationBuilding, 1f);
         }
     }
 

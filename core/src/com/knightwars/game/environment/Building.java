@@ -185,11 +185,14 @@ public abstract class Building {
      * @return The damages taken by the castle given the attack of the unit and the defence of the building
      */
     private float determineFightDamages (float enemyTotalAttack, float totalDefence) {
+        /*
         double a = Math.sqrt(26f)/5f;
         double b = 0.2428f;
 
         double functionParameter = totalDefence - enemyTotalAttack;
 
-        return (float) (b * Math.exp(-a * functionParameter));
+        return (float) (b * Math.exp(-a * functionParameter)); */
+
+        return 1f; // Pour l'instant c'est plus simple :))))
     }
 }
