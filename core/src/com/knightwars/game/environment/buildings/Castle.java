@@ -5,8 +5,8 @@ import com.knightwars.game.environment.Building;
 import com.knightwars.game.environment.Player;
 
 public class Castle extends Building {
-    public Castle(Player owner, Vector2 coordinates, int knights) {
-        super(owner, coordinates, knights);
+    public Castle(Player owner, Vector2 coordinates, int knights, boolean knightGrowth) {
+        super(owner, coordinates, knights, knightGrowth);
     }
 
     public Castle(Building building) {
