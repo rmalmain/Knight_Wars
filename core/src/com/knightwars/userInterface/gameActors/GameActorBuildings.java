@@ -27,11 +27,13 @@ public class GameActorBuildings extends Actor {
     private final Sprite spriteNeutralBuilding;
     private final KnightWarsGame gameState;
     private final BitmapFont font;
+    private final ShapeRenderer shapeRenderer;
     private Camera camera;
 
     public GameActorBuildings(KnightWarsGame gameState, Camera camera) {
         this.gameState = gameState;
         this.camera = camera;
+        shapeRenderer = new ShapeRenderer();
 
         // Create the sprites
         spriteRedBuilding = new Sprite(new Texture("buildings/red_building.png"));
@@ -51,7 +53,6 @@ public class GameActorBuildings extends Actor {
 
             batch.end();
             // Draw the boundaries of the building
-            ShapeRenderer shapeRenderer = new ShapeRenderer();
             shapeRenderer.setProjectionMatrix(camera.combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             shapeRenderer.setColor(1f, 0f, 0f, 1f);
