@@ -4,10 +4,12 @@
 
 package com.knightwars.userInterface.gameActors;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.knightwars.game.KnightWarsGame;
@@ -25,9 +27,11 @@ public class GameActorBuildings extends Actor {
     private final Sprite spriteNeutralBuilding;
     private final KnightWarsGame gameState;
     private final BitmapFont font;
+    private Camera camera;
 
-    public GameActorBuildings(KnightWarsGame gameState) {
+    public GameActorBuildings(KnightWarsGame gameState, Camera camera) {
         this.gameState = gameState;
+        this.camera = camera;
 
         // Create the sprites
         spriteRedBuilding = new Sprite(new Texture("buildings/red_building.png"));
@@ -44,12 +48,25 @@ public class GameActorBuildings extends Actor {
         // Draw the buildings
         for (Building building : buildings) {
             Vector2 buildingCoordinates = building.getCoordinates();
+
+            batch.end();
+            // Draw the boundaries of the building
+            ShapeRenderer shapeRenderer = new ShapeRenderer();
+            shapeRenderer.setProjectionMatrix(camera.combined);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.setColor(1f, 0f, 0f, 1f);
+            shapeRenderer.circle(buildingCoordinates.x*SCALE, buildingCoordinates.y*SCALE,
+                    Building.SELECTION_THRESHOLD*SCALE);
+            shapeRenderer.end();
+
+            batch.begin();
             // Draw the building
-            batch.draw(determineBuildingSprite(building), buildingCoordinates.x * SCALE - spriteRedBuilding.getWidth() / 2f,
-                    buildingCoordinates.y * SCALE - spriteRedBuilding.getHeight() / 2f);
+            batch.draw(determineBuildingSprite(building), buildingCoordinates.x*SCALE - spriteRedBuilding.getWidth()/2f,
+                    buildingCoordinates.y*SCALE - spriteRedBuilding.getHeight()/2f);
+
             // Draw the number of knights
-            font.draw(batch, String.valueOf(building.getKnights()), buildingCoordinates.x * SCALE,
-                    buildingCoordinates.y * SCALE + spriteRedBuilding.getHeight());
+            font.draw(batch, String.valueOf(building.getKnights()), buildingCoordinates.x*SCALE,
+                    buildingCoordinates.y*SCALE + spriteRedBuilding.getHeight());
         }
     }
 

@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.knightwars.game.KnightWarsGame;
 import com.knightwars.game.environment.Building;
+import com.knightwars.game.environment.Unit;
 
 import java.util.List;
 
@@ -27,10 +28,15 @@ public class EventHandler {
      * @param lastTouchUp   The coordinates of the last TouchUp event
      */
     public void handleDrag(Vector2 lastTouchDown, Vector2 lastTouchUp) {
+        // Unproject the screen coordinates in the game coordinates
         Vector2 selectedBuildingCoords = unprojectVector2(lastTouchDown);
         Vector2 destinationBuildingCoords = unprojectVector2(lastTouchUp);
+
+        // Get the selected buildings
         Building selectedBuilding = getSelectedBuilding(selectedBuildingCoords);
         Building destinationBuilding = getSelectedBuilding(destinationBuildingCoords);
+
+        // Move the units from one building to another
         if (selectedBuilding != null && destinationBuilding != null) {
             System.out.println("Move from building at " + selectedBuildingCoords + " to building at " + destinationBuildingCoords);
         }
