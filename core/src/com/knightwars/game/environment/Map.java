@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
 
 public class Map {
     public static final float BUILDING_COLLISION_THRESHOLD = 0.1f;
-    public static final float TIME_BETWEEN_UNITS = 0.2f;
+    public static final float TIME_BETWEEN_UNITS = 0.05f;
 
     private ArrayList<Building> buildings;
     private ArrayList<Queue<Unit>> unitsToSend;
