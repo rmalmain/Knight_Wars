@@ -18,6 +18,10 @@ public class Path {
         this.unit = unit;
     }
 
+    public Path(Building statingBuilding, Building arrivalBuilding, Unit unit) {
+        this(statingBuilding.getCoordinates(), arrivalBuilding.getCoordinates(), unit);
+    }
+
     public Vector2 getArrivalPoint() { return this.arrivalPoint; }
 
     public Vector2 getCurrentPosition() { return this.currentPosition; }
