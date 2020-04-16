@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.knightwars.game.KnightWarsGame;
 import com.knightwars.game.environment.Building;
+import com.knightwars.game.environment.NotEnoughKnightsException;
 import com.knightwars.game.environment.Unit;
 
 import java.util.List;
@@ -39,6 +40,15 @@ public class EventHandler {
         // Move the units from one building to another
         if (selectedBuilding != null && destinationBuilding != null) {
             System.out.println("Move from building at " + selectedBuildingCoords + " to building at " + destinationBuildingCoords);
+            try {
+                while(selectedBuilding.getKnights() > 0) {
+                    gameState.getMap().getUnits().add(new Unit(selectedBuilding.getOwner(),
+                            selectedBuilding.getCoordinates(), 10f, destinationBuilding));
+                    selectedBuilding.unitDeparture();
+                }
+            } catch (NotEnoughKnightsException e) {
+                e.printStackTrace();
+            }
         }
     }
 
