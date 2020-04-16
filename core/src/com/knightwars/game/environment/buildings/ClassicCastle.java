@@ -4,16 +4,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.knightwars.game.environment.Building;
 import com.knightwars.game.environment.Player;
 
-public class Castle extends Building {
-    public Castle(Player owner, Vector2 coordinates, int knights, boolean knightGrowth) {
+public class ClassicCastle extends Building {
+    public ClassicCastle(Player owner, Vector2 coordinates, int knights, boolean knightGrowth) {
         super(owner, coordinates, knights, knightGrowth);
     }
 
-    public Castle(Building building) {
+    public ClassicCastle(Building building) {
         super(building);
     }
 
-    public Castle Copy() {
-        return new Castle(this);
+    public ClassicCastle Copy() {
+        return new ClassicCastle(this);
     }
 }

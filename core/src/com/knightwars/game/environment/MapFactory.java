@@ -1,7 +1,7 @@
 package com.knightwars.game.environment;
 
 import com.badlogic.gdx.math.Vector2;
-import com.knightwars.game.environment.buildings.Castle;
+import com.knightwars.game.environment.buildings.ClassicCastle;
 
 
 public class MapFactory {
@@ -18,7 +18,7 @@ public class MapFactory {
     public static Map createProceduralMap(float width, float height, int buildings, Player defaultPlayer) {
         Map proceduralMap = new Map(width, height);
         for (int i = 0; i < buildings; i++) {
-            proceduralMap.addBuildingCopy(new Castle(defaultPlayer, generateValidPoint(proceduralMap), 20, false));
+            proceduralMap.addBuildingCopy(new ClassicCastle(defaultPlayer, generateValidPoint(proceduralMap), 20, false));
         }
         return proceduralMap;
     }
