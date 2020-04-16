@@ -1,10 +1,7 @@
 package com.knightwars.game.environment;
 
 import com.badlogic.gdx.math.Vector2;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import com.knightwars.game.environment.buildings.Castle;
 
 
 public class MapFactory {
@@ -15,13 +12,14 @@ public class MapFactory {
      * @param height Height of the map
      * @param buildings Number of buildings on the map
      * @param defaultPlayer Default owner of buildings
-     * @param buildingGenerationThreshold Minimum distance between buildings
+     * @param buildingGenerationThreshold Minimum distance between buildings. It must be chosen carefully, the game
+     *                                    may crash if it is too high.
      * @return The map procedurally generated
      */
     public static Map createProceduralMap(float width, float height, int buildings, Player defaultPlayer, float buildingGenerationThreshold, float buildingCollisionThreshold) {
         Map proceduralMap = new Map(width, height, buildingCollisionThreshold);
         for (int i = 0; i < buildings; i++) {
-            proceduralMap.addBuilding(new Building(defaultPlayer, generateValidPoint(proceduralMap, buildingGenerationThreshold), 0));
+            proceduralMap.addBuildingCopy(new Castle(defaultPlayer, generateValidPoint(proceduralMap, buildingGenerationThreshold), 20));
         }
         return proceduralMap;
     }

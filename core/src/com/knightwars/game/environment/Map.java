@@ -24,8 +24,8 @@ public class Map {
     /** Add a building to the map
      * @param building the building to add
      */
-    public void addBuilding(Building building) {
-        buildings.add(new Building(building));
+    public void addBuildingCopy(Building building) {
+        buildings.add(building.Copy());
     }
 
     /** Add a unit to the map
