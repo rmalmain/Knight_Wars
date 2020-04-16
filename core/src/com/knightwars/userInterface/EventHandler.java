@@ -44,7 +44,7 @@ public class EventHandler {
             try {
                 while(selectedBuilding.getKnights() > 0) {
                     gameState.getMap().getUnits().add(new Unit(selectedBuilding.getOwner(),
-                            selectedBuilding.getCoordinates(), 50f, destinationBuilding));
+                            selectedBuilding.getCoordinates(), 1f, destinationBuilding));
                     selectedBuilding.unitDeparture();
                 }
             } catch (NotEnoughKnightsException e) {

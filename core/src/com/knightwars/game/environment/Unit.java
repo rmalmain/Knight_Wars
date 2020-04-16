@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Unit {
     private Player owner;
     private Path path;
-    private Vector2 speed;
+    private float speed;
     private Building destinationBuilding;
 
     /** Unit constructor.
@@ -17,7 +17,7 @@ public class Unit {
     public Unit(Player owner, Vector2 startingPoint, float speed, Building destinationBuilding) {
         this.owner = owner;
         this.destinationBuilding = destinationBuilding;
-        this.speed = new Vector2(speed, speed);
+        this.speed = speed;
         this.path = new Path(startingPoint, destinationBuilding.getCoordinates(), this);
     }
 
@@ -25,12 +25,12 @@ public class Unit {
         return this.owner;
     }
 
-    public Vector2 getSpeed() {
+    public float getSpeed() {
         return this.speed;
     }
 
     public void setSpeed(float speed) {
-        this.speed = new Vector2(speed, speed);
+        this.speed = speed;
     }
 
     public Building getDestinationBuilding() { return this.destinationBuilding; }
