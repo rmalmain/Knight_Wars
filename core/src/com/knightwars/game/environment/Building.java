@@ -8,6 +8,7 @@ public class Building {
     private int knights;
     private float hitPoints;
     private float goldGeneration;
+    private float defenceLevel;
 
     /** Building constructor.
      * @param owner the owner of the building
@@ -20,6 +21,7 @@ public class Building {
         this.knights = knights;
         this.hitPoints = (float) knights;
         this.goldGeneration = 1;
+        this.defenceLevel = 1f;
     }
 
     /** Copy a building.
@@ -31,6 +33,7 @@ public class Building {
         this.knights = building.knights;
         this.hitPoints = building.getHitPoints();
         this.goldGeneration = building.getGoldGeneration();
+        this.defenceLevel = building.getDefenceLevel();
     }
 
     /** owner setter
@@ -62,20 +65,32 @@ public class Building {
         this.knights = (int) Math.ceil(this.hitPoints);
     }
 
-    /** Hit points getter
+    public void takeDamage(float hitPoints) {
+        this.setHitPoints(this.getHitPoints() - hitPoints);
+    }
+
+    /** Hit points getter.
      * @return the number of hit points of the building
      */
     public float getHitPoints() { return this.hitPoints; }
 
-    /** update building-related objects
+    /** update building-related objects.
      * @param dt time parameter
      */
     public void update(float dt) {
-        this.owner.addGold(goldGeneration*dt);
+        this.owner.addGold(this.getGoldGeneration()*dt);
     }
 
-    /** Knights number getter */
+    /** Knights number getter. */
     public int getKnights () { return this.knights; }
+
+    public float getDefenceLevel() { return this.defenceLevel; }
+
+    /** get total defence points of a building.
+     * The formula is totalDefence = BuildingDefence + allyUnitLevel
+     * @return the result of the above formula
+     */
+    public float getTotalDefence() { return (this.defenceLevel + this.owner.getUnitLevel()); }
 
     /** Called when a unit arrives near the destination building
      * @param unit The unit which arrived near the building
@@ -89,18 +104,29 @@ public class Building {
         }
     }
 
-    /** Called when a unit fights with a building
+    /** Called when a unit fights with a building.
      * @param unit the unit which fight with the building
      */
     private void fight(Unit unit) {
-        if (unit.getOwner().getUnitLevel() == this.owner.getUnitLevel()) {
-            setHitPoints(this.hitPoints - 1f);
-        }
-        else if (unit.getOwner().getUnitLevel() > this.owner.getUnitLevel()) {
-            setHitPoints(this.hitPoints - 2f);
-        }
-        else {
-            setHitPoints(this.hitPoints - 0.5f);
-        }
+        takeDamage(determineFightDamages(unit.getTotalAttack(), this.getTotalDefence()));
+    }
+
+    /** Determine damage taken in a fight between a unit and a building
+     * chosen function : damageTaken = b*exp(-a*(totalDefence - enemyTotalAttack))
+     * a and b are choosen such as:
+     *      damageTaken = 0.8 when (totalDefence - enemyTotalAttack) = 1
+     *      damageTaken = 1.3 when (totalDefence - enemyTotalAttack) = -1
+     * Very likely to change in near future, the formula requires in-depth testing
+     * @param enemyTotalAttack Total attack of the unit attacking the building
+     * @param totalDefence Total level of the building being under attack
+     * @return The damages taken by the castle given the attack of the unit and the defence of the building
+     */
+    private float determineFightDamages (float enemyTotalAttack, float totalDefence) {
+        double a = Math.sqrt(26f)/5f;
+        double b = 0.2428f;
+
+        double functionParameter = totalDefence - enemyTotalAttack;
+
+        return (float) (b * Math.exp(-a * functionParameter));
     }
 }
