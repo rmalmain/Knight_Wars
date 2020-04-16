@@ -3,8 +3,8 @@ package com.knightwars.game.environment;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Building {
-    public static final float SELECTION_THRESHOLD = 0.15f;
-    public static final int KNIGHT_GENERATION = 2;
+    public static final float SELECTION_THRESHOLD = 0.25f;
+    public static final int KNIGHT_GENERATION = 1;
     public static final float BUILDING_DEFENSE = 1f;
     public static final int GOLD_GENERATION = 1;
 
@@ -15,7 +15,7 @@ public abstract class Building {
     private float hitPoints; // ALWAYS use setters and getters to modify this attribute
     private float goldGeneration;
     private float knightGeneration;
-    private float defenceLevel;
+    private float defenseLevel;
     private boolean canGenerateUnits;
 
     /** Building constructor.
@@ -30,7 +30,7 @@ public abstract class Building {
         this.hitPoints = (float) knights;
         this.goldGeneration = GOLD_GENERATION;
         this.knightGeneration = KNIGHT_GENERATION;
-        this.defenceLevel = BUILDING_DEFENSE;
+        this.defenseLevel = BUILDING_DEFENSE;
         this.canGenerateUnits = canGenerateUnits;
     }
 
@@ -44,7 +44,7 @@ public abstract class Building {
         this.hitPoints = building.getHitPoints();
         this.goldGeneration = building.getGoldGeneration();
         this.knightGeneration = building.getKnightGeneration();
-        this.defenceLevel = building.getDefenceLevel();
+        this.defenseLevel = building.getDefenseLevel();
         this.canGenerateUnits = building.getCanGenerateUnits();
     }
 
@@ -146,13 +146,13 @@ public abstract class Building {
     /** Knights number getter. */
     public int getKnights () { return this.knights; }
 
-    public float getDefenceLevel() { return this.defenceLevel; }
+    public float getDefenseLevel() { return this.defenseLevel; }
 
-    /** get total defence points of a building.
-     * The formula is totalDefence = BuildingDefence + allyUnitLevel
+    /** get total defense points of a building.
+     * The formula is totalDefense = BuildingDefense + allyUnitLevel
      * @return the result of the above formula
      */
-    public float getTotalDefence() { return (this.defenceLevel + this.owner.getUnitLevel()); }
+    public float getTotalDefense() { return (this.defenseLevel + this.owner.getUnitLevel()); }
 
     /** Called when a unit arrives near the destination building
      * @param unit The unit which arrived near the building
@@ -174,25 +174,25 @@ public abstract class Building {
      * @param unit the unit which fight with the building
      */
     private void fight(Unit unit) throws NotEnoughKnightsException {
-        removeHitPoints(determineFightDamages(unit.getTotalAttack(), this.getTotalDefence()));
+        removeHitPoints(determineFightDamages(unit.getTotalAttack(), this.getTotalDefense()));
     }
 
     /** Determine damage taken in a fight between a unit and a building
-     * chosen function : damageTaken = b*exp(-a*(totalDefence - enemyTotalAttack))
+     * chosen function : damageTaken = b*exp(-a*(totalDefense - enemyTotalAttack))
      * a and b are choosen such as:
-     *      damageTaken = 0.8 when (totalDefence - enemyTotalAttack) = 1
-     *      damageTaken = 1.3 when (totalDefence - enemyTotalAttack) = -1
+     *      damageTaken = 0.8 when (totalDefense - enemyTotalAttack) = 1
+     *      damageTaken = 1.3 when (totalDefense - enemyTotalAttack) = -1
      * Very likely to change in near future, the formula requires in-depth testing
      * @param enemyTotalAttack Total attack of the unit attacking the building
-     * @param totalDefence Total level of the building being under attack
-     * @return The damages taken by the castle given the attack of the unit and the defence of the building
+     * @param totalDefense Total level of the building being under attack
+     * @return The damages taken by the castle given the attack of the unit and the defense of the building
      */
-    private float determineFightDamages (float enemyTotalAttack, float totalDefence) {
+    private float determineFightDamages (float enemyTotalAttack, float totalDefense) {
         /*
         double a = Math.sqrt(26f)/5f;
         double b = 0.2428f;
 
-        double functionParameter = totalDefence - enemyTotalAttack;
+        double functionParameter = totalDefense - enemyTotalAttack;
 
         return (float) (b * Math.exp(-a * functionParameter)); */
 

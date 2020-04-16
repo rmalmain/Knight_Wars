@@ -3,7 +3,7 @@ package com.knightwars.game.environment;
 import com.badlogic.gdx.math.Vector2;
 
 public class Unit {
-    public static final float DEFAULT_UNIT_SPEED = 1f;
+    public static final float DEFAULT_UNIT_SPEED = 0.5f;
 
     private Player owner;
     private Path path;

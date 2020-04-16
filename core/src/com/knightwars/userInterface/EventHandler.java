@@ -40,7 +40,6 @@ public class EventHandler {
 
         // Move the units from one building to another
         if (selectedBuilding != null && destinationBuilding != null) {
-            System.out.println("Move from building at " + selectedBuildingCoords + " to building at " + destinationBuildingCoords);
             gameState.getMap().sendUnit(selectedBuilding, destinationBuilding, 1f);
         }
     }
@@ -61,7 +60,7 @@ public class EventHandler {
      * Get the building corresponding the given coordinates
      *
      * @param coords The coordinates of the building
-     * @return The corresponding building, or null if no corresponding was found
+     * @return The corresponding building, or null if no corresponding building was found
      */
     private Building getSelectedBuilding(Vector2 coords) {
         // Fetch the coordinates of the buildings
