@@ -2,7 +2,7 @@ package com.knightwars.game.environment;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class Building {
+public abstract class Building {
     private Player owner;
     private Vector2 coordinates;
     private int knights;
@@ -35,6 +35,8 @@ public class Building {
         this.goldGeneration = building.getGoldGeneration();
         this.defenceLevel = building.getDefenceLevel();
     }
+
+    public abstract Building Copy();
 
     /** owner setter
      * @param player the owner of the building
