@@ -40,11 +40,11 @@ public class GameActorUnits extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         // Fetch the coordinates of the units
         units = gameState.getMap().getUnits();
+        elapsedTime += Gdx.graphics.getDeltaTime();
 
         // Draw the units
         for (Unit unit : units) {
             Vector2 unitCoordinate = unit.getCoordinates();
-            elapsedTime += Gdx.graphics.getDeltaTime();
             TextureRegion currentUnitFrame = unitAnimation.getKeyFrame(elapsedTime, true);
             batch.draw(currentUnitFrame, unitCoordinate.x*SCALE - WALK_ANIM_WIDTH/2f,
                     unitCoordinate.y*SCALE - WALK_ANIM_HEIGHT/2f, WALK_ANIM_WIDTH, WALK_ANIM_HEIGHT);

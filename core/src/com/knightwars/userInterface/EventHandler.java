@@ -3,6 +3,7 @@ package com.knightwars.userInterface;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.knightwars.game.KnightWarsGame;
 import com.knightwars.game.environment.Building;
 import com.knightwars.game.environment.NotEnoughKnightsException;
@@ -15,11 +16,11 @@ import static com.knightwars.userInterface.GameScreen.SCALE;
 public class EventHandler {
 
     private KnightWarsGame gameState;
-    private Camera camera;
+    private Viewport viewport;
 
-    public EventHandler(KnightWarsGame gameState, Camera camera) {
+    public EventHandler(KnightWarsGame gameState, Viewport viewport) {
         this.gameState = gameState;
-        this.camera = camera;
+        this.viewport = viewport;
     }
 
     /**
@@ -43,7 +44,7 @@ public class EventHandler {
             try {
                 while(selectedBuilding.getKnights() > 0) {
                     gameState.getMap().getUnits().add(new Unit(selectedBuilding.getOwner(),
-                            selectedBuilding.getCoordinates(), 10f, destinationBuilding));
+                            selectedBuilding.getCoordinates(), 50f, destinationBuilding));
                     selectedBuilding.unitDeparture();
                 }
             } catch (NotEnoughKnightsException e) {
@@ -60,7 +61,7 @@ public class EventHandler {
      */
     private Vector2 unprojectVector2(Vector2 vec2) {
         Vector3 vec3 = new Vector3(vec2.x, vec2.y, 0);
-        camera.unproject(vec3);
+        viewport.unproject(vec3);
         return new Vector2(vec3.x / GameScreen.SCALE, vec3.y / GameScreen.SCALE);
     }
 
