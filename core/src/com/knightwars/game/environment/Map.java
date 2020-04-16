@@ -51,6 +51,8 @@ public class Map {
      * @param dt the time parameter of the update
      */
     public void update(float dt) {
+        ArrayList<Unit> toDelete = new ArrayList<>();
+
         for(Unit unit : units) { // Update units
             unit.update(dt);
             if (unit.isArrived(BUILDING_COLLISION_THRESHOLD)) { // if units arrived to the building
@@ -59,9 +61,14 @@ public class Map {
                 } catch (AttackerWonFightException e) {
                     e.getAttackedBuilding().setOwner(e.getAttackingPlayer());
                 }
-                this.deleteUnit(unit);
+                toDelete.add(unit);
             }
         }
+
+        for(Unit unit : toDelete) {
+            this.units.remove(unit);
+        }
+
         for(Building building : buildings) { // Update buildings
             building.update(dt);
         }

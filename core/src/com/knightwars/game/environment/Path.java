@@ -17,7 +17,7 @@ public class Path {
         this.currentPosition = new Vector2(startingPoint);
         this.arrivalPoint = new Vector2(arrivalPoint);
         this.unit = unit;
-        this.directionVector = new Vector2(arrivalPoint).sub(new Vector2 (startingPoint));
+        this.directionVector = new Vector2(arrivalPoint).sub(new Vector2 (startingPoint)).nor();
     }
 
     public Path(Building statingBuilding, Building arrivalBuilding, Unit unit) {
