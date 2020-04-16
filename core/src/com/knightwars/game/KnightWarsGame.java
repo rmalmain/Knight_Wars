@@ -41,8 +41,12 @@ public class KnightWarsGame {
             randomBlue++;
             randomBlue = randomBlue%(map.getBuildings().size());
         }
+
         map.getBuildings().get(randomRed).setOwner(playerRed);
+        map.getBuildings().get(randomRed).setKnights(50);
+
         map.getBuildings().get(randomBlue).setOwner(playerBlue);
+        map.getBuildings().get(randomBlue).setKnights(50);
     }
 
     public Player getPlayerRed() { return this.playerRed; }
