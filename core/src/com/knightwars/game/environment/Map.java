@@ -118,19 +118,22 @@ public class Map {
      * @param percentage percentage of unit to send. Must be between 0 and 1
      */
     public void sendUnit(Building departureBuilding, Building arrivalBuilding, float percentage) {
-        if (percentage > 1f || percentage < 0f) {
-            throw new RuntimeException("The percentage of unit to send is wrong.");
+        if (departureBuilding.getOwner().getColor() != Player.ColorPlayer.NEUTRAL  // Neutral castles can't be selected as departure buildings
+                && departureBuilding != arrivalBuilding) { // Units can't be send to their own building
+            if (percentage > 1f || percentage < 0f) {
+                throw new RuntimeException("The percentage of unit to send is wrong.");
+            }
+
+            int knightNumberToSend = (int) Math.floor(departureBuilding.getKnights() * percentage);
+
+            Queue<Unit> unitsToMakeSpawn = new Queue<>();
+
+            for (int i = 0; i < knightNumberToSend; i++) {
+                unitsToMakeSpawn.addLast(new Unit(departureBuilding.getOwner(), departureBuilding, arrivalBuilding));
+            }
+
+            this.unitsToSend.add(unitsToMakeSpawn);
         }
-
-        int knightNumberToSend = (int) Math.floor(departureBuilding.getKnights() * percentage);
-
-        Queue<Unit> unitsToMakeSpawn = new Queue<>();
-
-        for (int i = 0; i < knightNumberToSend; i++) {
-            unitsToMakeSpawn.addLast(new Unit(departureBuilding.getOwner(), departureBuilding, arrivalBuilding));
-        }
-
-        this.unitsToSend.add(unitsToMakeSpawn);
     }
 
     public void changeBuilding(Building oldBuilding, Building newBuilding) {

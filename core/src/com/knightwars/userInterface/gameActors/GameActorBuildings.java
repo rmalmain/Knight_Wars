@@ -4,6 +4,7 @@
 
 package com.knightwars.userInterface.gameActors;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -30,6 +31,9 @@ public class GameActorBuildings extends Actor {
     private final ShapeRenderer shapeRenderer;
     private Camera camera;
 
+    private final static float fontOffsetX = -15f; // Horizontal position offset relative to the building
+    private final static float fontOffsetY = 120f; // Vertical position offset relative to the building
+
     public GameActorBuildings(KnightWarsGame gameState, Camera camera) {
         this.gameState = gameState;
         this.camera = camera;
@@ -39,7 +43,8 @@ public class GameActorBuildings extends Actor {
         spriteRedBuilding = new Sprite(new Texture("buildings/red_building.png"));
         spriteBlueBuilding = new Sprite(new Texture("buildings/blue_building.png"));
         spriteNeutralBuilding = new Sprite(new Texture("buildings/neutral_building.png"));
-        font = new BitmapFont();
+        font = new BitmapFont(Gdx.files.internal("fonts/MontserratBold.ttf.fnt"),
+                Gdx.files.internal("fonts/MontserratBold.ttf_0.png"), false);
     }
 
     @Override
@@ -51,23 +56,24 @@ public class GameActorBuildings extends Actor {
         for (Building building : buildings) {
             Vector2 buildingCoordinates = building.getCoordinates();
 
-            batch.end();
-            // Draw the boundaries of the building
-            shapeRenderer.setProjectionMatrix(camera.combined);
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            shapeRenderer.setColor(1f, 0f, 0f, 1f);
-            shapeRenderer.circle(buildingCoordinates.x*SCALE, buildingCoordinates.y*SCALE,
-                    Building.SELECTION_THRESHOLD*SCALE);
-            shapeRenderer.end();
+            // Draw the selection boundaries of the building
+//            batch.end();
+//            shapeRenderer.setProjectionMatrix(camera.combined);
+//            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+//            shapeRenderer.setColor(1f, 0f, 0f, 1f);
+//            shapeRenderer.circle(buildingCoordinates.x*SCALE, buildingCoordinates.y*SCALE,
+//                    Building.SELECTION_THRESHOLD*SCALE);
+//            shapeRenderer.end();
+//            batch.begin();
 
-            batch.begin();
             // Draw the building
-            batch.draw(determineBuildingSprite(building), buildingCoordinates.x*SCALE - spriteRedBuilding.getWidth()/2f,
-                    buildingCoordinates.y*SCALE - spriteRedBuilding.getHeight()/2f);
+            Sprite currentSprite = determineBuildingSprite(building);
+            batch.draw(currentSprite, buildingCoordinates.x*SCALE - currentSprite.getWidth()/2f,
+                    buildingCoordinates.y*SCALE - currentSprite.getHeight()/2f);
 
             // Draw the number of knights
-            font.draw(batch, String.valueOf(building.getKnights()), buildingCoordinates.x*SCALE,
-                    buildingCoordinates.y*SCALE + spriteRedBuilding.getHeight());
+            font.draw(batch, String.valueOf(building.getKnights()), buildingCoordinates.x*SCALE + fontOffsetX,
+                    buildingCoordinates.y*SCALE + fontOffsetY);
         }
     }
 
