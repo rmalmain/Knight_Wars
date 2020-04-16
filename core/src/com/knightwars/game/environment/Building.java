@@ -12,13 +12,14 @@ public abstract class Building {
     private float goldGeneration;
     private float knightGeneration;
     private float defenceLevel;
+    private boolean knightGrowth;
 
     /** Building constructor.
      * @param owner the owner of the building
      * @param coordinates the coordinates of the building
      * @param knights the number of knights in the building
      */
-    public Building(Player owner, Vector2 coordinates, int knights) {
+    public Building(Player owner, Vector2 coordinates, int knights, boolean knightGrowth) {
         this.owner = owner;
         this.coordinates = new Vector2(coordinates);
         this.knights = knights;
@@ -26,6 +27,7 @@ public abstract class Building {
         this.goldGeneration = 1;
         this.knightGeneration = 1;
         this.defenceLevel = 1f;
+        this.knightGrowth = knightGrowth;
     }
 
     /** Copy a building.
@@ -39,9 +41,14 @@ public abstract class Building {
         this.goldGeneration = building.getGoldGeneration();
         this.knightGeneration = building.getKnightGeneration();
         this.defenceLevel = building.getDefenceLevel();
+        this.knightGrowth = building.getKnightGrowth();
     }
 
-    protected float getKnightGeneration() {
+    public boolean getKnightGrowth() { return this.knightGrowth; }
+
+    public void setKnightGrowth(boolean knightGrowth) { this.knightGrowth = knightGrowth; }
+
+    public float getKnightGeneration() {
         return this.knightGeneration;
     }
 
@@ -122,7 +129,9 @@ public abstract class Building {
      */
     public void update(float dt) {
         this.owner.addGold(this.getGoldGeneration()*dt);
-        this.addHitPoints(this.knightGeneration*dt);
+        if(this.knightGrowth) {
+            this.addHitPoints(this.knightGeneration * dt);
+        }
     }
 
     /** When it is called, the number of knights decreases by one. */
