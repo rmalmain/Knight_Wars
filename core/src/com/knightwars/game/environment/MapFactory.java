@@ -19,7 +19,7 @@ public class MapFactory {
     public static Map createProceduralMap(float width, float height, int buildings, Player defaultPlayer, float buildingGenerationThreshold, float buildingCollisionThreshold) {
         Map proceduralMap = new Map(width, height, buildingCollisionThreshold);
         for (int i = 0; i < buildings; i++) {
-            proceduralMap.addBuildingCopy(new Castle(defaultPlayer, generateValidPoint(proceduralMap, buildingGenerationThreshold), 0));
+            proceduralMap.addBuildingCopy(new Castle(defaultPlayer, generateValidPoint(proceduralMap, buildingGenerationThreshold), 20));
         }
         return proceduralMap;
     }
