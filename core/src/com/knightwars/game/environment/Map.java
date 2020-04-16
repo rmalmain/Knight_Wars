@@ -55,7 +55,11 @@ public class Map {
         for(Unit unit : units) { // Update units
             unit.update(dt);
             if (unit.isArrived(this.buildingThreshold)) { // if units arrived to the building
-                unit.getDestinationBuilding().unitArrival(unit);
+                try {
+                    unit.getDestinationBuilding().unitArrival(unit);
+                } catch (NotEnoughKnightsException e) {
+                    // To complete...
+                }
                 this.deleteUnit(unit);
             }
         }

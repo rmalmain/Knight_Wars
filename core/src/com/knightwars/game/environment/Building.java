@@ -3,11 +3,14 @@ package com.knightwars.game.environment;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Building {
+    public static final float SELECTION_THRESHOLD = 0.2f;
+
     private Player owner;
     private Vector2 coordinates;
     private int knights; // ALWAYS use setters and getters to modify this attribute
     private float hitPoints; // ALWAYS use setters and getters to modify this attribute
     private float goldGeneration;
+    private float knightGeneration;
     private float defenceLevel;
 
     /** Building constructor.
@@ -21,6 +24,7 @@ public abstract class Building {
         this.knights = knights;
         this.hitPoints = (float) knights;
         this.goldGeneration = 1;
+        this.knightGeneration = 1;
         this.defenceLevel = 1f;
     }
 
@@ -33,7 +37,12 @@ public abstract class Building {
         this.knights = building.knights;
         this.hitPoints = building.getHitPoints();
         this.goldGeneration = building.getGoldGeneration();
+        this.knightGeneration = building.getKnightGeneration();
         this.defenceLevel = building.getDefenceLevel();
+    }
+
+    protected float getKnightGeneration() {
+        return this.knightGeneration;
     }
 
     public abstract Building Copy();
@@ -64,11 +73,43 @@ public abstract class Building {
      */
     public void setHitPoints(float hitPoints) {
         this.hitPoints = hitPoints;
-        this.knights = (int) Math.ceil(this.hitPoints);
+        this.knights = (int) Math.floor(this.hitPoints);
     }
 
-    public void takeDamage(float hitPoints) {
-        this.setHitPoints(this.getHitPoints() - hitPoints);
+    public void removeHitPoints(float hitPoints) throws NotEnoughKnightsException {
+        if (hitPoints >= this.hitPoints) {
+            setHitPoints(0f);
+            throw new NotEnoughKnightsException("There are not enough knights in the building.");
+        }
+        else {
+            this.setHitPoints(this.getHitPoints() - hitPoints);
+        }
+    }
+
+    public void removeKnights(int knights) throws NotEnoughKnightsException {
+        if (this.knights < knights) {
+            setKnights(0);
+            throw new NotEnoughKnightsException("There are not enough knights in the building.");
+        }
+        else {
+            setKnights(this.knights - knights);
+        }
+    }
+
+    public void addHitPoints(float hitPoints) {
+        this.setHitPoints(this.getHitPoints() + hitPoints);
+    }
+
+    /** Know if certain coordinates are close enough to the castle
+     * @param coordinates coordinates to test
+     * @return true if the coordinates are close enough to the castle, false otherwise
+     */
+    public Boolean isSelected(Vector2 coordinates) {
+        return coordinates.dst(this.coordinates) <= SELECTION_THRESHOLD;
+    }
+
+    public void addKnights(int knights) {
+        setKnights(this.knights + knights);
     }
 
     /** Hit points getter.
@@ -81,10 +122,13 @@ public abstract class Building {
      */
     public void update(float dt) {
         this.owner.addGold(this.getGoldGeneration()*dt);
+        this.addHitPoints(this.knightGeneration*dt);
     }
 
     /** When it is called, the number of knights decreases by one. */
-    public void knightLeaves() { setKnights(getKnights() - 1); }
+    public void knightLeaves() throws NotEnoughKnightsException {
+        this.removeKnights(1);
+    }
 
     /** Knights number getter. */
     public int getKnights () { return this.knights; }
@@ -100,9 +144,9 @@ public abstract class Building {
     /** Called when a unit arrives near the destination building
      * @param unit The unit which arrived near the building
      */
-    public void unitArrival(Unit unit) {
+    public void unitArrival(Unit unit) throws NotEnoughKnightsException {
         if (unit.getOwner() == this.owner) {
-            setKnights(this.knights + 1);
+            addKnights(1);
         }
         else {
             this.fight(unit);
@@ -112,8 +156,8 @@ public abstract class Building {
     /** Called when a unit fights with a building.
      * @param unit the unit which fight with the building
      */
-    private void fight(Unit unit) {
-        takeDamage(determineFightDamages(unit.getTotalAttack(), this.getTotalDefence()));
+    private void fight(Unit unit) throws NotEnoughKnightsException {
+        removeHitPoints(determineFightDamages(unit.getTotalAttack(), this.getTotalDefence()));
     }
 
     /** Determine damage taken in a fight between a unit and a building
