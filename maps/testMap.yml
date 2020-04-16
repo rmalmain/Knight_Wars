@@ -1,0 +1,25 @@
+# Test Map
+---
+width: 2.0
+
+height: 3.0
+
+buildings:
+  - x: 1.5
+    y: 2.4
+    knights: 20
+    knightGrowth: false
+  - x: 2.0
+    y: 0.5
+    knights: 20
+    knightGrowth: false
+  - x: 3.1
+    y: 1.5
+    knights: 30
+    knightGrowth: false
+  - x: 0.5
+    y: 3.2
+    knights: 20
+    knightGrowth: true
+
+

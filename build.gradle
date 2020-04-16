@@ -12,7 +12,6 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.0'
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.8'
-        
 
     }
 }
@@ -54,6 +53,7 @@ project(":desktop") {
         api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         api "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
+        api group: 'org.yaml', name: 'snakeyaml', version: '1.25'
         
     }
 }
@@ -94,6 +94,7 @@ project(":android") {
         api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
         api "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-controllers-android:$gdxVersion"
+        api group: 'org.yaml', name: 'snakeyaml', version: '1.25'
         
     }
 }
@@ -112,6 +113,7 @@ project(":ios") {
         api "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-ios"
         api "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-ios"
         api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
+        api group: 'org.yaml', name: 'snakeyaml', version: '1.25'
         
     }
 }
@@ -129,6 +131,7 @@ project(":core") {
         api "com.badlogicgames.ashley:ashley:$ashleyVersion"
         api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
         api "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
+        api group: 'org.yaml', name: 'snakeyaml', version: '1.25'
         
     }
 }
