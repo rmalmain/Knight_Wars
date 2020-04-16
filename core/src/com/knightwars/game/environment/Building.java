@@ -5,8 +5,8 @@ import com.badlogic.gdx.math.Vector2;
 public abstract class Building {
     private Player owner;
     private Vector2 coordinates;
-    private int knights;
-    private float hitPoints;
+    private int knights; // ALWAYS use setters and getters to modify this attribute
+    private float hitPoints; // ALWAYS use setters and getters to modify this attribute
     private float goldGeneration;
     private float defenceLevel;
 
@@ -82,6 +82,9 @@ public abstract class Building {
     public void update(float dt) {
         this.owner.addGold(this.getGoldGeneration()*dt);
     }
+
+    /** When it is called, the number of knights decreases by one. */
+    public void knightLeaves() { setKnights(getKnights() - 1); }
 
     /** Knights number getter. */
     public int getKnights () { return this.knights; }
