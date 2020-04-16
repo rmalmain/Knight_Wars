@@ -3,10 +3,11 @@ package com.knightwars.game.environment;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Building {
-    public static final float SELECTION_THRESHOLD = 0.2f;
+    public static final float SELECTION_THRESHOLD = 0.15f;
+
+    private final Vector2 coordinates;
 
     private Player owner;
-    private Vector2 coordinates;
     private int knights; // ALWAYS use setters and getters to modify this attribute
     private float hitPoints; // ALWAYS use setters and getters to modify this attribute
     private float goldGeneration;
