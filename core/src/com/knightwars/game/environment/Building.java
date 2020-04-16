@@ -4,6 +4,9 @@ import com.badlogic.gdx.math.Vector2;
 
 public abstract class Building {
     public static final float SELECTION_THRESHOLD = 0.15f;
+    public static final int KNIGHT_GENERATION = 2;
+    public static final float BUILDING_DEFENSE = 1f;
+    public static final int GOLD_GENERATION = 1;
 
     private final Vector2 coordinates;
 
@@ -25,9 +28,9 @@ public abstract class Building {
         this.coordinates = new Vector2(coordinates);
         this.knights = knights;
         this.hitPoints = (float) knights;
-        this.goldGeneration = 1;
-        this.knightGeneration = 1;
-        this.defenceLevel = 1f;
+        this.goldGeneration = GOLD_GENERATION;
+        this.knightGeneration = KNIGHT_GENERATION;
+        this.defenceLevel = BUILDING_DEFENSE;
         this.canGenerateUnits = canGenerateUnits;
     }
 
