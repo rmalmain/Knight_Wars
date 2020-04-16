@@ -4,21 +4,20 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.ArrayList;
 
 public class Map {
+    public static final float BUILDING_COLLISION_THRESHOLD = 0.1f;
+
     public ArrayList<Building> buildings;
     public ArrayList<Unit> units;
     public Vector2 size;
-    public float buildingThreshold;
 
     /** Map constructor
      * @param width the width of the map
      * @param height the height of the map
-     * @param buildingThreshold the collision threshold of the building
      */
-    public Map(float width, float height, float buildingThreshold) {
+    public Map(float width, float height) {
         this.size = new Vector2(width, height);
         this.buildings = new ArrayList<>();
         this.units = new ArrayList<>();
-        this.buildingThreshold = buildingThreshold;
     }
 
     /** Add a building to the map
@@ -54,7 +53,7 @@ public class Map {
     public void update(float dt) {
         for(Unit unit : units) { // Update units
             unit.update(dt);
-            if (unit.isArrived(this.buildingThreshold)) { // if units arrived to the building
+            if (unit.isArrived(BUILDING_COLLISION_THRESHOLD)) { // if units arrived to the building
                 try {
                     unit.getDestinationBuilding().unitArrival(unit);
                 } catch (NotEnoughKnightsException e) {
