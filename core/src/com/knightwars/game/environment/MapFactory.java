@@ -2,13 +2,17 @@ package com.knightwars.game.environment;
 
 import com.badlogic.gdx.math.Vector2;
 import com.knightwars.game.environment.buildings.ClassicCastle;
+import org.yaml.snakeyaml.*;
+import java.io.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 
 public class MapFactory {
     public static final float BUILDING_GENERATION_THRESHOLD = 0.9f;
 
-    /**
-     * Generates map procedurally based on map's properties.
+    /** Generates map procedurally based on map's properties.
      * @param width Width or the map
      * @param height Height of the map
      * @param buildings Number of buildings on the map
@@ -21,6 +25,31 @@ public class MapFactory {
             proceduralMap.addBuildingCopy(new ClassicCastle(defaultPlayer, generateValidPoint(proceduralMap), 20, false));
         }
         return proceduralMap;
+    }
+
+    /** Import a map with neutral buildings
+     * @param fileName The name of the file to import
+     * @return The map described by the file
+     */
+    public static Map importMapFromFile(String fileName, Player defaultPlayer) {
+
+        Yaml yaml = new Yaml();
+
+        LinkedHashMap<String, Object> mapProperties = yaml.load(fileToString(fileName));
+
+        Map importedMap = new Map(((Double) mapProperties.get("width")).floatValue(),
+                ((Double) mapProperties.get("height")).floatValue());
+
+        List<HashMap<String,Object>> buildings = (List<HashMap<String, Object>>) mapProperties.get("buildings");
+
+        for (HashMap<String, Object> building : buildings) {
+            importedMap.addBuildingCopy(new ClassicCastle(defaultPlayer,
+                    new Vector2(((Double)building.get("x")).floatValue(),
+                            ((Double)building.get("y")).floatValue()), (int) building.get("knights"),
+                    (boolean) building.get("knightGrowth")));
+        }
+
+        return importedMap;
     }
 
     /** Generate coordinates not too close to others buildings on a map.
@@ -49,6 +78,32 @@ public class MapFactory {
             }
         }
         return true;
+    }
+
+    /** Convert file content to string
+     * @param fileName The name of the file to convert
+     * @return The content of the file converted to string
+     */
+    private static String fileToString(String fileName) {
+        String fileAsString = "";
+        try {
+            InputStream file = new FileInputStream(fileName);
+            BufferedReader buf = new BufferedReader(new InputStreamReader(file));
+            String line = buf.readLine();
+            StringBuilder sb = new StringBuilder();
+            while(line != null){
+                sb.append(line).append("\n");
+                line = buf.readLine();
+            }
+            fileAsString = sb.toString();
+        }
+        catch (FileNotFoundException e) {
+            System.out.println(e);
+        }
+        catch (IOException e) {
+            System.out.println(e);
+        }
+        return fileAsString;
     }
 
 }
