@@ -55,11 +55,12 @@ public class GameScreen implements Screen {
         // Create a stage and add all the actors to display
         stage = new Stage(viewport, batch);
         stage.addActor(new GameActorBuildings(gameState, camera));
-        stage.addActor(new GameActorHUD(gameState));
         stage.addActor(new GameActorUnits(gameState));
+        GameActorHUD actorHUD = new GameActorHUD(gameState);
+        stage.addActor(actorHUD);
 
         // Create the event handler and input processor to deal with mouse movements
-        EventHandler eventHandler = new EventHandler(gameState, viewport);
+        EventHandler eventHandler = new EventHandler(gameState, viewport, actorHUD);
         Gdx.input.setInputProcessor(new GameInputProcessor(eventHandler));
     }
 
