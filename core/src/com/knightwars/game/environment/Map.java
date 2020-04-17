@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 public class Map {
-    public static final float BUILDING_COLLISION_THRESHOLD = 0.1f;
+    public static final float BUILDING_COLLISION_THRESHOLD = 0.25f;
     public static final float TIME_BETWEEN_UNITS = 0.15f;
 
     private ArrayList<Building> buildings;
