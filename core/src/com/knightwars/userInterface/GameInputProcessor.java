@@ -60,7 +60,7 @@ public class GameInputProcessor implements InputProcessor {
         if (button == Input.Buttons.LEFT) {
             lastTouchDown = new Vector2(screenX, screenY);
         }
-        return true;
+        return false;
     }
 
     /**
@@ -78,7 +78,7 @@ public class GameInputProcessor implements InputProcessor {
             Vector2 lastTouchUp = new Vector2(screenX, screenY);
             eventHandler.handleTouchUp(lastTouchDown, lastTouchUp);
         }
-        return true;
+        return false;
     }
 
     /**
@@ -94,7 +94,7 @@ public class GameInputProcessor implements InputProcessor {
         if (lastTouchDownButton == Input.Buttons.LEFT) {
             eventHandler.handleDrag(lastTouchDown, new Vector2(screenX, screenY));
         }
-        return true;
+        return false;
     }
 
     /**

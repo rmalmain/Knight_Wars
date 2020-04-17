@@ -6,6 +6,8 @@
 package com.knightwars.userInterface;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
@@ -54,14 +56,19 @@ public class GameScreen implements Screen {
 
         // Create a stage and add all the actors to display
         stage = new Stage(viewport, batch);
-        stage.addActor(new GameActorBuildings(gameState, camera));
+        stage.addActor(new GameActorBuildings(gameState));
         stage.addActor(new GameActorUnits(gameState));
-        GameActorHUD actorHUD = new GameActorHUD(gameState);
+        GameActorHUD actorHUD = new GameActorHUD(gameState, stage);
         stage.addActor(actorHUD);
 
         // Create the event handler and input processor to deal with mouse movements
         EventHandler eventHandler = new EventHandler(gameState, viewport, actorHUD);
-        Gdx.input.setInputProcessor(new GameInputProcessor(eventHandler));
+        InputProcessor gameInputProcessor = new GameInputProcessor(eventHandler);
+        // Inputs can come from GameInputProcessor or the stage itself (for the HUD)
+        InputMultiplexer inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(gameInputProcessor);
+        inputMultiplexer.addProcessor(stage);
+        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
 

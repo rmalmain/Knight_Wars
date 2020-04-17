@@ -5,12 +5,10 @@
 package com.knightwars.userInterface.gameActors;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.knightwars.game.KnightWarsGame;
@@ -28,16 +26,12 @@ public class GameActorBuildings extends Actor {
     private final Sprite spriteNeutralBuilding;
     private final KnightWarsGame gameState;
     private final BitmapFont font;
-    private final ShapeRenderer shapeRenderer;
-    private Camera camera;
 
     private final static float fontOffsetX = -15f; // Horizontal position offset relative to the building
     private final static float fontOffsetY = 120f; // Vertical position offset relative to the building
 
-    public GameActorBuildings(KnightWarsGame gameState, Camera camera) {
+    public GameActorBuildings(KnightWarsGame gameState) {
         this.gameState = gameState;
-        this.camera = camera;
-        shapeRenderer = new ShapeRenderer();
 
         // Create the sprites
         spriteRedBuilding = new Sprite(new Texture("buildings/red_building.png"));
@@ -55,16 +49,6 @@ public class GameActorBuildings extends Actor {
         // Draw the buildings
         for (Building building : buildings) {
             Vector2 buildingCoordinates = building.getCoordinates();
-
-            // Draw the selection boundaries of the building
-//            batch.end();
-//            shapeRenderer.setProjectionMatrix(camera.combined);
-//            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//            shapeRenderer.setColor(1f, 0f, 0f, 1f);
-//            shapeRenderer.circle(buildingCoordinates.x*SCALE, buildingCoordinates.y*SCALE,
-//                    Building.SELECTION_THRESHOLD*SCALE);
-//            shapeRenderer.end();
-//            batch.begin();
 
             // Draw the building
             Sprite currentSprite = determineBuildingSprite(building);
