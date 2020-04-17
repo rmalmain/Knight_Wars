@@ -8,6 +8,7 @@ public class Player {
     private String name;
     private ColorPlayer color;
     private float unitLevel;
+    private float unitPercentage;
 
     /** Player constructor.
      * @param name The name of the player
@@ -18,6 +19,7 @@ public class Player {
         this.color = color;
         this.unitLevel = 0f;
         this.gold = 50f; // Default golds, to modify if necessary
+        this.unitPercentage = 0.25f; // Default percentage of units to send
     }
 
     /* Name getter */
@@ -52,4 +54,12 @@ public class Player {
     /** Upgrade the units of a player by a level.
      */
     public void upgradeUnits() { this.unitLevel++; }
+
+    public void setUnitPercentage(float unitPercentage) {
+        this.unitPercentage = unitPercentage;
+    }
+
+    public float getUnitPercentage() {
+        return this.unitPercentage;
+    }
 }

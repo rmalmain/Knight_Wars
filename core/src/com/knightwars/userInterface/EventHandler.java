@@ -42,7 +42,8 @@ public class EventHandler {
 
         // Move the units from one building to another
         if (selectedBuilding != null && destinationBuilding != null) {
-            gameState.getMap().sendUnit(selectedBuilding, destinationBuilding, 1f);
+            gameState.getMap().sendUnit(selectedBuilding, destinationBuilding,
+                    gameState.getPlayerBlue().getUnitPercentage());
         }
     }
 
