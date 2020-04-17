@@ -1,36 +1,38 @@
 package com.knightwars.userInterface;
 
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.knightwars.game.KnightWarsGame;
 import com.knightwars.game.environment.Building;
-import com.knightwars.game.environment.NotEnoughKnightsException;
-import com.knightwars.game.environment.Unit;
+import com.knightwars.game.environment.Player;
+import com.knightwars.userInterface.gameActors.GameActorHUD;
 
 import java.util.List;
-
-import static com.knightwars.userInterface.GameScreen.SCALE;
 
 public class EventHandler {
 
     private KnightWarsGame gameState;
     private Viewport viewport;
+    private GameActorHUD actorHUD;
 
-    public EventHandler(KnightWarsGame gameState, Viewport viewport) {
+    public EventHandler(KnightWarsGame gameState, Viewport viewport, GameActorHUD actorHUD) {
         this.gameState = gameState;
         this.viewport = viewport;
+        this.actorHUD = actorHUD;
     }
 
     /**
-     * Handle drag event to select two buildings and move the units to the selected building
+     * Handle TouchUp event to select two buildings and move the units to the selected building
      *
      * @param lastTouchDown The coordinates of the last TouchDown event
      * @param lastTouchUp   The coordinates of the last TouchUp event
      */
-    public void handleDrag(Vector2 lastTouchDown, Vector2 lastTouchUp) {
-        // Unproject the screen coordinates in the game coordinates
+    public void handleTouchUp(Vector2 lastTouchDown, Vector2 lastTouchUp) {
+        // Delete last drawn arrow
+        actorHUD.deleteArrow();
+
+        // Project the screen coordinates in the game coordinates
         Vector2 selectedBuildingCoords = unprojectVector2(lastTouchDown);
         Vector2 destinationBuildingCoords = unprojectVector2(lastTouchUp);
 
@@ -44,6 +46,27 @@ public class EventHandler {
         }
     }
 
+
+    /**
+     * Handle drag event to draw an arrow between the selected building and current mouse position
+     * @param posTouchDown The coordinates of last TouchDown event
+     * @param posTouchDragged The coordinates of the last TouchDragged event
+     */
+    public void handleDrag(Vector2 posTouchDown, Vector2 posTouchDragged) {
+        // Project the screen coordinates in the game coordinates
+        Vector2 selectedBuildingCoords = unprojectVector2(posTouchDown);
+        Vector2 currentCoords = unprojectVector2(posTouchDragged);
+
+        // Get the selected building
+        Building selectedBuilding = getSelectedBuilding(selectedBuildingCoords);
+
+        // If a non neutral building is selected, draw the arrow
+        if (selectedBuilding != null && selectedBuilding.getOwner().getColor() != Player.ColorPlayer.NEUTRAL) {
+            actorHUD.createArrow(selectedBuilding.getCoordinates(), currentCoords);
+        }
+    }
+
+
     /**
      * Unproject a 2D vector in the game coordinates
      *
@@ -55,6 +78,7 @@ public class EventHandler {
         viewport.unproject(vec3);
         return new Vector2(vec3.x / GameScreen.SCALE, vec3.y / GameScreen.SCALE);
     }
+
 
     /**
      * Get the building corresponding the given coordinates

@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class GameInputProcessor implements InputProcessor {
 
+    private int lastTouchDownButton;
     private Vector2 lastTouchDown;
     private EventHandler eventHandler;
 
@@ -20,9 +21,7 @@ public class GameInputProcessor implements InputProcessor {
      * @return whether the input was processed
      */
     @Override
-    public boolean keyDown(int keycode) {
-        return false;
-    }
+    public boolean keyDown(int keycode) { return false; }
 
     /**
      * Called when a key was released
@@ -57,10 +56,11 @@ public class GameInputProcessor implements InputProcessor {
      */
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        lastTouchDownButton = button;
         if (button == Input.Buttons.LEFT) {
             lastTouchDown = new Vector2(screenX, screenY);
         }
-        return false;
+        return true;
     }
 
     /**
@@ -76,9 +76,9 @@ public class GameInputProcessor implements InputProcessor {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         if (button == Input.Buttons.LEFT) {
             Vector2 lastTouchUp = new Vector2(screenX, screenY);
-            eventHandler.handleDrag(lastTouchDown, lastTouchUp);
+            eventHandler.handleTouchUp(lastTouchDown, lastTouchUp);
         }
-        return false;
+        return true;
     }
 
     /**
@@ -91,7 +91,10 @@ public class GameInputProcessor implements InputProcessor {
      */
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
+        if (lastTouchDownButton == Input.Buttons.LEFT) {
+            eventHandler.handleDrag(lastTouchDown, new Vector2(screenX, screenY));
+        }
+        return true;
     }
 
     /**
