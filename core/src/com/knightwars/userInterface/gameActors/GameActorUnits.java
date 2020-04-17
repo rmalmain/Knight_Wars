@@ -25,8 +25,8 @@ public class GameActorUnits extends Actor {
     private ArrayList<Unit> units;
     private float elapsedTime = 0;
 
-    private static final float WALK_ANIM_WIDTH = 100f;
-    private static final float WALK_ANIM_HEIGHT = 100f;
+    private static final float WALK_ANIM_WIDTH = 41.5f;
+    private static final float WALK_ANIM_HEIGHT = 50f;
 
     public GameActorUnits(KnightWarsGame gameState) {
         this.gameState = gameState;
@@ -44,10 +44,19 @@ public class GameActorUnits extends Actor {
 
         // Draw the units
         for (Unit unit : units) {
-            Vector2 unitCoordinate = unit.getCoordinates();
+            // Get the current frame of the unit animation to display
             TextureRegion currentUnitFrame = unitAnimation.getKeyFrame(elapsedTime, true);
-            batch.draw(currentUnitFrame, unitCoordinate.x*SCALE - WALK_ANIM_WIDTH/2f,
-                    unitCoordinate.y*SCALE - WALK_ANIM_HEIGHT/2f, WALK_ANIM_WIDTH, WALK_ANIM_HEIGHT);
+
+            // Compute the unit's coordinates on the screen
+            float unitScreenX = unit.getCoordinates().x*SCALE - WALK_ANIM_WIDTH/2f;
+            float unitScreenY = unit.getCoordinates().y*SCALE - WALK_ANIM_HEIGHT/2f;
+
+            // If the unit is going in the left direction, flip the texture
+            boolean flip = unit.getDepartureBuilding().getCoordinates().x > unit.getDestinationBuilding().getCoordinates().x;
+
+            // Draw the unit on the screen
+            batch.draw(currentUnitFrame, flip ? unitScreenX + WALK_ANIM_WIDTH : unitScreenX,
+                    unitScreenY, flip ? -WALK_ANIM_WIDTH : WALK_ANIM_WIDTH, WALK_ANIM_HEIGHT);
         }
     }
 }
