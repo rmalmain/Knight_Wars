@@ -7,7 +7,7 @@ public class Arrow {
 
     private boolean exists;
     private Vector2 startCoords;
-    public Vector2 endCoords;
+    private Vector2 endCoords;
 
     public Arrow(Vector2 startCoords, Vector2 endCoords) {
         exists = true;

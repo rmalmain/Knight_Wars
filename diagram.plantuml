@@ -1,0 +1,324 @@
+@startuml
+
+package com.knightwars {
+  class KnightWars {
+    create()
+    render()
+    dispose()
+  }
+
+
+  package userInterface {
+    class Display {
+      + gameDisplay : KnightWars
+      - gameManager : GameManager
+      + Display(gameDisplay : KnightWars, gameManager : GameManager)
+      + displayGame()
+      + displayMainMenu()
+      + getGameDisplay() : KnightWars
+    }
+    class EventHandler {
+      - actorHUD : GameActorHUD
+      - gameState : KnightWarsGame
+      - viewport : Viewport
+      + EventHandler(gameState : KnightWarsGame, viewport : Viewport, actorHUD : GameActorHUD)
+      - getSelectedBuilding(coords : Vector2) : Building
+      + handleDrag(posTouchDown : Vector2, posTouchDragged : Vector2)
+      + handleTouchUp(lastTouchDown : Vector2, lastTouchUp : Vector2)
+      - unprojectVector2(vec2 : Vector2) : Vector2
+    }
+    class GameInputProcessor {
+      - eventHandler : EventHandler
+      - lastTouchDown : Vector2
+      - lastTouchDownButton : int
+      + GameInputProcessor(eventHandler : EventHandler)
+      + keyDown(keycode : int) : boolean
+      + keyTyped(character : char) : boolean
+      + keyUp(keycode : int) : boolean
+      + mouseMoved(screenX : int, screenY : int) : boolean
+      + scrolled(amount : int) : boolean
+      + touchDown(screenX : int, screenY : int, pointer : int, button : int) : boolean
+      + touchDragged(screenX : int, screenY : int, pointer : int) : boolean
+      + touchUp(screenX : int, screenY : int, pointer : int, button : int) : boolean
+    }
+    class GameScreen {
+      + SCALE : float {static}
+      - batch : SpriteBatch
+      - camera : Camera
+      - display : Display
+      - gameManager : GameManager
+      - mapSize : Vector2
+      - shapeRenderer : ShapeRenderer
+      - stage : Stage
+      - viewport : FitViewport
+      + GameScreen(display : Display, gameManager : GameManager)
+      + dispose()
+      + hide()
+      + pause()
+      + render(delta : float)
+      + resize(width : int, height : int)
+      + resume()
+      + show()
+    }
+    class MainMenuScreen {
+      - stage : Stage
+      - viewport : FillViewport
+      + MainMenuScreen(display : Display, gameManager : GameManager)
+      + dispose()
+      + hide()
+      + pause()
+      + render(delta : float)
+      + resize(width : int, height : int)
+      + resume()
+      + show()
+    }
+    class MainMenuBackground {
+      - camera : Camera
+      - mapSize : Vector2
+      - background : Texture
+      - title : Texture
+      + MainMenuBackground(camera : Camera, mapSize : Vector2)
+      + draw(batch : Batch, parentAlpha : float)
+    }
+
+
+    package gameActors {
+      class Arrow {
+        - endCoords : Vector2
+        - exists : boolean
+        - startCoords : Vector2
+        + Arrow(startCoords : Vector2, endCoords : Vector2)
+        + exists() : boolean
+        + getHeight() : float
+        + getOriginX() : float
+        + getOriginY() : float
+        + getRotation() : float
+        + getWidth() : float
+        + hide()
+        + setCoords(startCoords : Vector2, endCoords : Vector2)
+        + show()
+      }
+      class GameActorBuildings {
+        - spriteRedBuilding : Sprite
+        - spriteBlueBuilding : Sprite
+        - spriteNeutralBuilding : Sprite
+        - gameState : KnightWarsGame
+        - font : BitmapFont
+        + GameActorBuildings(gameState : KnightWarsGame)
+        + draw(batch : Batch, parentAlpha : float)
+        - determineBuildingSprite(building : Building) : Building
+      }
+      class GameActorHUD {
+        - arrow : Arrow
+        - spriteArrow : Sprite
+        + GameActorHUD(gameState : KnightWarsGame, stage : Stage)
+        + draw(batch : Batch, parentAlpha : float)
+        + createArrow(selectedBuildingCoords : Vector2, currentCoords : Vector2)
+        + deleteArrow()
+      }
+      class GameActorUnit {
+        - gameState : KnightWarsGame
+        - unitAnimation : Animation<TextureRegion>
+        - elapsedTime : float
+        + GameActorUnits(gameState : KnightWarsGame)
+        + draw(batch : Batch, parentAlpha : float)
+      }
+    }
+  }
+
+
+  package desktop {
+    class DesktopLauncher {
+      + DesktopLauncher()
+      + main(arg : String[]) {static}
+    }
+  }
+
+
+  package game {
+    class GameManager {
+      - game : KnightWarsGame
+      + GameManager()
+      + getKnightWarsGame() : KnightWarsGame
+      + update(dt : float)
+    }
+    class KnightWarsGame {
+      + BUILDINGS_NUMBER : int {static}
+      + HEIGHT : float {static}
+      + WIDTH : float {static}
+      - map : Map
+      - playerBlue : Player
+      - playerNeutral : Player
+      - playerRed : Player
+      - players : ArrayList<Player>
+      + KnightWarsGame()
+      + attributeBuildings()
+      + getMap() : Map
+      + getPlayerBlue() : Player
+      + getPlayerNeutral() : Player
+      + getPlayerRed() : Player
+      + update(dt : float)
+    }
+
+
+    package environment {
+      abstract class Building {
+        + BUILDING_DEFENSE : float {static}
+        + GOLD_GENERATION : int {static}
+        + KNIGHT_GENERATION : int {static}
+        + SELECTION_THRESHOLD : float {static}
+        - canGenerateUnits : boolean
+        - coordinates : Vector2
+        - defenseLevel : float
+        - goldGeneration : float
+        - hitPoints : float
+        - knightGeneration : float
+        - knights : int
+        - owner : Player
+        + Building(building : Building)
+        + Building(owner : Player, coordinates : Vector2, knights : int, canGenerateUnits : boolean)
+        + Copy() : Building {abstract}
+        + addHitPoints(hitPoints : float)
+        + addKnights(knights : int)
+        - determineFightDamages(enemyTotalAttack : float, totalDefense : float) : float
+        - fight(unit : Unit)
+        + getCanGenerateUnits() : boolean
+        + getCoordinates() : Vector2
+        + getDefenseLevel() : float
+        + getGoldGeneration() : float
+        + getHitPoints() : float
+        + getKnightGeneration() : float
+        + getKnights() : int
+        + getOwner() : Player
+        + getTotalDefense() : float
+        + isSelected(coordinates : Vector2) : Boolean
+        + removeHitPoints(hitPoints : float)
+        + removeKnights(knights : int)
+        + setCanGenerateUnits(canGenerateUnits : boolean)
+        + setHitPoints(hitPoints : float)
+        + setKnights(knights : int)
+        + setOwner(player : Player)
+        + unitArrival(unit : Unit)
+        + unitDeparture()
+        + update(dt : float)
+      }
+      class Map {
+        + BUILDING_COLLISION_THRESHOLD : float {static}
+        + TIME_BETWEEN_UNITS : float {static}
+        - buildings : ArrayList<Building>
+        - size : Vector2
+        - unitSpawnTick : float
+        - units : ArrayList<Unit>
+        - unitsToSend : ArrayList<Queue<Unit>>
+        + Map(width : float, height : float)
+        + addBuildingCopy(building : Building)
+        - addUnit(unit : Unit)
+        + changeBuilding(oldBuilding : Building, newBuilding : Building)
+        + deleteUnit(unit : Unit)
+        + getBuildings() : ArrayList<Building>
+        + getSize() : Vector2
+        + getUnits() : ArrayList<Unit>
+        + sendUnit(departureBuilding : Building, arrivalBuilding : Building, percentage : float)
+        + update(dt : float)
+      }
+      class MapFactory {
+        + BUILDING_GENERATION_THRESHOLD : float {static}
+        + MapFactory()
+        + createProceduralMap(width : float, height : float, buildings : int, defaultPlayer : Player) : Map {static}
+        - fileToString(fileName : String) : String {static}
+        - generateValidPoint(map : Map) : Vector2 {static}
+        + importMapFromFile(fileName : String, defaultPlayer : Player) : Map {static}
+        - isValidPoint(map : Map, point : Vector2) : Boolean {static}
+      }
+      class Path {
+        - arrivalPoint : Vector2
+        - currentPosition : Vector2
+        - directionVector : Vector2
+        - unit : Unit
+        + Path(startingPoint : Vector2, arrivalPoint : Vector2, unit : Unit)
+        + Path(statingBuilding : Building, arrivalBuilding : Building, unit : Unit)
+        + getArrivalPoint() : Vector2
+        + getCurrentPosition() : Vector2
+        + update(dt : float)
+      }
+      class Player {
+        - color : ColorPlayer
+        - gold : float
+        - name : String
+        - unitLevel : float
+        - unitPercentage : float
+        + Player(name : String, color : ColorPlayer)
+        + addGold(gold : float)
+        + getColor() : ColorPlayer
+        + getGold() : float
+        + getName() : String
+        + getUnitLevel() : float
+        + getUnitPercentage() : float
+        + removeGold(gold : float)
+        + setUnitPercentage(unitPercentage : float)
+        + upgradeUnits()
+      }
+      enum ColorPlayer {
+        + BLUE {static}
+        + NEUTRAL {static}
+        + RED {static}
+        + valueOf(name : String) : ColorPlayer {static}
+        + values() : ColorPlayer[] {static}
+      }
+      class Unit {
+        + DEFAULT_UNIT_SPEED : float {static}
+        - departureBuilding : Building
+        - destinationBuilding : Building
+        - owner : Player
+        - path : Path
+        - speed : float
+        + Unit(owner : Player, departureBuilding : Building, destinationBuilding : Building)
+        + getCoordinates() : Vector2
+        + getDepartureBuilding() : Building
+        + getDestinationBuilding() : Building
+        + getOwner() : Player
+        + getSpeed() : float
+        + getTotalAttack() : float
+        + isArrived(threshold : float) : boolean
+        + setSpeed(speed : float)
+        + update(dt : float)
+      }
+
+
+      package buildings {
+        class ClassicCastle {
+          + ClassicCastle(building : Building)
+          + ClassicCastle(owner : Player, coordinates : Vector2, knights : int, knightGrowth : boolean)
+          + Copy() : ClassicCastle
+        }
+      }
+    }
+  }
+}
+
+
+KnightWarsGame -->  "-map" Map
+GameInputProcessor -->  "-eventHandler" EventHandler
+Unit --> Building
+EventHandler --> KnightWarsGame
+GameScreen --> GameManager
+Map --> Building
+Building -->  "-owner" Player
+Display --> GameScreen
+Display --> MainMenuScreen
+Map -->  "-units" Unit
+Player -->  "-color" ColorPlayer
+ColorPlayer ..+ Player
+GameManager -->  "-game" KnightWarsGame
+KnightWarsGame -->  "-players" Player
+Path -->  "-unit" Unit
+ClassicCastle --|> Building
+GameActorHUD --> "-arrow" Arrow
+DesktopLauncher --> KnightWars
+KnightWars --> Display
+GameScreen --> GameActorHUD
+GameScreen --> GameActorBuildings
+GameScreen --> GameActorUnit
+MainMenuScreen --> MainMenuBackground
+MapFactory --> Map
+@enduml
