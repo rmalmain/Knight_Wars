@@ -22,9 +22,6 @@ import com.badlogic.gdx.utils.Scaling;
 import com.knightwars.game.KnightWarsGame;
 import com.knightwars.userInterface.GameScreen;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class GameActorHUD extends Actor {
 
     private final BitmapFont font;
@@ -41,25 +38,25 @@ public class GameActorHUD extends Actor {
         font = new BitmapFont(Gdx.files.internal("fonts/MontserratBold.ttf.fnt"),
                 Gdx.files.internal("fonts/MontserratBold.ttf_0.png"), false);
 
-        // Create the buttons to select the percentage of units to send to battle
-        List<CheckBox> checkBoxList = new ArrayList<>();
-        checkBoxList.add(new CheckBox(" 25 %", skin, "radio"));
-        checkBoxList.add(new CheckBox(" 50 %", skin, "radio"));
-        checkBoxList.add(new CheckBox(" 75 %", skin, "radio"));
-        checkBoxList.add(new CheckBox("100 %", skin, "radio"));
+        // Create the check boxes to select the percentage of units to send to battle
+        // and add them to a button group so only one checkbox can be checked at a time
+        ButtonGroup<CheckBox> buttonGroup = new ButtonGroup<>();
+        for (int i=0; i < 4; i++) {
+            buttonGroup.add(new CheckBox("", skin, "radio"));
+        }
+
         // Create a table to position the check boxes
         Table percentageTable = new Table();
-        // Create a button group so only one checkbox can be checked at a time
-        ButtonGroup<CheckBox> buttonGroup = new ButtonGroup<>();
 
         // Check box properties
-        final int checkBoxSize = 50;
+        final int checkBoxWidth = 100;
+        final int checkBoxHeight = 85;
         final int checkBoxPadding = 10;
-        final int checkBoxPosX = 120;
+        final int checkBoxPosX = 100;
         final int checkBoxPosY = 600;
 
         int index = 1;
-        for (CheckBox checkBox : checkBoxList) {
+        for (CheckBox checkBox : buttonGroup.getButtons()) {
             // Change the percentage when the check box is clicked
             final int finalIndex = index; // So index can be accessed from the inner class
             checkBox.addListener(new ClickListener() {
@@ -69,14 +66,12 @@ public class GameActorHUD extends Actor {
                 }
             });
 
-            // Scale the checkbox so it appears bigger
-            checkBox.getImage().setScaling(Scaling.fill);
-            checkBox.getImageCell().size(checkBoxSize);
-            checkBox.left().pad(checkBoxPadding);
-            checkBox.getLabelCell().pad(checkBoxPadding);
+            // Set the size of the checkbox
+            checkBox.getImage().setScaling(Scaling.stretch);
+            checkBox.getCells().get(0).size(checkBoxWidth,checkBoxHeight);
 
-            buttonGroup.add(checkBox);
-            percentageTable.add(checkBox).row();
+            // Add the check box to the table
+            percentageTable.add(checkBox).pad(checkBoxPadding).row();
 
             index ++;
         }
@@ -104,6 +99,13 @@ public class GameActorHUD extends Actor {
 
         // Display the current amount of gold of the player
         font.draw(batch, "Gold : " + (int) gameState.getPlayerBlue().getGold(), 50f, 950f);
+
+        // Display the percentages in the checkboxes
+        final float percentagePosX = 58f;
+        for (int i=1; i < 5; i ++) {
+            final float percentagePosY = 765f - (i-1)*104f;
+            font.draw(batch, "" + i*25 + "%", percentagePosX, percentagePosY);
+        }
     }
 
     public void createArrow(Vector2 selectedBuildingCoords, Vector2 currentCoords) {
