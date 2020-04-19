@@ -1,5 +1,6 @@
 package com.knightwars.game.environment;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.knightwars.game.environment.buildings.ClassicCastle;
 import org.yaml.snakeyaml.*;
@@ -10,7 +11,7 @@ import java.util.List;
 
 
 public class MapFactory {
-    public static final float BUILDING_GENERATION_THRESHOLD = 0.9f;
+    public static final float BUILDING_GENERATION_THRESHOLD = 0.8f;
 
     /** Generates map procedurally based on map's properties.
      * @param width Width or the map
@@ -58,9 +59,13 @@ public class MapFactory {
      */
     private static Vector2 generateValidPoint(Map map) {
         float x, y;
+        float minX = 0.9f;
+        float maxX = map.getSize().x - 0.3f;
+        float minY = 0.4f;
+        float maxY = map.getSize().y - 0.4f;
         do {
-            x = ((float) Math.random() * 0.9f + 0.05f) * map.getSize().x;
-            y = ((float) Math.random() * 0.9f + 0.05f) * map.getSize().y;
+            x = MathUtils.random(minX, maxX);
+            y = MathUtils.random(minY, maxY);
         } while (!isValidPoint(map, new Vector2(x, y))); // generating points until it is
         // not too close to other buildings
         return new Vector2(x, y);
@@ -96,12 +101,9 @@ public class MapFactory {
                 line = buf.readLine();
             }
             fileAsString = sb.toString();
-        }
-        catch (FileNotFoundException e) {
-            System.out.println(e);
-        }
-        catch (IOException e) {
-            System.out.println(e);
+        } catch (IOException e) {
+            System.out.println("Map file not found");
+            e.printStackTrace();
         }
         return fileAsString;
     }

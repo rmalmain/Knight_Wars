@@ -10,7 +10,7 @@ import static com.badlogic.gdx.math.MathUtils.random;
 
 public class KnightWarsGame {
     public static final float WIDTH = 6f;
-    public static final float HEIGHT = 4f;
+    public static final float HEIGHT = 3.375f;
     public static final int BUILDINGS_NUMBER = 15;
 
     private ArrayList<Player> players;
