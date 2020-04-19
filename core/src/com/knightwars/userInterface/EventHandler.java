@@ -42,6 +42,8 @@ public class EventHandler {
 
         // Move the units from one building to another
         if (selectedBuilding != null && destinationBuilding != null) {
+            // TODO Extract this code to fit the principle of an event-based game (we'll use the very same
+            //  events for the AI to play)
             gameState.getMap().sendUnit(selectedBuilding, destinationBuilding,
                     gameState.getPlayerBlue().getUnitPercentage());
         }

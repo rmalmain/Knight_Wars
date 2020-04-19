@@ -1,5 +1,7 @@
 package com.knightwars.game.environment;
 
+import com.knightwars.game.KnightWarsGame;
+
 public class Player {
 
     public enum ColorPlayer {NEUTRAL, BLUE, RED}
@@ -61,5 +63,15 @@ public class Player {
 
     public float getUnitPercentage() {
         return this.unitPercentage;
+    }
+
+    /**
+     * Offers the player the opportunity to make a move.
+     * Called about 60 times a second.
+     *
+     * @param game Current game
+     */
+    public void makeMoves(KnightWarsGame game) {
+        // We may want to have something like public List<Move> makeMoves(...) in the future
     }
 }
