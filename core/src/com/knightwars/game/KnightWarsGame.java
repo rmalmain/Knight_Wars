@@ -22,8 +22,8 @@ public class KnightWarsGame {
 
     public KnightWarsGame() {
         // Players initialization
-        playerRed = new Player("Red Player", Player.ColorPlayer.RED);
-        playerBlue = new ComputerPlayer("Blue Player", Player.ColorPlayer.BLUE);
+        playerRed = new ComputerPlayer("Red Player", Player.ColorPlayer.RED);
+        playerBlue = new Player("Blue Player", Player.ColorPlayer.BLUE);
         playerNeutral = new Player("Neutral Player", Player.ColorPlayer.NEUTRAL);
 
         // TODO Keep all the players in a list, not as spare properties
