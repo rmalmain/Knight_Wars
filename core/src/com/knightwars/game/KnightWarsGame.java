@@ -3,8 +3,10 @@ package com.knightwars.game;
 import com.knightwars.game.environment.Map;
 import com.knightwars.game.environment.MapFactory;
 import com.knightwars.game.environment.Player;
+import com.knightwars.game.environment.players.ComputerPlayer;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.badlogic.gdx.math.MathUtils.random;
 
@@ -13,15 +15,22 @@ public class KnightWarsGame {
     public static final float HEIGHT = 3.375f;
     public static final int BUILDINGS_NUMBER = 15;
 
-    private ArrayList<Player> players;
+    /** All (active and past) players in the game */
+    private List<Player> players;
     private Player playerRed, playerBlue, playerNeutral;
     private Map map;
 
     public KnightWarsGame() {
         // Players initialization
         playerRed = new Player("Red Player", Player.ColorPlayer.RED);
-        playerBlue = new Player("Blue Player", Player.ColorPlayer.BLUE);
+        playerBlue = new ComputerPlayer("Blue Player", Player.ColorPlayer.BLUE);
         playerNeutral = new Player("Neutral Player", Player.ColorPlayer.NEUTRAL);
+
+        // TODO Keep all the players in a list, not as spare properties
+        this.players = new ArrayList<>();
+        this.players.add(playerRed);
+        this.players.add(playerBlue);
+        this.players.add(playerNeutral);
 
         this.map = MapFactory.createProceduralMap( // Map generation
                 WIDTH, HEIGHT, BUILDINGS_NUMBER, this.playerNeutral);
@@ -58,5 +67,8 @@ public class KnightWarsGame {
 
     public void update(float dt) {
         map.update(dt);
+        for (Player player : this.players) {
+            player.makeMoves(this);
+        }
     }
 }
