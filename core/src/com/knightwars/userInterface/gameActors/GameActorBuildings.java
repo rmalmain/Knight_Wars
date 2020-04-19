@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Align;
 import com.knightwars.game.KnightWarsGame;
 import com.knightwars.game.environment.Building;
 import com.knightwars.userInterface.UnknownPlayerException;
@@ -26,6 +27,7 @@ public class GameActorBuildings extends Actor {
     private final Sprite spriteNeutralBuilding;
     private final KnightWarsGame gameState;
     private final BitmapFont font;
+    private Building selectedBuilding;
 
     private final static float fontOffsetX = -15f; // Horizontal position offset relative to the building
     private final static float fontOffsetY = 120f; // Vertical position offset relative to the building
@@ -58,6 +60,14 @@ public class GameActorBuildings extends Actor {
             // Draw the number of knights
             font.draw(batch, String.valueOf(building.getKnights()), buildingCoordinates.x*SCALE + fontOffsetX,
                     buildingCoordinates.y*SCALE + fontOffsetY);
+
+            // Display more information about this building if it is selected
+            if (building == selectedBuilding) {
+                String informations = "Defense : " + (int) building.getDefenseLevel() + "\nGold gen : "
+                        + (int) building.getGoldGeneration() + "\nKnight gen : " + (int) building.getKnightGeneration();
+                font.draw(batch, informations, buildingCoordinates.x*SCALE - 70f,
+                        buildingCoordinates.y*SCALE - 80f, currentSprite.getWidth(), Align.center, false);
+            }
         }
     }
 
@@ -76,5 +86,20 @@ public class GameActorBuildings extends Actor {
         } else {
             throw new UnknownPlayerException("There is no player associated with the building.");
         }
+    }
+
+    /**
+     * Display more informations about a building
+     * @param selectedBuilding The selected building
+     */
+    public void showInformation(Building selectedBuilding) {
+        this.selectedBuilding = selectedBuilding;
+    }
+
+    /**
+     * Hide the information on the screen
+     */
+    public void hideInformation() {
+        selectedBuilding = null;
     }
 }

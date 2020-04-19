@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.knightwars.game.KnightWarsGame;
 import com.knightwars.game.environment.Building;
 import com.knightwars.game.environment.Player;
+import com.knightwars.userInterface.gameActors.GameActorBuildings;
 import com.knightwars.userInterface.gameActors.GameActorHUD;
 
 import java.util.List;
@@ -15,11 +16,14 @@ public class EventHandler {
     private KnightWarsGame gameState;
     private Viewport viewport;
     private GameActorHUD actorHUD;
+    private GameActorBuildings actorBuildings;
 
-    public EventHandler(KnightWarsGame gameState, Viewport viewport, GameActorHUD actorHUD) {
+    public EventHandler(KnightWarsGame gameState, Viewport viewport, GameActorHUD actorHUD,
+                        GameActorBuildings actorBuildings) {
         this.gameState = gameState;
         this.viewport = viewport;
         this.actorHUD = actorHUD;
+        this.actorBuildings = actorBuildings;
     }
 
     /**
@@ -32,6 +36,9 @@ public class EventHandler {
         // Delete last drawn arrow
         actorHUD.deleteArrow();
 
+        // Hide building information
+        actorBuildings.hideInformation();
+
         // Project the screen coordinates in the game coordinates
         Vector2 selectedBuildingCoords = unprojectVector2(lastTouchDown);
         Vector2 destinationBuildingCoords = unprojectVector2(lastTouchUp);
@@ -40,12 +47,18 @@ public class EventHandler {
         Building selectedBuilding = getSelectedBuilding(selectedBuildingCoords);
         Building destinationBuilding = getSelectedBuilding(destinationBuildingCoords);
 
-        // Move the units from one building to another
         if (selectedBuilding != null && destinationBuilding != null) {
             // TODO Extract this code to fit the principle of an event-based game (we'll use the very same
             //  events for the AI to play)
-            gameState.getMap().sendUnit(selectedBuilding, destinationBuilding,
-                    gameState.getPlayerBlue().getUnitPercentage());
+            if (selectedBuilding == destinationBuilding) {
+                // Display more information about this building
+                actorBuildings.showInformation(selectedBuilding);
+            }
+            else {
+                // Move the units from one building to another
+                gameState.getMap().sendUnit(selectedBuilding, destinationBuilding,
+                        gameState.getPlayerBlue().getUnitPercentage());
+            }
         }
     }
 
@@ -56,6 +69,9 @@ public class EventHandler {
      * @param posTouchDragged The coordinates of the last TouchDragged event
      */
     public void handleDrag(Vector2 posTouchDown, Vector2 posTouchDragged) {
+        // Hide building information
+        actorBuildings.hideInformation();
+
         // Project the screen coordinates in the game coordinates
         Vector2 selectedBuildingCoords = unprojectVector2(posTouchDown);
         Vector2 currentCoords = unprojectVector2(posTouchDragged);
@@ -63,8 +79,8 @@ public class EventHandler {
         // Get the selected building
         Building selectedBuilding = getSelectedBuilding(selectedBuildingCoords);
 
-        // If a non neutral building is selected, draw the arrow
-        if (selectedBuilding != null && selectedBuilding.getOwner().getColor() != Player.ColorPlayer.NEUTRAL) {
+        // If the blue player selects a buidling, draw an arrow
+        if (selectedBuilding != null && selectedBuilding.getOwner().getColor() == Player.ColorPlayer.BLUE) {
             actorHUD.createArrow(selectedBuilding.getCoordinates(), currentCoords);
         }
     }
@@ -93,7 +109,7 @@ public class EventHandler {
         // Fetch the coordinates of the buildings
         List<Building> buildings = gameState.getMap().getBuildings();
 
-        // Draw the buildings
+        // Search for the selected building
         for (Building building : buildings) {
             if (building.isSelected(coords)) {
                 return building;
