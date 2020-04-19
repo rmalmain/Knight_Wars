@@ -29,7 +29,7 @@ public class Player {
     public ColorPlayer getColor() { return this.color; }
 
     /* Gold getter */
-    public float getGold() { return this.gold; }
+    public float getGold() { return (float) Math.floor(this.gold); }
 
     /** Add golds to the player
      * @param gold golds to give at the player.

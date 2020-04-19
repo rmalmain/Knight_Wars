@@ -3,7 +3,7 @@ package com.knightwars.game.environment;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Building {
-    public static final float SELECTION_THRESHOLD = 0.25f;
+    public static final float SELECTION_THRESHOLD = 0.22f;
     public static final int KNIGHT_GENERATION = 1;
     public static final float BUILDING_DEFENSE = 1f;
     public static final int GOLD_GENERATION = 1;

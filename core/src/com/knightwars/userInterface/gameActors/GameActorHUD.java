@@ -7,12 +7,16 @@ package com.knightwars.userInterface.gameActors;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Scaling;
 import com.knightwars.game.KnightWarsGame;
@@ -23,14 +27,19 @@ import java.util.List;
 
 public class GameActorHUD extends Actor {
 
+    private final BitmapFont font;
+    private final KnightWarsGame gameState;
     private Arrow arrow;
     private final Sprite spriteArrow;
 
     public GameActorHUD(final KnightWarsGame gameState, Stage stage) {
+        this.gameState = gameState;
 
-        // Load the textures
+        // Load the textures and font
         spriteArrow = new Sprite(new Texture("hud/arrow.png"));
         Skin skin = new Skin(Gdx.files.internal("buttons/glassy-ui.json"));
+        font = new BitmapFont(Gdx.files.internal("fonts/MontserratBold.ttf.fnt"),
+                Gdx.files.internal("fonts/MontserratBold.ttf_0.png"), false);
 
         // Create the buttons to select the percentage of units to send to battle
         List<CheckBox> checkBoxList = new ArrayList<>();
@@ -46,7 +55,7 @@ public class GameActorHUD extends Actor {
         // Check box properties
         final int checkBoxSize = 50;
         final int checkBoxPadding = 10;
-        final int checkBoxPosX = 150;
+        final int checkBoxPosX = 120;
         final int checkBoxPosY = 600;
 
         int index = 1;
@@ -92,6 +101,9 @@ public class GameActorHUD extends Actor {
                     0, 0, arrow.getWidth(), arrow.getHeight(),
                     1, 1, arrow.getRotation());
         }
+
+        // Display the current amount of gold of the player
+        font.draw(batch, "Gold : " + (int) gameState.getPlayerBlue().getGold(), 50f, 950f);
     }
 
     public void createArrow(Vector2 selectedBuildingCoords, Vector2 currentCoords) {
