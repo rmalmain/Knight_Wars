@@ -30,8 +30,7 @@ public class MainMenuScreen implements Screen {
         // Fetch the map size from the game state
         Vector2 mapSize = gameManager.getKnightWarsGame().getMap().getSize();
 
-        // Constructs a new OrthographicCamera, using the given viewport width and height
-        // Height is multiplied by aspect ratio.
+        // Constructs a new OrthographicCamera and viewport using the screen width and height
         OrthographicCamera camera = new OrthographicCamera();
         viewport = new FillViewport(mapSize.x * SCALE, mapSize.y * SCALE, camera);
 
@@ -70,7 +69,7 @@ public class MainMenuScreen implements Screen {
         final float buttonPadding = 10f; // Padding between each button
         final float buttonPosY = 400f;   //  Vertical position of the lowest button
 
-        // Create a table to contain the buttons, scale the buttons and add padding
+        // Create a table to contain the buttons, scale them and add padding
         Table menuTable = new Table();
         menuTable.add(playButton).width(playButton.getWidth()*buttonScale).height(playButton.getHeight()*buttonScale).pad(buttonPadding).row();
         menuTable.add(optionsButton).width(playButton.getWidth()*buttonScale).height(playButton.getHeight()*buttonScale).pad(buttonPadding).row();
