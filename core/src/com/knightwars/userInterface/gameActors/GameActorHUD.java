@@ -62,7 +62,7 @@ public class GameActorHUD extends Actor {
             checkBox.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    gameState.getPlayerBlue().setUnitPercentage(finalIndex * 0.25f);
+                    gameState.getHumanPlayer().setUnitPercentage(finalIndex * 0.25f);
                 }
             });
 
@@ -98,7 +98,7 @@ public class GameActorHUD extends Actor {
         }
 
         // Display the current amount of gold of the player
-        font.draw(batch, "Gold : " + (int) gameState.getPlayerBlue().getGold(), 50f, 950f);
+        font.draw(batch, "Gold : " + (int) gameState.getHumanPlayer().getGold(), 50f, 950f);
 
         // Display the percentages in the checkboxes
         final float percentagePosX = 58f;

@@ -2,7 +2,7 @@ package com.knightwars.game.environment.buildings;
 
 import com.badlogic.gdx.math.Vector2;
 import com.knightwars.game.environment.Building;
-import com.knightwars.game.environment.Player;
+import com.knightwars.game.players.Player;
 
 public class ClassicCastle extends Building {
     public ClassicCastle(Player owner, Vector2 coordinates, int knights, boolean knightGrowth) {

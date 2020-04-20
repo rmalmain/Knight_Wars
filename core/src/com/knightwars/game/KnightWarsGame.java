@@ -2,8 +2,10 @@ package com.knightwars.game;
 
 import com.knightwars.game.environment.Map;
 import com.knightwars.game.environment.MapFactory;
-import com.knightwars.game.environment.Player;
-import com.knightwars.game.environment.players.ComputerPlayer;
+import com.knightwars.game.players.HumanPlayer;
+import com.knightwars.game.players.NeutralPlayer;
+import com.knightwars.game.players.Player;
+import com.knightwars.game.players.ComputerPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,30 +19,33 @@ public class KnightWarsGame {
 
     /** All (active and past) players in the game */
     private List<Player> players;
-    private Player playerRed, playerBlue, playerNeutral;
+    private HumanPlayer humanPlayer;
     private Map map;
 
     public KnightWarsGame() {
         // Players initialization
-        playerRed = new ComputerPlayer("Red Player", Player.ColorPlayer.RED);
-        playerBlue = new Player("Blue Player", Player.ColorPlayer.BLUE);
-        playerNeutral = new Player("Neutral Player", Player.ColorPlayer.NEUTRAL);
+        Player playerRed = new ComputerPlayer("Red Player", Player.ColorPlayer.RED);
+        HumanPlayer playerBlue = new HumanPlayer("Blue Player", Player.ColorPlayer.BLUE);
+        Player playerNeutral = new NeutralPlayer("Neutral Player", Player.ColorPlayer.NEUTRAL);
 
-        // TODO Keep all the players in a list, not as spare properties
+        // Keep them all in a list
         this.players = new ArrayList<>();
         this.players.add(playerRed);
         this.players.add(playerBlue);
         this.players.add(playerNeutral);
 
+        this.humanPlayer = playerBlue;
+
         this.map = MapFactory.createProceduralMap( // Map generation
-                WIDTH, HEIGHT, BUILDINGS_NUMBER, this.playerNeutral);
+                WIDTH, HEIGHT, BUILDINGS_NUMBER, playerNeutral);
 
         // Buildings attribution
-        attributeBuildings();
+        attributeBuildings(playerRed, playerBlue);
     }
 
     /** Attribute a building to each player. Every other buildings are attributed to the neutral player. */
-    public void attributeBuildings() {
+    public void attributeBuildings(Player playerRed, Player playerBlue) {
+        // TODO That should be done at generation time
         int randomRed = random(map.getBuildings().size()-1);
         int randomBlue = random(map.getBuildings().size()-1);
         if (randomBlue == randomRed) {
@@ -57,11 +62,15 @@ public class KnightWarsGame {
         map.getBuildings().get(randomBlue).setCanGenerateUnits(true);
     }
 
-    public Player getPlayerRed() { return this.playerRed; }
+    public List<Player> getPlayers() { return this.players; }
 
-    public Player getPlayerBlue() { return this.playerBlue; }
-
-    public Player getPlayerNeutral() { return this.playerNeutral; }
+    /**
+     * A way to get the player who uses a mouse or a touchscreen.
+     * @return The human player currently playing
+     */
+    public HumanPlayer getHumanPlayer() {
+        return this.humanPlayer;
+    }
 
     public Map getMap() { return map; }
 

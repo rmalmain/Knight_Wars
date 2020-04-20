@@ -2,7 +2,7 @@ package com.knightwars.game.environment;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
-import com.knightwars.game.KnightWarsGame;
+import com.knightwars.game.players.Player;
 
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
