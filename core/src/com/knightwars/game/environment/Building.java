@@ -1,6 +1,7 @@
 package com.knightwars.game.environment;
 
 import com.badlogic.gdx.math.Vector2;
+import com.knightwars.game.players.Player;
 
 public abstract class Building {
     public static final float SELECTION_THRESHOLD = 0.22f;

@@ -1,5 +1,7 @@
 package com.knightwars.game.environment;
 
+import com.knightwars.game.players.Player;
+
 public class AttackerWonFightException extends Exception {
 
     private final Player attackingPlayer;

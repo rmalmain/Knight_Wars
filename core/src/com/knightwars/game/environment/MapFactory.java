@@ -3,6 +3,7 @@ package com.knightwars.game.environment;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.knightwars.game.environment.buildings.ClassicCastle;
+import com.knightwars.game.players.Player;
 import org.yaml.snakeyaml.*;
 import java.io.*;
 import java.util.HashMap;

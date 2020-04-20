@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.knightwars.game.KnightWarsGame;
 import com.knightwars.game.environment.Building;
-import com.knightwars.game.environment.Player;
+import com.knightwars.game.players.Player;
 import com.knightwars.userInterface.gameActors.GameActorBuildings;
 import com.knightwars.userInterface.gameActors.GameActorHUD;
 
@@ -57,7 +57,7 @@ public class EventHandler {
             else {
                 // Move the units from one building to another
                 gameState.getMap().sendUnit(selectedBuilding, destinationBuilding,
-                        gameState.getPlayerBlue().getUnitPercentage());
+                        gameState.getHumanPlayer().getUnitPercentage());
             }
         }
     }

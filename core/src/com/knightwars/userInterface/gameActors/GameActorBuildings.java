@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
 import com.knightwars.game.KnightWarsGame;
 import com.knightwars.game.environment.Building;
+import com.knightwars.game.players.Player;
 import com.knightwars.userInterface.UnknownPlayerException;
 
 import java.util.List;
@@ -77,11 +78,11 @@ public class GameActorBuildings extends Actor {
      * @return The corresponding sprite
      */
     private Sprite determineBuildingSprite(Building building) {
-        if (building.getOwner() == gameState.getPlayerRed()) {
+        if (building.getOwner().getColor() == Player.ColorPlayer.RED) {
             return spriteRedBuilding;
-        } else if (building.getOwner() == gameState.getPlayerBlue()) {
+        } else if (building.getOwner().getColor() == Player.ColorPlayer.BLUE) {
             return spriteBlueBuilding;
-        } else if (building.getOwner() == gameState.getPlayerNeutral()) {
+        } else if (building.getOwner().getColor() == Player.ColorPlayer.NEUTRAL) {
             return spriteNeutralBuilding;
         } else {
             throw new UnknownPlayerException("There is no player associated with the building.");
