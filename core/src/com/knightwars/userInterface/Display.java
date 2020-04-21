@@ -5,7 +5,7 @@ import com.knightwars.game.GameManager;
 
 public class Display {
 
-    public final KnightWars gameDisplay;
+    private final KnightWars gameDisplay;
     private final GameManager gameManager;
 
     public Display(KnightWars gameDisplay, GameManager gameManager) {
