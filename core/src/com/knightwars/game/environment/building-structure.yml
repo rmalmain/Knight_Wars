@@ -1,0 +1,28 @@
+ClassicCastle:
+  - FortifiedCastle
+
+FortifiedCastle:
+  - GarrisonCastle1
+  - CitadelCastle1
+  - MarketCastle1
+  - ForgeCastle1
+
+CitadelCastle1:
+  - CitadelCastle2
+
+GarrisonCastle1:
+  - GarrisonCastle2
+
+MarketCastle1:
+  - MarketCastle2
+
+ForgeCastle1:
+  ForgeCastle2
+#
+#CitadelCastle2:
+#
+#GarrisonCastle2:
+#
+#MarketCastle2:
+#
+#ForgeCastle2:
