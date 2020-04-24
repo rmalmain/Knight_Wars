@@ -2,7 +2,7 @@ package com.knightwars.game.environment;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
-import com.knightwars.game.InvalidYamlFormat;
+import com.knightwars.game.InvalidYamlFormatException;
 import com.knightwars.game.YamlParser;
 import com.knightwars.game.players.Player;
 
@@ -37,7 +37,7 @@ public class Map {
         try {
             this.buildingHierarchy = YamlParser.yamlToJavaMap(yamlUpgradeHierarchyPath);
             YamlParser.yamlValidity(this.buildingHierarchy, Building.class, BUILDINGS_LOCATION_PACKAGE);
-        } catch (FileNotFoundException | InvalidYamlFormat e) {
+        } catch (FileNotFoundException | InvalidYamlFormatException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
             System.exit(0);
