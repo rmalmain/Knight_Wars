@@ -2,6 +2,9 @@ package com.knightwars.game.environment;
 
 import com.knightwars.game.players.Player;
 
+/** Exception raised if the attacker of a castle won the fight
+ */
+
 public class AttackerWonFightException extends Exception {
 
     private final Player attackingPlayer;
