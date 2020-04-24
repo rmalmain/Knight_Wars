@@ -151,12 +151,11 @@ public class Map {
         }
     }
 
-    public void changeBuilding(Building oldBuilding, Building newBuilding) {
-        newBuilding.setKnights(oldBuilding.getKnights());
-        newBuilding.setCanGenerateUnits(oldBuilding.getCanGenerateUnits());
-        newBuilding.setOwner(oldBuilding.getOwner());
-    }
-
+    /** Return the building associated to some coordinates
+     * @param coordinates the coordinates of the building to find
+     * @return The building associated to the building
+     * @throws NoBuildingFoundException is thrown if the coordinates were not able to determine a building
+     */
     private int coordinatesToBuildingsIndex(Vector2 coordinates) throws NoBuildingFoundException {
         for (Building building : buildings) {
             if (building.getCoordinates().dst(coordinates) < EPSILON_BUILDING_COORDINATES) {
@@ -166,24 +165,40 @@ public class Map {
         throw new NoBuildingFoundException("No building has been found.");
     }
 
-    public void upgradeBuilding(Vector2 coordinatesBuildingToUpgrade, Class<? extends Building> building) throws InvalidUpgradeException, NoBuildingFoundException {
-        upgradeBuilding(this.buildings.get(coordinatesToBuildingsIndex(coordinatesBuildingToUpgrade)), building);
+    /** Upgrade a building given the coordinates of a building to upgrade and the class of the upgraded building
+     * @param coordinatesBuildingToUpgrade Coordinates of the building to upgrade
+     * @param buildingUpgradeClass building class of the upgrade
+     * @throws InvalidUpgradeException is thrown if the upgrade is invalid regarding the upgrade tree
+     * @throws NoBuildingFoundException is thrown if the building can't be found with the given coordinates
+     */
+    public void upgradeBuilding(Vector2 coordinatesBuildingToUpgrade, Class<? extends Building> buildingUpgradeClass) throws InvalidUpgradeException, NoBuildingFoundException {
+        upgradeBuilding(this.buildings.get(coordinatesToBuildingsIndex(coordinatesBuildingToUpgrade)), buildingUpgradeClass);
     }
 
-    private boolean isUpgradable(Building building, Class<?> buildingClass) {
+    /** To know is an upgrade is valid or not.
+     * @param building is the building to upgrade
+     * @param buildingUpgradeClass is the building
+     * @return true if the upgrade is valid and false elsewhere
+     */
+    private boolean isUpgradable(Building building, Class<?> buildingUpgradeClass) {
         String hierarchyResult = this.buildingHierarchy.get(building.getClass().getSimpleName()).toString();
-        return Arrays.asList(hierarchyResult.substring(1, hierarchyResult.length()-1).split("\\s*,\\s*")).contains(buildingClass.getSimpleName());
+        return Arrays.asList(hierarchyResult.substring(1, hierarchyResult.length()-1).split("\\s*,\\s*")).contains(buildingUpgradeClass.getSimpleName());
     }
 
-    public void upgradeBuilding(Building buildingToUpgrade, Class<? extends Building> building) throws InvalidUpgradeException {
-        if (!isUpgradable(buildingToUpgrade, building)) {
+    /** Upgrade a building given a building to upgrade and the class of the upgraded building
+     * @param buildingToUpgrade is the building to upgrade
+     * @param buildingUpgradeClass is the class of the upgraded building
+     * @throws InvalidUpgradeException is thrown if the upgrade is not valid regarding the upgrade tree
+     */
+    public void upgradeBuilding(Building buildingToUpgrade, Class<? extends Building> buildingUpgradeClass) throws InvalidUpgradeException {
+        if (!isUpgradable(buildingToUpgrade, buildingUpgradeClass)) {
             throw new InvalidUpgradeException("This building can't be upgraded to such class according to the hierarchy. Please" +
                     " take a look at the yaml file 'building-structure'.");
         }
         else {
             try {
                 this.buildings.set(this.buildings.indexOf(buildingToUpgrade),
-                        building.getConstructor(Building.class).newInstance(buildingToUpgrade));
+                        buildingUpgradeClass.getConstructor(Building.class).newInstance(buildingToUpgrade));
             } catch (Exception e) {
                 System.out.println("Error while upgrading a building...");
             }
