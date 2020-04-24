@@ -21,8 +21,9 @@ public class MapFactory {
      * @param defaultPlayer Default owner of buildings
      * @return The map procedurally generated
      */
-    public static Map createProceduralMap(float width, float height, int buildings, Player defaultPlayer) {
-        Map proceduralMap = new Map(width, height);
+    public static Map createProceduralMap(float width, float height, int buildings, Player defaultPlayer,
+                                          String yamlUpgradeHierarchyPath) {
+        Map proceduralMap = new Map(width, height, yamlUpgradeHierarchyPath);
         for (int i = 0; i < buildings; i++) {
             proceduralMap.addBuildingCopy(new ClassicCastle(defaultPlayer, generateValidPoint(proceduralMap), 20, false));
         }
@@ -33,14 +34,14 @@ public class MapFactory {
      * @param fileName The name of the file to import
      * @return The map described by the file
      */
-    public static Map importMapFromFile(String fileName, Player defaultPlayer) {
+    public static Map importMapFromFile(String fileName, Player defaultPlayer, String yamlUpgradeHierarchyPath) {
 
         Yaml yaml = new Yaml();
 
         LinkedHashMap<String, Object> mapProperties = yaml.load(fileToString(fileName));
 
         Map importedMap = new Map(((Double) mapProperties.get("width")).floatValue(),
-                ((Double) mapProperties.get("height")).floatValue());
+                ((Double) mapProperties.get("height")).floatValue(), yamlUpgradeHierarchyPath);
 
         List<HashMap<String,Object>> buildings = (List<HashMap<String, Object>>) mapProperties.get("buildings");
 

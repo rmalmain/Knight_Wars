@@ -16,6 +16,7 @@ public class KnightWarsGame {
     public static final float WIDTH = 6f;
     public static final float HEIGHT = 3.375f;
     public static final int BUILDINGS_NUMBER = 15;
+    public static final String YAML_UPGRADE_HIERARCHY_PATH = "core/src/com/knightwars/game/environment/building-structure.yml";
 
     /** All (active and past) players in the game */
     private List<Player> players;
@@ -37,7 +38,7 @@ public class KnightWarsGame {
         this.humanPlayer = playerBlue;
 
         this.map = MapFactory.createProceduralMap( // Map generation
-                WIDTH, HEIGHT, BUILDINGS_NUMBER, playerNeutral);
+                WIDTH, HEIGHT, BUILDINGS_NUMBER, playerNeutral, YAML_UPGRADE_HIERARCHY_PATH);
 
         // Buildings attribution
         attributeBuildings(playerRed, playerBlue);
