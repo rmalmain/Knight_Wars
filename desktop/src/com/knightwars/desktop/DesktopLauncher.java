@@ -9,6 +9,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.height = 1080;
 		config.width = 1920;
+		config.fullscreen = true;
 		config.forceExit = false; // to prevent non-zero exit value when the window is closed
 		new LwjglApplication(new KnightWars(), config);
 	}

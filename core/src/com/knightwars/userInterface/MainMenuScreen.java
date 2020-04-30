@@ -65,9 +65,9 @@ public class MainMenuScreen implements Screen {
         });
 
         // Properties of the buttons
-        final float buttonScale = 1.3f;  // Scale of the buttons
+        final float buttonScale = 1.1f;  // Scale of the buttons
         final float buttonPadding = 10f; // Padding between each button
-        final float buttonPosY = 400f;   //  Vertical position of the lowest button
+        final float buttonPosY = 230f;   //  Vertical position of the lowest button
 
         // Create a table to contain the buttons, scale them and add padding
         Table menuTable = new Table();

@@ -28,7 +28,7 @@ public class MainMenuBackground extends Actor {
         batch.setProjectionMatrix(camera.combined);
 
         // Draw the menu
-        final float titlePosY = 500f;   // Vertical position of the game title
+        final float titlePosY = 300f;   // Vertical position of the game title
         final float titleOffsetX = 30f; // Horizontal offset of the title
         batch.draw(background, 0, 0,mapSize.x*SCALE, mapSize.y*SCALE);
         batch.draw(title, mapSize.x*SCALE/2f - title.getWidth()/2f - titleOffsetX, titlePosY);

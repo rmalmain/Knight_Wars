@@ -1,5 +1,6 @@
 package com.knightwars.userInterface;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
@@ -21,7 +22,12 @@ public class GameInputProcessor implements InputProcessor {
      * @return whether the input was processed
      */
     @Override
-    public boolean keyDown(int keycode) { return false; }
+    public boolean keyDown(int keycode) {
+        if (keycode == Input.Keys.ESCAPE) {
+            Gdx.app.exit();
+        }
+        return false;
+    }
 
     /**
      * Called when a key was released
