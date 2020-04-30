@@ -1,0 +1,55 @@
+# First map
+---
+width: 6.0
+
+height: 3.375
+
+buildings:
+  - x: 1.8
+    y: 2.4
+    knights: 20
+    knightGrowth: false
+  - x: 4.2
+    y: 2.4
+    knights: 20
+    knightGrowth: false
+  - x: 1.1
+    y: 2.8
+    knights: 20
+    knightGrowth: false
+  - x: 4.9
+    y: 2.8
+    knights: 20
+    knightGrowth: false
+  - x: 1.2
+    y: 1.8
+    knights: 20
+    knightGrowth: false
+  - x: 4.8
+    y: 1.8
+    knights: 20
+    knightGrowth: false
+  - x: 1.4
+    y: 1.0
+    knights: 20
+    knightGrowth: false
+  - x: 4.6
+    y: 1.0
+    knights: 20
+    knightGrowth: false
+  - x: 2.2
+    y: 0.5
+    knights: 20
+    knightGrowth: false
+  - x: 3.8
+    y: 0.5
+    knights: 20
+    knightGrowth: false
+  - x: 3.0
+    y: 2.8
+    knights: 20
+    knightGrowth: false
+  - x: 3.0
+    y: 1.3
+    knights: 20
+    knightGrowth: false
