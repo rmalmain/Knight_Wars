@@ -1,16 +1,16 @@
 package com.knightwars.game;
 
+import com.badlogic.gdx.Gdx;
 import com.knightwars.game.environment.Map;
 import com.knightwars.game.environment.MapFactory;
+import com.knightwars.game.environment.NoBuildingFoundException;
+import com.knightwars.game.players.ComputerPlayer;
 import com.knightwars.game.players.HumanPlayer;
 import com.knightwars.game.players.NeutralPlayer;
 import com.knightwars.game.players.Player;
-import com.knightwars.game.players.ComputerPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.badlogic.gdx.math.MathUtils.random;
 
 public class KnightWarsGame {
     public static final float WIDTH = 6f;
@@ -19,9 +19,9 @@ public class KnightWarsGame {
     public static final String YAML_UPGRADE_HIERARCHY_PATH = "core/src/com/knightwars/game/environment/building-structure.yml";
 
     /** All (active and past) players in the game */
-    private List<Player> players;
-    private HumanPlayer humanPlayer;
-    private Map map;
+    private final List<Player> players;
+    private final HumanPlayer humanPlayer;
+    private final Map map;
 
     public KnightWarsGame() {
         // Players initialization
@@ -43,19 +43,30 @@ public class KnightWarsGame {
         this.map = MapFactory.importMapFromFile("maps/map1.yml", playerNeutral, YAML_UPGRADE_HIERARCHY_PATH);
 
         // Buildings attribution
-        attributeBuildings(playerRed, playerBlue);
+        try {
+            attributeBuildings(playerRed, playerBlue);
+        } catch (NoBuildingFoundException e) {
+            e.printStackTrace();
+            Gdx.app.exit();
+        }
     }
 
     /** Attribute a building to each player. Every other buildings are attributed to the neutral player. */
-    public void attributeBuildings(Player playerRed, Player playerBlue) {
+    public void attributeBuildings(Player playerRed, Player playerBlue) throws NoBuildingFoundException {
         // TODO That should be done at generation time
-        map.getBuildings().get(0).setOwner(playerRed);
-        map.getBuildings().get(0).setKnights(50);
-        map.getBuildings().get(0).setCanGenerateUnits(true);
+        try {
+            map.getBuildings().get(0).setOwner(playerRed);
+            map.getBuildings().get(0).setKnights(50);
+            map.getBuildings().get(0).setCanGenerateUnits(true);
 
-        map.getBuildings().get(1).setOwner(playerBlue);
-        map.getBuildings().get(1).setKnights(50);
-        map.getBuildings().get(1).setCanGenerateUnits(true);
+            map.getBuildings().get(1).setOwner(playerBlue);
+            map.getBuildings().get(1).setKnights(50);
+            map.getBuildings().get(1).setCanGenerateUnits(true);
+        }
+        catch (IndexOutOfBoundsException e) {
+            throw new NoBuildingFoundException("The map should at least have two buildings");
+        }
+
     }
 
     public List<Player> getPlayers() { return this.players; }

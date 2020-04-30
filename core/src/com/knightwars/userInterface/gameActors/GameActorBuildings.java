@@ -36,7 +36,7 @@ public class GameActorBuildings extends Actor {
     public GameActorBuildings(KnightWarsGame gameState) {
         this.gameState = gameState;
 
-        // Create the sprites
+        // Load the sprites
         spriteRedBuilding = new Sprite(new Texture("buildings/red_building.png"));
         spriteBlueBuilding = new Sprite(new Texture("buildings/blue_building.png"));
         spriteNeutralBuilding = new Sprite(new Texture("buildings/neutral_building.png"));
@@ -64,9 +64,9 @@ public class GameActorBuildings extends Actor {
 
             // Display more information about this building if it is selected
             if (building == selectedBuilding) {
-                String informations = "Defense : " + (int) building.getDefenseLevel() + "\nGold gen : "
+                String information = "Defense : " + (int) building.getDefenseLevel() + "\nGold gen : "
                         + (int) building.getGoldGeneration() + "\nKnight gen : " + (int) building.getKnightGeneration();
-                font.draw(batch, informations, buildingCoordinates.x*SCALE - 70f,
+                font.draw(batch, information, buildingCoordinates.x*SCALE - 70f,
                         buildingCoordinates.y*SCALE - 80f, currentSprite.getWidth(), Align.center, false);
             }
         }
@@ -90,7 +90,7 @@ public class GameActorBuildings extends Actor {
     }
 
     /**
-     * Display more informations about a building
+     * Display more information about a building
      * @param selectedBuilding The selected building
      */
     public void showInformation(Building selectedBuilding) {
