@@ -37,8 +37,10 @@ public class KnightWarsGame {
 
         this.humanPlayer = playerBlue;
 
-        this.map = MapFactory.createProceduralMap( // Map generation
-                WIDTH, HEIGHT, BUILDINGS_NUMBER, playerNeutral, YAML_UPGRADE_HIERARCHY_PATH);
+//        this.map = MapFactory.createProceduralMap( // Map generation
+//                WIDTH, HEIGHT, BUILDINGS_NUMBER, playerNeutral, YAML_UPGRADE_HIERARCHY_PATH);
+
+        this.map = MapFactory.importMapFromFile("maps/map1.yml", playerNeutral, YAML_UPGRADE_HIERARCHY_PATH);
 
         // Buildings attribution
         attributeBuildings(playerRed, playerBlue);
@@ -47,20 +49,13 @@ public class KnightWarsGame {
     /** Attribute a building to each player. Every other buildings are attributed to the neutral player. */
     public void attributeBuildings(Player playerRed, Player playerBlue) {
         // TODO That should be done at generation time
-        int randomRed = random(map.getBuildings().size()-1);
-        int randomBlue = random(map.getBuildings().size()-1);
-        if (randomBlue == randomRed) {
-            randomBlue++;
-            randomBlue = randomBlue%(map.getBuildings().size());
-        }
+        map.getBuildings().get(0).setOwner(playerRed);
+        map.getBuildings().get(0).setKnights(50);
+        map.getBuildings().get(0).setCanGenerateUnits(true);
 
-        map.getBuildings().get(randomRed).setOwner(playerRed);
-        map.getBuildings().get(randomRed).setKnights(50);
-        map.getBuildings().get(randomRed).setCanGenerateUnits(true);
-
-        map.getBuildings().get(randomBlue).setOwner(playerBlue);
-        map.getBuildings().get(randomBlue).setKnights(50);
-        map.getBuildings().get(randomBlue).setCanGenerateUnits(true);
+        map.getBuildings().get(1).setOwner(playerBlue);
+        map.getBuildings().get(1).setKnights(50);
+        map.getBuildings().get(1).setCanGenerateUnits(true);
     }
 
     public List<Player> getPlayers() { return this.players; }
