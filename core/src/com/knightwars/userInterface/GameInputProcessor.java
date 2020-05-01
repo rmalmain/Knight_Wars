@@ -9,7 +9,7 @@ public class GameInputProcessor implements InputProcessor {
 
     private int lastTouchDownButton;
     private Vector2 lastTouchDown;
-    private EventHandler eventHandler;
+    private final EventHandler eventHandler;
 
     public GameInputProcessor(EventHandler eventHandler) {
         this.eventHandler = eventHandler;
@@ -123,6 +123,7 @@ public class GameInputProcessor implements InputProcessor {
      */
     @Override
     public boolean scrolled(int amount) {
+        eventHandler.handleScroll(amount);
         return false;
     }
 }
