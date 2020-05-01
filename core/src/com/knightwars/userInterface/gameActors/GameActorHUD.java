@@ -11,13 +11,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Scaling;
 import com.knightwars.game.KnightWarsGame;
 import com.knightwars.userInterface.GameScreen;
@@ -28,6 +27,7 @@ public class GameActorHUD extends Actor {
     private final KnightWarsGame gameState;
     private Arrow arrow;
     private final Sprite spriteArrow;
+    private final ButtonGroup<CheckBox> buttonGroup;
 
     public GameActorHUD(final KnightWarsGame gameState, Stage stage) {
         this.gameState = gameState;
@@ -40,7 +40,7 @@ public class GameActorHUD extends Actor {
 
         // Create the check boxes to select the percentage of units to send to battle
         // and add them to a button group so only one checkbox can be checked at a time
-        ButtonGroup<CheckBox> buttonGroup = new ButtonGroup<>();
+        buttonGroup = new ButtonGroup<>();
         for (int i=0; i < 4; i++) {
             buttonGroup.add(new CheckBox("", skin, "radio"));
         }
@@ -59,9 +59,9 @@ public class GameActorHUD extends Actor {
         for (CheckBox checkBox : buttonGroup.getButtons()) {
             // Change the percentage when the check box is clicked
             final int finalIndex = index; // So index can be accessed from the inner class
-            checkBox.addListener(new ClickListener() {
+            checkBox.addListener(new ChangeListener() {
                 @Override
-                public void clicked(InputEvent event, float x, float y) {
+                public void changed(ChangeEvent event, Actor actor) {
                     gameState.getHumanPlayer().setUnitPercentage(finalIndex * 0.25f);
                 }
             });
@@ -69,6 +69,9 @@ public class GameActorHUD extends Actor {
             // Set the size of the checkbox
             checkBox.getImage().setScaling(Scaling.stretch);
             checkBox.getCells().get(0).size(checkBoxWidth,checkBoxHeight);
+
+            // Enable events to be fired when the checkbox is checked programmatically
+            checkBox.setProgrammaticChangeEvents(true);
 
             // Add the check box to the table
             percentageTable.add(checkBox).pad(checkBoxPadding).row();
@@ -122,5 +125,9 @@ public class GameActorHUD extends Actor {
         if (arrow != null) {
             arrow.hide();
         }
+    }
+
+    public ButtonGroup<CheckBox> getButtonGroup() {
+        return buttonGroup;
     }
 }

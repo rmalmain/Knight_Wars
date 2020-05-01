@@ -13,10 +13,10 @@ import java.util.List;
 
 public class EventHandler {
 
-    private KnightWarsGame gameState;
-    private Viewport viewport;
-    private GameActorHUD actorHUD;
-    private GameActorBuildings actorBuildings;
+    private final KnightWarsGame gameState;
+    private final Viewport viewport;
+    private final GameActorHUD actorHUD;
+    private final GameActorBuildings actorBuildings;
 
     public EventHandler(KnightWarsGame gameState, Viewport viewport, GameActorHUD actorHUD,
                         GameActorBuildings actorBuildings) {
@@ -116,5 +116,21 @@ public class EventHandler {
             }
         }
         return null;
+    }
+
+    /**
+     * Handle scroll to change the percentage of unit to send to battle
+     *
+     * @param amount the scroll amount, -1 or 1 depending on the direction the wheel was scrolled.
+     */
+    public void handleScroll(int amount) {
+        int currentIndex = actorHUD.getButtonGroup().getCheckedIndex();
+        int length = actorHUD.getButtonGroup().getButtons().size;
+        if (amount < 0 && currentIndex > 0) {
+            actorHUD.getButtonGroup().getButtons().get(currentIndex - 1).setChecked(true);
+        }
+        else if (amount > 0 && currentIndex < length - 1) {
+            actorHUD.getButtonGroup().getButtons().get(currentIndex + 1).setChecked(true);
+        }
     }
 }
