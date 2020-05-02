@@ -56,7 +56,7 @@ public class GameScreen implements Screen {
 
         // Create a stage and add all the actors to display
         stage = new Stage(viewport, batch);
-        GameActorBuildings actorBuildings = new GameActorBuildings(gameState);
+        GameActorBuildings actorBuildings = new GameActorBuildings(gameState, stage);
         stage.addActor(actorBuildings);
         stage.addActor(new GameActorUnits(gameState));
         GameActorHUD actorHUD = new GameActorHUD(gameState, stage);

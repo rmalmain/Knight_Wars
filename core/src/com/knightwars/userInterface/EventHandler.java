@@ -37,7 +37,7 @@ public class EventHandler {
         actorHUD.deleteArrow();
 
         // Hide building information
-        actorBuildings.hideInformation();
+        actorBuildings.hideUpgrade();
 
         // Project the screen coordinates in the game coordinates
         Vector2 selectedBuildingCoords = unprojectVector2(lastTouchDown);
@@ -51,8 +51,8 @@ public class EventHandler {
             // TODO Extract this code to fit the principle of an event-based game (we'll use the very same
             //  events for the AI to play)
             if (selectedBuilding == destinationBuilding) {
-                // Display more information about this building
-                actorBuildings.showInformation(selectedBuilding);
+                // Display upgrade options
+                actorBuildings.showUpgrade(selectedBuilding);
             }
             else {
                 // Move the units from one building to another
@@ -69,8 +69,8 @@ public class EventHandler {
      * @param posTouchDragged The coordinates of the last TouchDragged event
      */
     public void handleDrag(Vector2 posTouchDown, Vector2 posTouchDragged) {
-        // Hide building information
-        actorBuildings.hideInformation();
+        // Hide building upgrade options
+        actorBuildings.hideUpgrade();
 
         // Project the screen coordinates in the game coordinates
         Vector2 selectedBuildingCoords = unprojectVector2(posTouchDown);
