@@ -9,8 +9,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 import com.knightwars.game.KnightWarsGame;
 import com.knightwars.game.environment.Building;
@@ -29,11 +33,14 @@ public class GameActorBuildings extends Actor {
     private final KnightWarsGame gameState;
     private final BitmapFont font;
     private Building selectedBuilding;
+    private final Table upgradeTable;
 
     private final static float fontOffsetX = -15f; // Horizontal position offset relative to the building
     private final static float fontOffsetY = 120f; // Vertical position offset relative to the building
+    private final static float buttonUpgradeSize = 70f;
+    private final static float buttonUpgradePadding = 10f;
 
-    public GameActorBuildings(KnightWarsGame gameState) {
+    public GameActorBuildings(KnightWarsGame gameState, Stage stage) {
         this.gameState = gameState;
 
         // Load the sprites
@@ -42,6 +49,20 @@ public class GameActorBuildings extends Actor {
         spriteNeutralBuilding = new Sprite(new Texture("buildings/neutral_building.png"));
         font = new BitmapFont(Gdx.files.internal("fonts/MontserratBold.ttf.fnt"),
                 Gdx.files.internal("fonts/MontserratBold.ttf_0.png"), false);
+
+        // Add the buttons to upgrade buildings
+        upgradeTable = new Table();
+        Skin skin = new Skin(Gdx.files.internal("buttons/glassy-ui.json"));
+        final Button upgradeButton1 = new TextButton("1", skin, "small");
+        final Button upgradeButton2 = new TextButton("2", skin, "small");
+        final Button upgradeButton3 = new TextButton("3", skin, "small");
+        final Button upgradeButton4 = new TextButton("4", skin, "small");
+        upgradeTable.add(upgradeButton1).width(buttonUpgradeSize).height(buttonUpgradeSize).pad(buttonUpgradePadding);
+        upgradeTable.add(upgradeButton2).width(buttonUpgradeSize).height(buttonUpgradeSize).pad(buttonUpgradePadding).row();
+        upgradeTable.add(upgradeButton3).width(buttonUpgradeSize).height(buttonUpgradeSize).pad(buttonUpgradePadding);
+        upgradeTable.add(upgradeButton4).width(buttonUpgradeSize).height(buttonUpgradeSize).pad(buttonUpgradePadding);
+        upgradeTable.setVisible(false);
+        stage.addActor(upgradeTable);
     }
 
     @Override
@@ -51,23 +72,20 @@ public class GameActorBuildings extends Actor {
 
         // Draw the buildings
         for (Building building : buildings) {
-            Vector2 buildingCoordinates = building.getCoordinates();
-
             // Draw the building
             Sprite currentSprite = determineBuildingSprite(building);
-            batch.draw(currentSprite, buildingCoordinates.x*SCALE - currentSprite.getWidth()/2f,
-                    buildingCoordinates.y*SCALE - currentSprite.getHeight()/2f);
+            batch.draw(currentSprite, building.getCoordinates().x*SCALE - currentSprite.getWidth()/2f,
+                    building.getCoordinates().y*SCALE - currentSprite.getHeight()/2f);
 
-            // Draw the number of knights
-            font.draw(batch, String.valueOf(building.getKnights()), buildingCoordinates.x*SCALE + fontOffsetX,
-                    buildingCoordinates.y*SCALE + fontOffsetY);
+            // Draw the number of knights in the building
+            font.draw(batch, String.valueOf(building.getKnights()), building.getCoordinates().x*SCALE + fontOffsetX,
+                    building.getCoordinates().y*SCALE + fontOffsetY);
 
-            // Display more information about this building if it is selected
+            // Display upgrade options if the building is selected
             if (building == selectedBuilding) {
-                String information = "Defense : " + (int) building.getDefenseLevel() + "\nGold gen : "
-                        + (int) building.getGoldGeneration() + "\nKnight gen : " + (int) building.getKnightGeneration();
-                font.draw(batch, information, buildingCoordinates.x*SCALE - 70f,
-                        buildingCoordinates.y*SCALE - 80f, currentSprite.getWidth(), Align.center, false);
+                upgradeTable.setPosition(building.getCoordinates().x*SCALE, building.getCoordinates().y*SCALE,
+                        Align.center);
+                upgradeTable.draw(batch, parentAlpha);
             }
         }
     }
@@ -90,17 +108,19 @@ public class GameActorBuildings extends Actor {
     }
 
     /**
-     * Display more information about a building
+     * Display upgrade options
      * @param selectedBuilding The selected building
      */
-    public void showInformation(Building selectedBuilding) {
+    public void showUpgrade(Building selectedBuilding) {
         this.selectedBuilding = selectedBuilding;
+        upgradeTable.setVisible(true);
     }
 
     /**
-     * Hide the information on the screen
+     * Hide the upgrade options
      */
-    public void hideInformation() {
+    public void hideUpgrade() {
         selectedBuilding = null;
+        upgradeTable.setVisible(false);
     }
 }

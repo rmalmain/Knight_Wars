@@ -29,6 +29,13 @@ public class GameActorHUD extends Actor {
     private final Sprite spriteArrow;
     private final ButtonGroup<CheckBox> buttonGroup;
 
+    // Check box properties
+    private final static int checkBoxWidth = 100;
+    private final static int checkBoxHeight = 85;
+    private final static int checkBoxPadding = 10;
+    private final static int checkBoxPosX = 100;
+    private final static int checkBoxPosY = 600;
+
     public GameActorHUD(final KnightWarsGame gameState, Stage stage) {
         this.gameState = gameState;
 
@@ -47,13 +54,6 @@ public class GameActorHUD extends Actor {
 
         // Create a table to position the check boxes
         Table percentageTable = new Table();
-
-        // Check box properties
-        final int checkBoxWidth = 100;
-        final int checkBoxHeight = 85;
-        final int checkBoxPadding = 10;
-        final int checkBoxPosX = 100;
-        final int checkBoxPosY = 600;
 
         int index = 1;
         for (CheckBox checkBox : buttonGroup.getButtons()) {
