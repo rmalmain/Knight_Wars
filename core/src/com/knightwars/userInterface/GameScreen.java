@@ -67,8 +67,8 @@ public class GameScreen implements Screen {
         InputProcessor gameInputProcessor = new GameInputProcessor(eventHandler);
         // Inputs can come from GameInputProcessor or the stage itself (for the HUD)
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(gameInputProcessor);
         inputMultiplexer.addProcessor(stage);
+        inputMultiplexer.addProcessor(gameInputProcessor);
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
 

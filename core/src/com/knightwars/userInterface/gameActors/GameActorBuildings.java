@@ -10,17 +10,20 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.knightwars.game.KnightWarsGame;
 import com.knightwars.game.environment.Building;
+import com.knightwars.game.environment.InvalidUpgradeException;
 import com.knightwars.game.players.Player;
 import com.knightwars.userInterface.UnknownPlayerException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.knightwars.userInterface.GameScreen.SCALE;
@@ -34,13 +37,16 @@ public class GameActorBuildings extends Actor {
     private final BitmapFont font;
     private Building selectedBuilding;
     private final Table upgradeTable;
+    private final List<TextButton> upgradeButtons;
+    private ArrayList<Class<? extends Building>> availableUpgrades;
 
     private final static float fontOffsetX = -15f; // Horizontal position offset relative to the building
     private final static float fontOffsetY = 120f; // Vertical position offset relative to the building
-    private final static float buttonUpgradeSize = 70f;
+    private final static float buttonUpgradeHeight = 70f;
+    private final static float buttonUpgradeWidth = 150f;
     private final static float buttonUpgradePadding = 10f;
 
-    public GameActorBuildings(KnightWarsGame gameState, Stage stage) {
+    public GameActorBuildings(final KnightWarsGame gameState, Stage stage) {
         this.gameState = gameState;
 
         // Load the sprites
@@ -52,15 +58,31 @@ public class GameActorBuildings extends Actor {
 
         // Add the buttons to upgrade buildings
         upgradeTable = new Table();
+        upgradeButtons = new ArrayList<>();
         Skin skin = new Skin(Gdx.files.internal("buttons/glassy-ui.json"));
-        final Button upgradeButton1 = new TextButton("1", skin, "small");
-        final Button upgradeButton2 = new TextButton("2", skin, "small");
-        final Button upgradeButton3 = new TextButton("3", skin, "small");
-        final Button upgradeButton4 = new TextButton("4", skin, "small");
-        upgradeTable.add(upgradeButton1).width(buttonUpgradeSize).height(buttonUpgradeSize).pad(buttonUpgradePadding);
-        upgradeTable.add(upgradeButton2).width(buttonUpgradeSize).height(buttonUpgradeSize).pad(buttonUpgradePadding).row();
-        upgradeTable.add(upgradeButton3).width(buttonUpgradeSize).height(buttonUpgradeSize).pad(buttonUpgradePadding);
-        upgradeTable.add(upgradeButton4).width(buttonUpgradeSize).height(buttonUpgradeSize).pad(buttonUpgradePadding);
+        for (int i = 0; i < 4; i++) {
+            TextButton upgradeButton = new TextButton("", skin, "small");
+            upgradeTable.add(upgradeButton).width(buttonUpgradeWidth).height(buttonUpgradeHeight).pad(buttonUpgradePadding);
+            if (i == 1) upgradeTable.row();
+            upgradeButtons.add(upgradeButton);
+
+            final int finalI = i;
+            upgradeButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    try {
+                        if (selectedBuilding != null) {
+                            gameState.getMap().upgradeBuilding(selectedBuilding, availableUpgrades.get(finalI));
+                            System.out.println("Upgraded to " + availableUpgrades.get(finalI).getSimpleName());
+                        }
+                    } catch (IndexOutOfBoundsException | InvalidUpgradeException e) {
+                        e.printStackTrace();
+                    } finally {
+                        upgradeTable.setVisible(false);
+                    }
+                }
+            });
+        }
         upgradeTable.setVisible(false);
         stage.addActor(upgradeTable);
     }
@@ -112,8 +134,16 @@ public class GameActorBuildings extends Actor {
      * @param selectedBuilding The selected building
      */
     public void showUpgrade(Building selectedBuilding) {
-        this.selectedBuilding = selectedBuilding;
-        upgradeTable.setVisible(true);
+        if (selectedBuilding.getOwner().getColor() == Player.ColorPlayer.BLUE) {
+            this.selectedBuilding = selectedBuilding;
+            availableUpgrades = gameState.getMap().availableUpgrade(selectedBuilding);
+            try {
+                for (int i = 0; i < 4; i++) {
+                    upgradeButtons.get(i).setText(availableUpgrades.get(i).getSimpleName());
+                }
+            } catch (IndexOutOfBoundsException ignored) {}
+            upgradeTable.setVisible(true);
+        }
     }
 
     /**
