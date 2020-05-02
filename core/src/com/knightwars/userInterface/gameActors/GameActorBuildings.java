@@ -12,9 +12,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.knightwars.game.KnightWarsGame;
@@ -45,6 +43,7 @@ public class GameActorBuildings extends Actor {
     private final static float buttonUpgradeHeight = 70f;
     private final static float buttonUpgradeWidth = 150f;
     private final static float buttonUpgradePadding = 10f;
+    private final TextField buildingText;
 
     public GameActorBuildings(final KnightWarsGame gameState, Stage stage) {
         this.gameState = gameState;
@@ -63,7 +62,7 @@ public class GameActorBuildings extends Actor {
         for (int i = 0; i < 4; i++) {
             TextButton upgradeButton = new TextButton("", skin, "small");
             upgradeTable.add(upgradeButton).width(buttonUpgradeWidth).height(buttonUpgradeHeight).pad(buttonUpgradePadding);
-            if (i == 1) upgradeTable.row();
+            if (i%2 == 1) upgradeTable.row();
             upgradeButtons.add(upgradeButton);
 
             final int finalI = i;
@@ -75,14 +74,17 @@ public class GameActorBuildings extends Actor {
                             gameState.getMap().upgradeBuilding(selectedBuilding, availableUpgrades.get(finalI));
                             System.out.println("Upgraded to " + availableUpgrades.get(finalI).getSimpleName());
                         }
-                    } catch (IndexOutOfBoundsException | InvalidUpgradeException e) {
-                        e.printStackTrace();
+                    } catch (IndexOutOfBoundsException | InvalidUpgradeException ignored) {
                     } finally {
                         upgradeTable.setVisible(false);
                     }
                 }
             });
         }
+        buildingText = new TextField("", skin);
+        buildingText.setAlignment(Align.center);
+        buildingText.setDisabled(true);
+        upgradeTable.add(buildingText).colspan(2);
         upgradeTable.setVisible(false);
         stage.addActor(upgradeTable);
     }
@@ -136,12 +138,15 @@ public class GameActorBuildings extends Actor {
     public void showUpgrade(Building selectedBuilding) {
         if (selectedBuilding.getOwner().getColor() == Player.ColorPlayer.BLUE) {
             this.selectedBuilding = selectedBuilding;
+            buildingText.setText(selectedBuilding.getClass().getSimpleName());
             availableUpgrades = gameState.getMap().availableUpgrade(selectedBuilding);
-            try {
                 for (int i = 0; i < 4; i++) {
+                    try {
                     upgradeButtons.get(i).setText(availableUpgrades.get(i).getSimpleName());
+                    } catch (IndexOutOfBoundsException e) {
+                        upgradeButtons.get(i).setText("");
+                    }
                 }
-            } catch (IndexOutOfBoundsException ignored) {}
             upgradeTable.setVisible(true);
         }
     }
