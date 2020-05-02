@@ -19,8 +19,10 @@ public class Map {
 
     private ArrayList<Building> buildings;
     private ArrayList<Queue<Unit>> unitsToSend;
-    private float unitSpawnTick;
     private ArrayList<Unit> units;
+    private ArrayList<com.knightwars.game.environment.Arrow> arrows;
+
+    private float unitSpawnTick;
     private Vector2 size;
     private java.util.Map<String, Object> buildingHierarchy;
 
@@ -33,6 +35,7 @@ public class Map {
         this.buildings = new ArrayList<>();
         this.units = new ArrayList<>();
         this.unitsToSend = new ArrayList<>();
+        this.arrows = new ArrayList<>();
         this.unitSpawnTick = 0f;
         try {
             this.buildingHierarchy = YamlParser.yamlToJavaMap(yamlUpgradeHierarchyPath);
@@ -175,14 +178,43 @@ public class Map {
         upgradeBuilding(this.buildings.get(coordinatesToBuildingsIndex(coordinatesBuildingToUpgrade)), buildingUpgradeClass);
     }
 
-    /** To know is an upgrade is valid or not.
+    /** To know if an upgrade is valid or not.
      * @param building is the building to upgrade
-     * @param buildingUpgradeClass is the building
+     * @param buildingUpgradeClass aimed upgrade
      * @return true if the upgrade is valid and false elsewhere
      */
     private boolean isUpgradable(Building building, Class<?> buildingUpgradeClass) {
         String hierarchyResult = this.buildingHierarchy.get(building.getClass().getSimpleName()).toString();
         return Arrays.asList(hierarchyResult.substring(1, hierarchyResult.length()-1).split("\\s*,\\s*")).contains(buildingUpgradeClass.getSimpleName());
+    }
+
+    /** Get every available upgrade given a building
+     * @param building is the upgradable building
+     * @return A list of available upgrade. It is empty if there is not any available upgrade.
+     */
+    public ArrayList<Class<? extends Building>> availableUpgrade(Building building) {
+        ArrayList<Class<? extends Building>> upgrades = new ArrayList<>();
+        ArrayList<String> upgradeName = (ArrayList<String>) buildingHierarchy.get(building.getClass().getSimpleName());
+
+        if (upgradeName == null) return upgrades;
+
+        for(String name : upgradeName) {
+            try {
+                upgrades.add((Class<? extends Building>) Class.forName(BUILDINGS_LOCATION_PACKAGE + "." + name));
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        return upgrades;
+    }
+
+    /** Get every available upgrade given building's coordinates
+     * @param buildingCoordinates Coordinates of the upgradable building
+     * @return A list of available upgrade. It is empty if there is not any available upgrade.
+     * @throws NoBuildingFoundException is thrown if the building can't be found with the given coordinates
+     */
+    public ArrayList<Class<? extends Building>> availableUpgrade(Vector2 buildingCoordinates) throws NoBuildingFoundException {
+        return availableUpgrade(this.buildings.get(coordinatesToBuildingsIndex(buildingCoordinates)));
     }
 
     /** Upgrade a building given a building to upgrade and the class of the upgraded building

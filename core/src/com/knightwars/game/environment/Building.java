@@ -9,15 +9,15 @@ public abstract class Building {
     public static final float BUILDING_DEFENSE = 1f;
     public static final int GOLD_GENERATION = 1;
 
-    private final Vector2 coordinates;
+    protected final Vector2 coordinates;
 
-    private Player owner;
-    private int knights; // ALWAYS use setters and getters to modify this attribute
-    private float hitPoints; // ALWAYS use setters and getters to modify this attribute
-    private float goldGeneration;
-    private float knightGeneration;
-    private float defenseLevel;
-    private boolean canGenerateUnits;
+    protected Player owner;
+    protected int knights; // ALWAYS use setters and getters to modify this attribute
+    protected float hitPoints; // ALWAYS use setters and getters to modify this attribute
+    protected float goldGeneration;
+    protected float knightGeneration;
+    protected float defenseLevel;
+    protected boolean canGenerateUnits;
 
     /** Building constructor.
      * @param owner the owner of the building
@@ -35,18 +35,11 @@ public abstract class Building {
         this.canGenerateUnits = canGenerateUnits;
     }
 
-    /** Copy a building.
+    /** Construct a building from another building.
      * @param building the building to copy
      */
     public Building(Building building) {
-        this.owner = building.owner;
-        this.coordinates = new Vector2(building.coordinates);
-        this.knights = building.knights;
-        this.hitPoints = building.getHitPoints();
-        this.goldGeneration = building.getGoldGeneration();
-        this.knightGeneration = building.getKnightGeneration();
-        this.defenseLevel = building.getDefenseLevel();
-        this.canGenerateUnits = building.getCanGenerateUnits();
+        this(building.getOwner(), building.getCoordinates(), building.getKnights(), building.getCanGenerateUnits());
     }
 
     public boolean getCanGenerateUnits() { return this.canGenerateUnits; }

@@ -3,10 +3,8 @@ package com.knightwars.tests;
 import com.knightwars.game.environment.Building;
 import com.knightwars.game.environment.InvalidUpgradeException;
 import com.knightwars.game.environment.MapFactory;
-import com.knightwars.game.environment.buildings.CitadelCastle1;
-import com.knightwars.game.environment.buildings.ClassicCastle;
-import com.knightwars.game.environment.buildings.ForgeCastle1;
-import com.knightwars.game.environment.buildings.FortifiedCastle;
+import com.knightwars.game.environment.NoBuildingFoundException;
+import com.knightwars.game.environment.buildings.*;
 import com.knightwars.game.players.NeutralPlayer;
 import com.knightwars.game.players.Player;
 import org.junit.*;
@@ -74,5 +72,41 @@ public class BuildingTreeTest {
         }
 
         Assert.assertTrue(gameMap.getBuildings().get(0).getClass().getSimpleName().equals(ForgeCastle1.class.getSimpleName()));
+    }
+
+    @Test
+    public void getAvailableUpgrades() throws InvalidUpgradeException {
+        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).get(0).getSimpleName().equals(
+                "FortifiedCastle"));
+
+        gameMap.upgradeBuilding(gameMap.getBuildings().get(0), FortifiedCastle.class);
+
+        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).contains(CitadelCastle1.class));
+        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).contains(MarketCastle1.class));
+        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).contains(ForgeCastle1.class));
+        Assert.assertFalse(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).contains(FortifiedCastle.class));
+        Assert.assertFalse(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).contains(ClassicCastle.class));
+
+        gameMap.upgradeBuilding(gameMap.getBuildings().get(0), ForgeCastle1.class);
+
+        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).isEmpty());
+    }
+
+    @Test
+    public void getAvailableUpgradesCoordinates() throws InvalidUpgradeException, NoBuildingFoundException {
+        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).get(0).getSimpleName().equals(
+                "FortifiedCastle"));
+
+        gameMap.upgradeBuilding(gameMap.getBuildings().get(0).getCoordinates(), FortifiedCastle.class);
+
+        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0).getCoordinates()).contains(CitadelCastle1.class));
+        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0).getCoordinates()).contains(MarketCastle1.class));
+        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0).getCoordinates()).contains(ForgeCastle1.class));
+        Assert.assertFalse(gameMap.availableUpgrade(gameMap.getBuildings().get(0).getCoordinates()).contains(FortifiedCastle.class));
+        Assert.assertFalse(gameMap.availableUpgrade(gameMap.getBuildings().get(0).getCoordinates()).contains(ClassicCastle.class));
+
+        gameMap.upgradeBuilding(gameMap.getBuildings().get(0).getCoordinates(), ForgeCastle1.class);
+
+        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0).getCoordinates()).isEmpty());
     }
 }
