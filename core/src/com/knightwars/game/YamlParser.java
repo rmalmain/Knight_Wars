@@ -30,9 +30,15 @@ public class YamlParser {
     public static void yamlValidity(Map<String, Object> javaMap, Class<?> superClass, String objPackage) throws InvalidYamlFormatException {
         for (String classesHierarchy : javaMap.keySet()) {
             try {
-                if (Class.forName(objPackage + "." + classesHierarchy).getSuperclass() != superClass) {
-                    throw new InvalidYamlFormatException("Invalid YAML format : not extending the right superclass...");
+                Class<?> c = Class.forName(objPackage + "." + classesHierarchy);
+                while (c != null) {
+                    if (c == superClass) {
+                        return;
+                    } else {
+                        c = c.getSuperclass();
+                    }
                 }
+                throw new InvalidYamlFormatException("Invalid YAML format : not extending the right superclass...");
             } catch (ClassNotFoundException e) {
                 throw new InvalidYamlFormatException("Invalid YAML format : Some classes from the YAML file were not found");
             }

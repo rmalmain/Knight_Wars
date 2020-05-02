@@ -62,9 +62,9 @@ public class MapFactory {
     private static Vector2 generateValidPoint(Map map) {
         float x, y;
         float minX = 0.9f;
-        float maxX = map.getSize().x - 0.3f;
-        float minY = 0.4f;
-        float maxY = map.getSize().y - 0.4f;
+        float maxX = map.getSize().x - 0.5f;
+        float minY = 0.9f;
+        float maxY = map.getSize().y - 0.2f;
         do {
             x = MathUtils.random(minX, maxX);
             y = MathUtils.random(minY, maxY);
