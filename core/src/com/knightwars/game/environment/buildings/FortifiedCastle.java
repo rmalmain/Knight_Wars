@@ -7,8 +7,8 @@ import com.knightwars.game.players.Player;
 public class FortifiedCastle extends ClassicCastle {
     public FortifiedCastle(Player owner, Vector2 coordinates, int knights, boolean knightGrowth) {
         super(owner, coordinates, knights, knightGrowth);
-        this.knightGeneration *= 2;
-        this.goldGeneration *= 2;
+        this.knightGeneration *= 5;
+        this.goldGeneration *= 5;
     }
 
     /** Construct a building from another building.
