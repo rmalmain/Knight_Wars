@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.Align;
 import com.knightwars.game.KnightWarsGame;
 import com.knightwars.game.environment.Building;
 import com.knightwars.game.environment.InvalidUpgradeException;
+import com.knightwars.game.environment.NotEnoughGoldException;
 import com.knightwars.game.players.Player;
 import com.knightwars.userInterface.UnknownPlayerException;
 
@@ -74,7 +75,7 @@ public class GameActorBuildings extends Actor {
                             gameState.getMap().upgradeBuilding(selectedBuilding, availableUpgrades.get(finalI));
                             System.out.println("Upgraded to " + availableUpgrades.get(finalI).getSimpleName());
                         }
-                    } catch (IndexOutOfBoundsException | InvalidUpgradeException ignored) {
+                    } catch (IndexOutOfBoundsException | InvalidUpgradeException | NotEnoughGoldException ignored) {
                     } finally {
                         upgradeTable.setVisible(false);
                     }
@@ -139,7 +140,9 @@ public class GameActorBuildings extends Actor {
         if (selectedBuilding.getOwner().getColor() == Player.ColorPlayer.BLUE) {
             this.selectedBuilding = selectedBuilding;
             buildingText.setText(selectedBuilding.getClass().getSimpleName());
-            availableUpgrades = gameState.getMap().availableUpgrade(selectedBuilding);
+            availableUpgrades =
+                    new ArrayList<>(gameState.getMap().availableUpgrade(selectedBuilding).keySet());
+
                 for (int i = 0; i < 4; i++) {
                     try {
                     upgradeButtons.get(i).setText(availableUpgrades.get(i).getSimpleName());
