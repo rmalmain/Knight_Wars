@@ -15,7 +15,7 @@ public class YamlParser {
      * @return the map from the YAML file
      * @throws FileNotFoundException thrown exception if the path is wrong
      */
-    public static Map<String, Object> yamlToJavaMap(String path) throws FileNotFoundException {
+    public static Map<String, Map<String, Integer>> yamlToJavaMap(String path) throws FileNotFoundException {
         Yaml yaml = new Yaml();
         InputStream inputStream = new FileInputStream(new File(path));
         return yaml.load(inputStream);
@@ -27,7 +27,7 @@ public class YamlParser {
      * @param objPackage The package containing the buildings
      * @throws InvalidYamlFormatException thrown exception if there is a construction error in the yaml file
      */
-    public static void yamlValidity(Map<String, Object> javaMap, Class<?> superClass, String objPackage) throws InvalidYamlFormatException {
+    public static void yamlValidity(Map<String, Map<String, Integer>> javaMap, Class<?> superClass, String objPackage) throws InvalidYamlFormatException {
         for (String classesHierarchy : javaMap.keySet()) {
             try {
                 Class<?> c = Class.forName(objPackage + "." + classesHierarchy);

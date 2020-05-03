@@ -24,7 +24,7 @@ public class Map {
 
     private float unitSpawnTick;
     private Vector2 size;
-    private java.util.Map<String, Object> buildingHierarchy;
+    private java.util.Map<String, java.util.Map<String, Integer>> buildingHierarchy;
 
     /** Map constructor
      * @param width the width of the map
@@ -174,7 +174,7 @@ public class Map {
      * @throws InvalidUpgradeException is thrown if the upgrade is invalid regarding the upgrade tree
      * @throws NoBuildingFoundException is thrown if the building can't be found with the given coordinates
      */
-    public void upgradeBuilding(Vector2 coordinatesBuildingToUpgrade, Class<? extends Building> buildingUpgradeClass) throws InvalidUpgradeException, NoBuildingFoundException {
+    public void upgradeBuilding(Vector2 coordinatesBuildingToUpgrade, Class<? extends Building> buildingUpgradeClass) throws InvalidUpgradeException, NoBuildingFoundException, NotEnoughGoldException {
         upgradeBuilding(this.buildings.get(coordinatesToBuildingsIndex(coordinatesBuildingToUpgrade)), buildingUpgradeClass);
     }
 
@@ -184,23 +184,25 @@ public class Map {
      * @return true if the upgrade is valid and false elsewhere
      */
     private boolean isUpgradable(Building building, Class<?> buildingUpgradeClass) {
-        String hierarchyResult = this.buildingHierarchy.get(building.getClass().getSimpleName()).toString();
+        String hierarchyResult = this.buildingHierarchy.get(building.getClass().getSimpleName()).keySet().toString();
         return Arrays.asList(hierarchyResult.substring(1, hierarchyResult.length()-1).split("\\s*,\\s*")).contains(buildingUpgradeClass.getSimpleName());
     }
 
     /** Get every available upgrade given a building
      * @param building is the upgradable building
-     * @return A list of available upgrade. It is empty if there is not any available upgrade.
+     * @return A java Map of available upgrade and their costs in gold. It is empty if there is not any available upgrade.
      */
-    public ArrayList<Class<? extends Building>> availableUpgrade(Building building) {
-        ArrayList<Class<? extends Building>> upgrades = new ArrayList<>();
-        ArrayList<String> upgradeName = (ArrayList<String>) buildingHierarchy.get(building.getClass().getSimpleName());
+    public java.util.HashMap<Class<? extends Building>, Integer> availableUpgrade(Building building) {
+        java.util.HashMap<Class<? extends Building>, Integer> upgrades = new java.util.HashMap<>();
 
-        if (upgradeName == null) return upgrades;
+        if (buildingHierarchy.get(building.getClass().getSimpleName()) == null) return upgrades;
 
-        for(String name : upgradeName) {
+        java.util.Map<String, Integer> upgradeName = buildingHierarchy.get(building.getClass().getSimpleName());
+
+        for(String name : upgradeName.keySet()) {
             try {
-                upgrades.add((Class<? extends Building>) Class.forName(BUILDINGS_LOCATION_PACKAGE + "." + name));
+                upgrades.put((Class<? extends Building>) Class.forName(BUILDINGS_LOCATION_PACKAGE + "." + name),
+                        upgradeName.get(name));
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -213,7 +215,7 @@ public class Map {
      * @return A list of available upgrade. It is empty if there is not any available upgrade.
      * @throws NoBuildingFoundException is thrown if the building can't be found with the given coordinates
      */
-    public ArrayList<Class<? extends Building>> availableUpgrade(Vector2 buildingCoordinates) throws NoBuildingFoundException {
+    public java.util.HashMap<Class<? extends Building>, Integer> availableUpgrade(Vector2 buildingCoordinates) throws NoBuildingFoundException {
         return availableUpgrade(this.buildings.get(coordinatesToBuildingsIndex(buildingCoordinates)));
     }
 
@@ -222,17 +224,20 @@ public class Map {
      * @param buildingUpgradeClass is the class of the upgraded building
      * @throws InvalidUpgradeException is thrown if the upgrade is not valid regarding the upgrade tree
      */
-    public void upgradeBuilding(Building buildingToUpgrade, Class<? extends Building> buildingUpgradeClass) throws InvalidUpgradeException {
+    public void upgradeBuilding(Building buildingToUpgrade, Class<? extends Building> buildingUpgradeClass) throws InvalidUpgradeException, NotEnoughGoldException {
         if (!isUpgradable(buildingToUpgrade, buildingUpgradeClass)) {
             throw new InvalidUpgradeException("This building can't be upgraded to such class according to the hierarchy. Please" +
                     " take a look at the yaml file 'building-structure'.");
+        } else if (buildingToUpgrade.getOwner().getGold() < buildingHierarchy.get(buildingToUpgrade.getClass().getSimpleName()).get(buildingUpgradeClass.getSimpleName())) {
+            throw new NotEnoughGoldException("Not enough gold to upgrade the building.");
         }
         else {
             try {
+                buildingToUpgrade.getOwner().removeGold(buildingHierarchy.get(buildingToUpgrade.getClass().getSimpleName()).get(buildingUpgradeClass.getSimpleName()));
                 this.buildings.set(this.buildings.indexOf(buildingToUpgrade),
                         buildingUpgradeClass.getConstructor(Building.class).newInstance(buildingToUpgrade));
             } catch (Exception e) {
-                System.out.println("Error while upgrading a building...");
+                e.printStackTrace();
             }
         }
     }
