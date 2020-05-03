@@ -66,6 +66,10 @@ abstract public class Player {
         }
     }
 
+    public void setGold(float gold) {
+        this.gold = gold;
+    }
+
     public float getUnitLevel() {
         return this.unitLevel;
     }

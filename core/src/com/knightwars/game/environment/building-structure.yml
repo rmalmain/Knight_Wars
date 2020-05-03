@@ -1,11 +1,11 @@
 ClassicCastle:
-  - FortifiedCastle
+  FortifiedCastle: 20
 
 FortifiedCastle:
-  - GarrisonCastle1
-  - CitadelCastle1
-  - MarketCastle1
-  - ForgeCastle1
+  GarrisonCastle1: 150
+  CitadelCastle1: 150
+  MarketCastle1: 150
+  ForgeCastle1: 150
 
 CitadelCastle1:
 #  - CitadelCastle2

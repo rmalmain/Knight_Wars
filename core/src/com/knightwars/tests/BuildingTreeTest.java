@@ -1,13 +1,12 @@
 package com.knightwars.tests;
 
-import com.knightwars.game.environment.Building;
-import com.knightwars.game.environment.InvalidUpgradeException;
-import com.knightwars.game.environment.MapFactory;
-import com.knightwars.game.environment.NoBuildingFoundException;
+import com.knightwars.game.environment.*;
 import com.knightwars.game.environment.buildings.*;
 import com.knightwars.game.players.NeutralPlayer;
 import com.knightwars.game.players.Player;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.reflections.Reflections;
 import org.yaml.snakeyaml.Yaml;
 
@@ -17,18 +16,17 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 public class BuildingTreeTest {
-    Yaml yaml;
-    Set<Class<? extends Building>> classes;
-    Map<String, Object> obj;
+    public final static double EPSILON = 1e-6;
 
-    com.knightwars.game.environment.Map gameMap;
+    private Map<String, Map<String, Integer>> obj;
+
+    private com.knightwars.game.environment.Map gameMap;
 
     @Before
     public void setUp() {
-        yaml = new Yaml();
+        Yaml yaml = new Yaml();
         try {
             InputStream inputStream = new FileInputStream(new File("src/com/knightwars/game/environment/building-structure" +
                     ".yml"));
@@ -39,53 +37,64 @@ public class BuildingTreeTest {
         }
 
         Reflections reflections = new Reflections("com.knightwars.game.environment");
-        classes = reflections.getSubTypesOf(Building.class);
+        reflections.getSubTypesOf(Building.class);
 
          gameMap = MapFactory.createProceduralMap(6f, 3.375f, 1, new NeutralPlayer("Test",
                 Player.ColorPlayer.NEUTRAL), "src/com/knightwars/game/environment/building-structure.yml");
+
+         gameMap.getBuildings().get(0).getOwner().addGold(10000);
     }
 
     @Test
-    public void simpleUpgradeTest() throws InvalidUpgradeException {
+    public void simpleUpgradeTest() throws InvalidUpgradeException, NotEnoughGoldException {
+        float initialGolds = gameMap.getBuildings().get(0).getOwner().getGold();
         gameMap.upgradeBuilding(gameMap.getBuildings().get(0), FortifiedCastle.class);
 
-        Assert.assertTrue(gameMap.getBuildings().get(0).getClass().getSimpleName().equals(FortifiedCastle.class.getSimpleName()));
+        Assert.assertEquals(gameMap.getBuildings().get(0).getClass().getSimpleName(), FortifiedCastle.class.getSimpleName());
+        Assert.assertEquals(initialGolds - obj.get(ClassicCastle.class.getSimpleName()).get(FortifiedCastle.class.getSimpleName()),
+                gameMap.getBuildings().get(0).getOwner().getGold(),
+                EPSILON);
     }
 
     @Test(expected=InvalidUpgradeException.class)
-    public void wrongUpgradeTest() throws InvalidUpgradeException {
-        gameMap.upgradeBuilding(gameMap.getBuildings().get(0), CitadelCastle1.class);
+    public void wrongUpgradeTest() throws InvalidUpgradeException, NotEnoughGoldException {
+        float initialGolds = gameMap.getBuildings().get(0).getOwner().getGold();
+        try {
+            gameMap.upgradeBuilding(gameMap.getBuildings().get(0), CitadelCastle1.class);
+        } finally {
+            Assert.assertEquals(initialGolds, gameMap.getBuildings().get(0).getOwner().getGold(), EPSILON);
+        }
     }
 
     @Test
-    public void multipleUpgradeTest() {
-        try {
-            gameMap.upgradeBuilding(gameMap.getBuildings().get(0), FortifiedCastle.class);
-        } catch (InvalidUpgradeException e) {
-            System.exit(1);
-        }
+    public void multipleUpgradeTest() throws NotEnoughGoldException, InvalidUpgradeException {
+        float initialGolds = gameMap.getBuildings().get(0).getOwner().getGold();
+        gameMap.upgradeBuilding(gameMap.getBuildings().get(0), FortifiedCastle.class);
+        Assert.assertEquals(initialGolds - obj.get(ClassicCastle.class.getSimpleName()).get(FortifiedCastle.class.getSimpleName()),
+                gameMap.getBuildings().get(0).getOwner().getGold(), EPSILON);
 
-        try {
-            gameMap.upgradeBuilding(gameMap.getBuildings().get(0), ForgeCastle1.class);
-        } catch (InvalidUpgradeException e) {
-            System.exit(1);
-        }
-
-        Assert.assertTrue(gameMap.getBuildings().get(0).getClass().getSimpleName().equals(ForgeCastle1.class.getSimpleName()));
+        gameMap.upgradeBuilding(gameMap.getBuildings().get(0), ForgeCastle1.class);
+        Assert.assertEquals(initialGolds - obj.get(ClassicCastle.class.getSimpleName()).get(FortifiedCastle.class.getSimpleName())
+                - obj.get(FortifiedCastle.class.getSimpleName()).get(ForgeCastle1.class.getSimpleName()),
+                gameMap.getBuildings().get(0).getOwner().getGold(), EPSILON);
+        Assert.assertEquals(gameMap.getBuildings().get(0).getClass().getSimpleName(), ForgeCastle1.class.getSimpleName());
     }
 
     @Test
-    public void getAvailableUpgrades() throws InvalidUpgradeException {
-        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).get(0).getSimpleName().equals(
-                "FortifiedCastle"));
+    public void getAvailableUpgrades() throws InvalidUpgradeException, NotEnoughGoldException {
+
+        HashSet<Class<? extends Building>> initialUpgrades = new HashSet<>();
+        initialUpgrades.add(FortifiedCastle.class);
+
+        Assert.assertEquals(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).keySet(), initialUpgrades);
 
         gameMap.upgradeBuilding(gameMap.getBuildings().get(0), FortifiedCastle.class);
 
-        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).contains(CitadelCastle1.class));
-        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).contains(MarketCastle1.class));
-        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).contains(ForgeCastle1.class));
-        Assert.assertFalse(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).contains(FortifiedCastle.class));
-        Assert.assertFalse(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).contains(ClassicCastle.class));
+        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).containsKey(CitadelCastle1.class));
+        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).containsKey(MarketCastle1.class));
+        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).containsKey(ForgeCastle1.class));
+        Assert.assertFalse(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).containsKey(FortifiedCastle.class));
+        Assert.assertFalse(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).containsKey(ClassicCastle.class));
 
         gameMap.upgradeBuilding(gameMap.getBuildings().get(0), ForgeCastle1.class);
 
@@ -93,17 +102,19 @@ public class BuildingTreeTest {
     }
 
     @Test
-    public void getAvailableUpgradesCoordinates() throws InvalidUpgradeException, NoBuildingFoundException {
-        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).get(0).getSimpleName().equals(
-                "FortifiedCastle"));
+    public void getAvailableUpgradesCoordinates() throws InvalidUpgradeException, NoBuildingFoundException, NotEnoughGoldException {
+        HashSet<Class<? extends Building>> initialUpgrades = new HashSet<>();
+        initialUpgrades.add(FortifiedCastle.class);
+
+        Assert.assertEquals(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).keySet(), initialUpgrades);
 
         gameMap.upgradeBuilding(gameMap.getBuildings().get(0).getCoordinates(), FortifiedCastle.class);
 
-        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0).getCoordinates()).contains(CitadelCastle1.class));
-        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0).getCoordinates()).contains(MarketCastle1.class));
-        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0).getCoordinates()).contains(ForgeCastle1.class));
-        Assert.assertFalse(gameMap.availableUpgrade(gameMap.getBuildings().get(0).getCoordinates()).contains(FortifiedCastle.class));
-        Assert.assertFalse(gameMap.availableUpgrade(gameMap.getBuildings().get(0).getCoordinates()).contains(ClassicCastle.class));
+        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0).getCoordinates()).containsKey(CitadelCastle1.class));
+        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0).getCoordinates()).containsKey(MarketCastle1.class));
+        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0).getCoordinates()).containsKey(ForgeCastle1.class));
+        Assert.assertFalse(gameMap.availableUpgrade(gameMap.getBuildings().get(0).getCoordinates()).containsKey(FortifiedCastle.class));
+        Assert.assertFalse(gameMap.availableUpgrade(gameMap.getBuildings().get(0).getCoordinates()).containsKey(ClassicCastle.class));
 
         gameMap.upgradeBuilding(gameMap.getBuildings().get(0).getCoordinates(), ForgeCastle1.class);
 
