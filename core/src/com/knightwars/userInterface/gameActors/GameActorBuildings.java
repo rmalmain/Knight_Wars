@@ -72,7 +72,6 @@ public class GameActorBuildings extends Actor {
                     try {
                         if (selectedBuilding != null) {
                             gameState.getMap().upgradeBuilding(selectedBuilding, availableUpgrades.get(finalI));
-                            System.out.println("Upgraded to " + availableUpgrades.get(finalI).getSimpleName());
                         }
                     } catch (IndexOutOfBoundsException | InvalidUpgradeException ignored) {
                     } finally {
