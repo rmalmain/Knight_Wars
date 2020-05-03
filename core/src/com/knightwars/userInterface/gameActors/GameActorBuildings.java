@@ -21,9 +21,9 @@ import com.knightwars.game.environment.InvalidUpgradeException;
 import com.knightwars.game.environment.NotEnoughGoldException;
 import com.knightwars.game.players.Player;
 import com.knightwars.userInterface.UnknownPlayerException;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static com.knightwars.userInterface.GameScreen.SCALE;
 
@@ -37,7 +37,7 @@ public class GameActorBuildings extends Actor {
     private Building selectedBuilding;
     private final Table upgradeTable;
     private final List<TextButton> upgradeButtons;
-    private ArrayList<Class<? extends Building>> availableUpgrades;
+    private ArrayList<Class<? extends Building>> availableUpgradesClassList;
 
     private final static float fontOffsetX = -15f; // Horizontal position offset relative to the building
     private final static float fontOffsetY = 120f; // Vertical position offset relative to the building
@@ -72,7 +72,7 @@ public class GameActorBuildings extends Actor {
                 public void clicked(InputEvent event, float x, float y) {
                     try {
                         if (selectedBuilding != null) {
-                            gameState.getMap().upgradeBuilding(selectedBuilding, availableUpgrades.get(finalI));
+                            gameState.getMap().upgradeBuilding(selectedBuilding, availableUpgradesClassList.get(finalI));
                         }
                     } catch (IndexOutOfBoundsException | InvalidUpgradeException | NotEnoughGoldException ignored) {
                     } finally {
@@ -139,16 +139,18 @@ public class GameActorBuildings extends Actor {
         if (selectedBuilding.getOwner().getColor() == Player.ColorPlayer.BLUE) {
             this.selectedBuilding = selectedBuilding;
             buildingText.setText(selectedBuilding.getClass().getSimpleName());
-            availableUpgrades =
-                    new ArrayList<>(gameState.getMap().availableUpgrade(selectedBuilding).keySet());
-
-                for (int i = 0; i < 4; i++) {
-                    try {
-                    upgradeButtons.get(i).setText(availableUpgrades.get(i).getSimpleName());
-                    } catch (IndexOutOfBoundsException e) {
-                        upgradeButtons.get(i).setText("");
-                    }
-                }
+            Map<Class<? extends Building>, Integer> availableUpgradesMap =
+                    gameState.getMap().availableUpgrade(selectedBuilding);
+            availableUpgradesClassList = new ArrayList<>(availableUpgradesMap.keySet());
+            int i = 0;
+            for (Map.Entry<Class<? extends Building>, Integer> entry : availableUpgradesMap.entrySet()) {
+                upgradeButtons.get(i).setText(entry.getKey().getSimpleName() + "\n" + entry.getValue());
+                i ++;
+            }
+            while (i < 4) {
+                upgradeButtons.get(i).setText("");
+                i ++;
+            }
             upgradeTable.setVisible(true);
         }
     }
