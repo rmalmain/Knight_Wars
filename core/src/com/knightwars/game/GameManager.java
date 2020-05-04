@@ -14,4 +14,6 @@ public class GameManager {
     }
 
     public KnightWarsGame getKnightWarsGame() { return this.game; }
+
+    public void resetGame() { this.game = new KnightWarsGame(); }
 }

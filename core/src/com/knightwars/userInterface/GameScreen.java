@@ -104,6 +104,11 @@ public class GameScreen implements Screen {
 
         stage.act();
         stage.draw();
+        KnightWarsGame gameState = gameManager.getKnightWarsGame();
+        if (gameState.gameOver() != null) {
+            stage.dispose();
+            display.displayEndMenu(gameState.gameOver());
+        }
     }
 
     /**
