@@ -43,14 +43,12 @@ public class EndGameScreen implements Screen {
 
         // Add the skin of the buttons
         Skin skin = new Skin(Gdx.files.internal("buttons/glassy-ui.json"));
-        Skin skinLabel = (Skin) skin.newDrawable("winner message", winner.getColor() == Player.ColorPlayer.RED ? Color.RED : Color.BLUE);
-
         // Create the stage
         stage = new Stage(viewport, batch);
         Gdx.input.setInputProcessor(stage);
 
         // Create the winner label
-        Label winnerLabel = new Label(winner.getName() + " has won !", skinLabel);
+        Label winnerLabel = new Label(winner.getName() + " has won !", skin);
 
         // Create the play button
         TextButton playButton = new TextButton("Restart", skin);
