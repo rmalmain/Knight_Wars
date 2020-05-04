@@ -2,6 +2,7 @@ package com.knightwars.userInterface;
 
 import com.knightwars.KnightWars;
 import com.knightwars.game.GameManager;
+import com.knightwars.game.players.Player;
 
 public class Display {
 
@@ -23,5 +24,9 @@ public class Display {
 
     public void displayMainMenu() {
         gameDisplay.setScreen(new MainMenuScreen(this, gameManager));
+    }
+
+    public void displayEndMenu(Player winner) {
+        gameDisplay.setScreen(new EndGameScreen(this, gameManager, winner));
     }
 }

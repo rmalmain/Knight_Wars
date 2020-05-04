@@ -1,6 +1,7 @@
 package com.knightwars.game;
 
 import com.badlogic.gdx.Gdx;
+import com.knightwars.game.environment.Building;
 import com.knightwars.game.environment.Map;
 import com.knightwars.game.environment.MapFactory;
 import com.knightwars.game.environment.NoBuildingFoundException;
@@ -87,4 +88,19 @@ public class KnightWarsGame {
             player.makeMoves(this);
         }
     }
+
+
+    public Player gameOver() {
+        boolean gameOver = true;
+        Player winner = map.getBuildings().get(0).getOwner();
+        for (Building building : map.getBuildings()) {
+            gameOver = gameOver && (winner == building.getOwner());
+            if (!gameOver) {
+                winner = null;
+                break;
+            }
+        }
+        return winner;
+    }
+
 }
