@@ -1,5 +1,5 @@
 
-walk.png
+walkRed.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
@@ -47,7 +47,7 @@ Walk (9)
   offset: 0, 0
   index: -1
 
-walk2.png
+walkRed2.png
 size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest

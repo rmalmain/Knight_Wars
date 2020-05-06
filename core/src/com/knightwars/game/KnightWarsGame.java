@@ -102,6 +102,14 @@ public class KnightWarsGame {
 
         if (!gameOver) {
             winner = null;
+        } else {
+            i = 0;
+            while (gameOver && i < map.getUnits().size()) {
+                gameOver = (map.getUnits().get(i).getOwner() == winner);
+                i++;
+            }
+            if (!gameOver)
+                winner = null;
         }
         return winner;
     }
