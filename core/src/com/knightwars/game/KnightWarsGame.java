@@ -92,13 +92,17 @@ public class KnightWarsGame {
 
     public Player gameOver() {
         boolean gameOver = true;
+        int i = 0;
         Player winner = map.getBuildings().get(0).getOwner();
-        for (Building building : map.getBuildings()) {
-            gameOver = gameOver && (winner == building.getOwner());
-            if (!gameOver) {
-                winner = null;
-                break;
-            }
+
+        while(gameOver && i < map.getBuildings().size()){
+            Player player = map.getBuildings().get(i).getOwner();
+            gameOver = (player.getColor() == Player.ColorPlayer.NEUTRAL || winner == player);
+            i++;
+        }
+
+        if (!gameOver) {
+            winner = null;
         }
         return winner;
     }
