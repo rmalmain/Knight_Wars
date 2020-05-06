@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.knightwars.game.KnightWarsGame;
 import com.knightwars.game.environment.Unit;
+import com.knightwars.game.players.Player;
 
 import java.util.ArrayList;
 
@@ -20,7 +21,8 @@ import static com.knightwars.userInterface.GameScreen.SCALE;
 public class GameActorUnits extends Actor {
 
     private final KnightWarsGame gameState;
-    private final Animation<TextureRegion> unitAnimation;
+    private final Animation<TextureRegion> unitAnimationRed;
+    private final Animation<TextureRegion> unitAnimationBlue;
     private float elapsedTime = 0;
 
     private static final float WALK_ANIM_WIDTH = 41.5f;
@@ -30,8 +32,11 @@ public class GameActorUnits extends Actor {
         this.gameState = gameState;
 
         // Create the sprites
-        TextureAtlas unitAtlas = new TextureAtlas(Gdx.files.internal("units/walk.atlas"));
-        unitAnimation = new Animation<TextureRegion>(1/15f, unitAtlas.getRegions());
+        TextureAtlas unitAtlasRed = new TextureAtlas(Gdx.files.internal("units/walkRed.atlas"));
+        unitAnimationRed = new Animation<TextureRegion>(1/15f, unitAtlasRed.getRegions());
+
+        TextureAtlas unitAtlasBlue = new TextureAtlas(Gdx.files.internal("units/walkBlue.atlas"));
+        unitAnimationBlue = new Animation<TextureRegion>(1/15f, unitAtlasBlue.getRegions());
     }
 
     @Override
@@ -43,8 +48,12 @@ public class GameActorUnits extends Actor {
         // Draw the units
         for (Unit unit : units) {
             // Get the current frame of the unit animation to display
-            TextureRegion currentUnitFrame = unitAnimation.getKeyFrame(elapsedTime, true);
-
+            TextureRegion currentUnitFrame;
+            if (unit.getOwner().getColor() == Player.ColorPlayer.RED) {
+                currentUnitFrame = unitAnimationRed.getKeyFrame(elapsedTime, true);
+            } else {
+                currentUnitFrame = unitAnimationBlue.getKeyFrame(elapsedTime, true);
+            }
             // Compute the unit's coordinates on the screen
             float unitScreenX = unit.getCoordinates().x*SCALE - WALK_ANIM_WIDTH/2f;
             float unitScreenY = unit.getCoordinates().y*SCALE - WALK_ANIM_HEIGHT/2f;
