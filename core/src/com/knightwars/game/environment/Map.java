@@ -26,8 +26,10 @@ public class Map {
     private Vector2 size;
     private java.util.Map<String, java.util.Map<String, Integer>> buildingHierarchy;
 
-    /** Map constructor
-     * @param width the width of the map
+    /**
+     * Map constructor
+     *
+     * @param width  the width of the map
      * @param height the height of the map
      */
     public Map(float width, float height, String yamlUpgradeHierarchyPath) {
@@ -47,14 +49,18 @@ public class Map {
         }
     }
 
-    /** Add a building to the map
+    /**
+     * Add a building to the map
+     *
      * @param building the building to add
      */
     public void addBuildingCopy(Building building) {
         buildings.add(building.Copy());
     }
 
-    /** Add a unit to the map
+    /**
+     * Add a unit to the map
+     *
      * @param unit unit to add to the map
      */
     private void addUnit(Unit unit) {
@@ -66,22 +72,32 @@ public class Map {
         }
     }
 
-    /** Delete a unit from the map
+    /**
+     * Delete a unit from the map
+     *
      * @param unit the unit to delete
      */
     public void deleteUnit(Unit unit) {
-        if(!units.remove(unit)) {
+        if (!units.remove(unit)) {
             throw new NoUnitFoundException("The unit wasn't found in unit list");
         }
     }
 
-    public Vector2 getSize() { return new Vector2(size); }
+    public Vector2 getSize() {
+        return new Vector2(size);
+    }
 
-    public ArrayList<Building> getBuildings() { return buildings; }
+    public ArrayList<Building> getBuildings() {
+        return buildings;
+    }
 
-    public ArrayList<Unit> getUnits() { return units; }
+    public ArrayList<Unit> getUnits() {
+        return units;
+    }
 
-    /** Update each element depending on the map
+    /**
+     * Update each element depending on the map
+     *
      * @param dt the time parameter of the update
      */
     public void update(float dt) {
@@ -89,7 +105,7 @@ public class Map {
 
         this.unitSpawnTick += dt;
 
-        for(Unit unit : units) { // Update units on the map
+        for (Unit unit : units) { // Update units on the map
             unit.update(dt);
             if (unit.isArrived(BUILDING_COLLISION_THRESHOLD)) { // if units arrived to the building
                 try {
@@ -102,41 +118,46 @@ public class Map {
             }
         }
 
-        for(Unit unit : unitsToDelete) { // Delete arrived units
+        for (Unit unit : unitsToDelete) { // Delete arrived units
             this.units.remove(unit);
         }
 
-        for(Building building : buildings) { // Update buildings
+        for (Building building : buildings) { // Update buildings
             building.update(dt);
         }
 
-        if(unitSpawnTick > TIME_BETWEEN_UNITS){ // Send units if enough time elapsed
+        if (unitSpawnTick > TIME_BETWEEN_UNITS) { // Send units if enough time elapsed
             unitSpawnTick = 0f;
             ArrayList<Queue<Unit>> unitGroupToDelete = new ArrayList<>();
 
-            for(Queue<Unit> unitGroup : unitsToSend){ // all units waiting are sent
+            for (Queue<Unit> unitGroup : unitsToSend) { // all units waiting are sent
                 try {
                     addUnit(unitGroup.first());
                     unitGroup.removeFirst();
-                } catch (NoSuchElementException e){ continue; } // May be a bad idea ?
+                } catch (NoSuchElementException e) {
+                    continue;
+                } // May be a bad idea ?
                 if (unitGroup.isEmpty()) {
                     unitGroupToDelete.add(unitGroup);
                 }
             }
 
-            for(Queue<Unit> unitGroup : unitGroupToDelete) { //Remove empty unit groups
+            for (Queue<Unit> unitGroup : unitGroupToDelete) { // Remove empty unit groups
                 unitsToSend.remove(unitGroup);
             }
         }
     }
 
-    /** Send 100*percentage percent from departureBuilding to arrivalBuilding
+    /**
+     * Send 100*percentage percent from departureBuilding to arrivalBuilding
+     *
      * @param departureBuilding departure building
-     * @param arrivalBuilding arrival building
-     * @param percentage percentage of unit to send. Must be between 0 and 1
+     * @param arrivalBuilding   arrival building
+     * @param percentage        percentage of unit to send. Must be between 0 and 1
      */
     public void sendUnit(Building departureBuilding, Building arrivalBuilding, float percentage) {
-        if (departureBuilding.getOwner().getColor() != Player.ColorPlayer.NEUTRAL  // Neutral castles can't be selected as departure buildings
+        if (departureBuilding.getOwner().getColor() != Player.ColorPlayer.NEUTRAL // Neutral castles can't be selected
+                                                                                  // as departure buildings
                 && departureBuilding != arrivalBuilding) { // Units can't be send to their own building
             if (percentage > 1f || percentage < 0f) {
                 throw new RuntimeException("The percentage of unit to send is wrong.");
@@ -154,10 +175,13 @@ public class Map {
         }
     }
 
-    /** Return the building associated to some coordinates
+    /**
+     * Return the building associated to some coordinates
+     *
      * @param coordinates the coordinates of the building to find
      * @return The building associated to the building
-     * @throws NoBuildingFoundException is thrown if the coordinates were not able to determine a building
+     * @throws NoBuildingFoundException is thrown if the coordinates were not able
+     *                                  to determine a building
      */
     private int coordinatesToBuildingsIndex(Vector2 coordinates) throws NoBuildingFoundException {
         for (Building building : buildings) {
@@ -168,38 +192,52 @@ public class Map {
         throw new NoBuildingFoundException("No building has been found.");
     }
 
-    /** Upgrade a building given the coordinates of a building to upgrade and the class of the upgraded building
+    /**
+     * Upgrade a building given the coordinates of a building to upgrade and the
+     * class of the upgraded building
+     *
      * @param coordinatesBuildingToUpgrade Coordinates of the building to upgrade
-     * @param buildingUpgradeClass building class of the upgrade
-     * @throws InvalidUpgradeException is thrown if the upgrade is invalid regarding the upgrade tree
-     * @throws NoBuildingFoundException is thrown if the building can't be found with the given coordinates
+     * @param buildingUpgradeClass         building class of the upgrade
+     * @throws InvalidUpgradeException  is thrown if the upgrade is invalid
+     *                                  regarding the upgrade tree
+     * @throws NoBuildingFoundException is thrown if the building can't be found
+     *                                  with the given coordinates
      */
-    public void upgradeBuilding(Vector2 coordinatesBuildingToUpgrade, Class<? extends Building> buildingUpgradeClass) throws InvalidUpgradeException, NoBuildingFoundException, NotEnoughGoldException {
-        upgradeBuilding(this.buildings.get(coordinatesToBuildingsIndex(coordinatesBuildingToUpgrade)), buildingUpgradeClass);
+    public void upgradeBuilding(Vector2 coordinatesBuildingToUpgrade, Class<? extends Building> buildingUpgradeClass)
+            throws InvalidUpgradeException, NoBuildingFoundException, NotEnoughGoldException {
+        upgradeBuilding(this.buildings.get(coordinatesToBuildingsIndex(coordinatesBuildingToUpgrade)),
+                buildingUpgradeClass);
     }
 
-    /** To know if an upgrade is valid or not.
-     * @param building is the building to upgrade
+    /**
+     * To know if an upgrade is valid or not.
+     *
+     * @param building             is the building to upgrade
      * @param buildingUpgradeClass aimed upgrade
      * @return true if the upgrade is valid and false elsewhere
      */
     private boolean isUpgradable(Building building, Class<?> buildingUpgradeClass) {
         String hierarchyResult = this.buildingHierarchy.get(building.getClass().getSimpleName()).keySet().toString();
-        return Arrays.asList(hierarchyResult.substring(1, hierarchyResult.length()-1).split("\\s*,\\s*")).contains(buildingUpgradeClass.getSimpleName());
+        return Arrays.asList(hierarchyResult.substring(1, hierarchyResult.length() - 1).split("\\s*,\\s*"))
+                .contains(buildingUpgradeClass.getSimpleName());
     }
 
-    /** Get every available upgrade given a building
+    /**
+     * Get every available upgrade given a building
+     *
      * @param building is the upgradable building
-     * @return A java Map of available upgrade and their costs in gold. It is empty if there is not any available upgrade.
+     * @return A java Map of available upgrade and their costs in gold. It is empty
+     *         if there is not any available upgrade.
      */
     public java.util.HashMap<Class<? extends Building>, Integer> availableUpgrade(Building building) {
         java.util.HashMap<Class<? extends Building>, Integer> upgrades = new java.util.HashMap<>();
 
-        if (buildingHierarchy.get(building.getClass().getSimpleName()) == null) return upgrades;
+        if (buildingHierarchy.get(building.getClass().getSimpleName()) == null)
+            return upgrades;
 
         java.util.Map<String, Integer> upgradeName = buildingHierarchy.get(building.getClass().getSimpleName());
 
-        for(String name : upgradeName.keySet()) {
+        for (String name : upgradeName.keySet()) {
             try {
                 upgrades.put((Class<? extends Building>) Class.forName(BUILDINGS_LOCATION_PACKAGE + "." + name),
                         upgradeName.get(name));
@@ -210,30 +248,42 @@ public class Map {
         return upgrades;
     }
 
-    /** Get every available upgrade given building's coordinates
+    /**
+     * Get every available upgrade given building's coordinates
+     *
      * @param buildingCoordinates Coordinates of the upgradable building
-     * @return A list of available upgrade. It is empty if there is not any available upgrade.
-     * @throws NoBuildingFoundException is thrown if the building can't be found with the given coordinates
+     * @return A list of available upgrade. It is empty if there is not any
+     *         available upgrade.
+     * @throws NoBuildingFoundException is thrown if the building can't be found
+     *                                  with the given coordinates
      */
-    public java.util.HashMap<Class<? extends Building>, Integer> availableUpgrade(Vector2 buildingCoordinates) throws NoBuildingFoundException {
+    public java.util.HashMap<Class<? extends Building>, Integer> availableUpgrade(Vector2 buildingCoordinates)
+            throws NoBuildingFoundException {
         return availableUpgrade(this.buildings.get(coordinatesToBuildingsIndex(buildingCoordinates)));
     }
 
-    /** Upgrade a building given a building to upgrade and the class of the upgraded building
-     * @param buildingToUpgrade is the building to upgrade
+    /**
+     * Upgrade a building given a building to upgrade and the class of the upgraded
+     * building
+     *
+     * @param buildingToUpgrade    is the building to upgrade
      * @param buildingUpgradeClass is the class of the upgraded building
-     * @throws InvalidUpgradeException is thrown if the upgrade is not valid regarding the upgrade tree
+     * @throws InvalidUpgradeException is thrown if the upgrade is not valid
+     *                                 regarding the upgrade tree
      */
-    public void upgradeBuilding(Building buildingToUpgrade, Class<? extends Building> buildingUpgradeClass) throws InvalidUpgradeException, NotEnoughGoldException {
+    public void upgradeBuilding(Building buildingToUpgrade, Class<? extends Building> buildingUpgradeClass)
+            throws InvalidUpgradeException, NotEnoughGoldException {
         if (!isUpgradable(buildingToUpgrade, buildingUpgradeClass)) {
-            throw new InvalidUpgradeException("This building can't be upgraded to such class according to the hierarchy. Please" +
-                    " take a look at the yaml file 'building-structure'.");
-        } else if (buildingToUpgrade.getOwner().getGold() < buildingHierarchy.get(buildingToUpgrade.getClass().getSimpleName()).get(buildingUpgradeClass.getSimpleName())) {
+            throw new InvalidUpgradeException(
+                    "This building can't be upgraded to such class according to the hierarchy. Please"
+                            + " take a look at the yaml file 'building-structure'.");
+        } else if (buildingToUpgrade.getOwner().getGold() < buildingHierarchy
+                .get(buildingToUpgrade.getClass().getSimpleName()).get(buildingUpgradeClass.getSimpleName())) {
             throw new NotEnoughGoldException("Not enough gold to upgrade the building.");
-        }
-        else {
+        } else {
             try {
-                buildingToUpgrade.getOwner().removeGold(buildingHierarchy.get(buildingToUpgrade.getClass().getSimpleName()).get(buildingUpgradeClass.getSimpleName()));
+                buildingToUpgrade.getOwner().removeGold(buildingHierarchy
+                        .get(buildingToUpgrade.getClass().getSimpleName()).get(buildingUpgradeClass.getSimpleName()));
                 this.buildings.set(this.buildings.indexOf(buildingToUpgrade),
                         buildingUpgradeClass.getConstructor(Building.class).newInstance(buildingToUpgrade));
             } catch (Exception e) {
