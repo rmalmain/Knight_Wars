@@ -37,6 +37,12 @@ package com.knightwars {
     class MainMenuBackground {
       + draw(batch : Batch, parentAlpha : float)
     }
+    class MainMenuBackground {
+      + draw(batch : Batch, parentAlpha : float)
+    }
+    class EndGameScreen {
+      + draw(batch : Batch, parentAlpha : float)
+    }
 
 
     package gameActors {
@@ -74,6 +80,7 @@ package com.knightwars {
 
 
   package game {
+
     class GameManager {
       - game : KnightWarsGame
       + getKnightWarsGame() : KnightWarsGame
@@ -90,6 +97,9 @@ package com.knightwars {
       + update(dt : float)
     }
 
+    class YamlParser {
+      yamlValidity(javaMap : Map<String, Map<String, Integer>>, superClass : Class<?> , objPackage : String)
+    }
 
     package environment {
 
@@ -127,22 +137,6 @@ package com.knightwars {
         + update(dt : float)
       }
 
-      class Player {
-        - color : ColorPlayer
-        + getColor() : ColorPlayer
-        + getGold() : float
-        + getName() : String
-        + getUnitLevel() : float
-        + removeGold(gold : float)
-        + upgradeUnits()
-      }
-
-      enum ColorPlayer {
-        + BLUE {static}
-        + NEUTRAL {static}
-        + RED {static}
-      }
-
       class Unit {
         - departureBuilding : Building
         - destinationBuilding : Building
@@ -153,19 +147,35 @@ package com.knightwars {
         + update(dt : float)
       }
 
-
       package players {
           class ComputerPlayer
           class HumanPlayer
           class NeutralPlayer
+
+          class Player {
+            - color : ColorPlayer
+            + getColor() : ColorPlayer
+            + getGold() : float
+            + getName() : String
+            + getUnitLevel() : float
+            + removeGold(gold : float)
+            + upgradeUnits()
+        }
+
+        enum ColorPlayer {
+          + BLUE {static}
+          + NEUTRAL {static}
+          + RED {static}
+        }
       }
 
       package buildings {
-        class ClassicCastle {
-          + ClassicCastle(building : Building)
-          + ClassicCastle(owner : Player, coordinates : Vector2, knights : int, knightGrowth : boolean)
-          + Copy() : ClassicCastle
-        }
+        class ClassicCastle
+        class FortifiedCastle
+        class CitadelCastle1
+        class ForgeCastle1
+        class GarrisonCastle1
+        class MarketCastle1
       }
     }
   }
@@ -179,6 +189,7 @@ KnightWars ..> GameManager: crée
 ' Frontend
 Display ..> GameScreen: affiche
 Display ..> MainMenuScreen: affiche
+Display ..> EndGameScreen: affiche
 MainMenuScreen o-- MainMenuBackground
 GameScreen o-- GameActorHUD
 GameScreen o-- GameActorBuildings
@@ -196,10 +207,15 @@ Unit o-- Building
 Unit o-- Path
 Building o-- Player
 Player o-- ColorPlayer
-ClassicCastle --|> Building
 ComputerPlayer --|> Player
 NeutralPlayer --|> Player
 HumanPlayer --|> Player
+ClassicCastle --|> Building
+FortifiedCastle --|> Building
+CitadelCastle1 --|> Building
+ForgeCastle1 --|> Building
+GarrisonCastle1 --|> Building
+MarketCastle1 --|> Building
 
 ' Liens frontend - backend
 EventHandler o-- KnightWarsGame
