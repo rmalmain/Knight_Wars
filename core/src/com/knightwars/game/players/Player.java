@@ -23,7 +23,7 @@ abstract public class Player {
     public Player(String name, ColorPlayer color) {
         this.name = name;
         this.color = color;
-        this.unitLevel = 0f;
+        this.unitLevel = 1f;
         this.gold = 50f; // Default golds, to modify if necessary
         this.unitPercentage = 0.25f; // Default percentage of units to send
     }
