@@ -42,7 +42,7 @@ public class Map {
         try {
             this.buildingHierarchy = YamlParser.yamlToJavaMap(yamlUpgradeHierarchyPath);
             YamlParser.yamlValidity(this.buildingHierarchy, Building.class, BUILDINGS_LOCATION_PACKAGE);
-        } catch (FileNotFoundException | InvalidYamlFormatException e) {
+        } catch (InvalidYamlFormatException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
             System.exit(0);

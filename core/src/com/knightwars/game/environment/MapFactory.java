@@ -94,7 +94,7 @@ public class MapFactory {
     private static String fileToString(String fileName) {
         String fileAsString = "";
         try {
-            InputStream file = new FileInputStream(fileName);
+            InputStream file = MapFactory.class.getResourceAsStream(fileName);
             BufferedReader buf = new BufferedReader(new InputStreamReader(file));
             String line = buf.readLine();
             StringBuilder sb = new StringBuilder();
