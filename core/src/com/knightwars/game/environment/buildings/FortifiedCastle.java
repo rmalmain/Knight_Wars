@@ -9,6 +9,7 @@ public class FortifiedCastle extends ClassicCastle {
         super(owner, coordinates, knights, knightGrowth);
         this.knightGeneration *= 2;
         this.goldGeneration *= 1.5;
+        this.defenseLevel += 1;
     }
 
     /** Construct a building from another building.

@@ -13,11 +13,10 @@ public class YamlParser {
     /** Convert a YAML file to a java map
      * @param path The path of the YAML file to convert
      * @return the map from the YAML file
-     * @throws FileNotFoundException thrown exception if the path is wrong
      */
-    public static Map<String, Map<String, Integer>> yamlToJavaMap(String path) throws FileNotFoundException {
+    public static Map<String, Map<String, Integer>> yamlToJavaMap(String path) {
         Yaml yaml = new Yaml();
-        InputStream inputStream = new FileInputStream(new File(path));
+        InputStream inputStream = YamlParser.class.getResourceAsStream(path);
         return yaml.load(inputStream);
     }
 
