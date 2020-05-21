@@ -19,9 +19,12 @@ import com.knightwars.game.KnightWarsGame;
 import com.knightwars.game.environment.Building;
 import com.knightwars.game.environment.InvalidUpgradeException;
 import com.knightwars.game.environment.NotEnoughGoldException;
+import com.knightwars.game.environment.buildings.*;
 import com.knightwars.game.players.Player;
+import com.knightwars.userInterface.UnknownBuildingException;
 import com.knightwars.userInterface.UnknownPlayerException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,8 +32,8 @@ import static com.knightwars.userInterface.GameScreen.SCALE;
 
 public class GameActorBuildings extends Actor {
 
-    private final Sprite spriteRedBuilding;
-    private final Sprite spriteBlueBuilding;
+    private final HashMap<Class<? extends Building>, Sprite> redSpritesBuildings;
+    private final HashMap<Class<? extends  Building>, Sprite> blueSpritesBuildings;
     private final Sprite spriteNeutralBuilding;
     private final KnightWarsGame gameState;
     private final BitmapFont font;
@@ -48,11 +51,27 @@ public class GameActorBuildings extends Actor {
 
     public GameActorBuildings(final KnightWarsGame gameState, Stage stage) {
         this.gameState = gameState;
-
         // Load the sprites
-        spriteRedBuilding = new Sprite(new Texture("buildings/red_building.png"));
-        spriteBlueBuilding = new Sprite(new Texture("buildings/blue_building.png"));
+        redSpritesBuildings = new HashMap<>();
+        blueSpritesBuildings = new HashMap<>();
+
+        redSpritesBuildings.put(ClassicCastle.class, new Sprite(new Texture("buildings/red_building.png")));
+        redSpritesBuildings.put(FortifiedCastle.class, new Sprite(new Texture("buildings/red_fortified_castle.png")));
+        redSpritesBuildings.put(ForgeCastle1.class, new Sprite(new Texture("buildings/red_forge.png")));
+        redSpritesBuildings.put(CitadelCastle1.class, new Sprite(new Texture("buildings/red_buildings")));
+        redSpritesBuildings.put(GarrisonCastle1.class, new Sprite(new Texture("buildings/red_buildings")));
+        redSpritesBuildings.put(MarketCastle1.class, new Sprite(new Texture("buildings/red_buildings")));
+
+
+        blueSpritesBuildings.put(ClassicCastle.class, new Sprite(new Texture("buildings/blue_building.png")));
+        blueSpritesBuildings.put(FortifiedCastle.class, new Sprite(new Texture("buildings/blue_fortified_castle.png")));
+        blueSpritesBuildings.put(ForgeCastle1.class, new Sprite(new Texture("buildings/blue_forge.png")));
+        blueSpritesBuildings.put(CitadelCastle1.class, new Sprite(new Texture("buildings/blue_building.png")));
+        blueSpritesBuildings.put(GarrisonCastle1.class, new Sprite(new Texture("buildings/blue_building.png")));
+        blueSpritesBuildings.put(MarketCastle1.class, new Sprite(new Texture("buildings/blue_building.png")));
+
         spriteNeutralBuilding = new Sprite(new Texture("buildings/neutral_building.png"));
+
         font = new BitmapFont(Gdx.files.internal("fonts/MontserratBold.ttf.fnt"),
                 Gdx.files.internal("fonts/MontserratBold.ttf_0.png"), false);
 
@@ -120,15 +139,20 @@ public class GameActorBuildings extends Actor {
      * @return The corresponding sprite
      */
     private Sprite determineBuildingSprite(Building building) {
+        Sprite spriteReturned;
         if (building.getOwner().getColor() == Player.ColorPlayer.RED) {
-            return spriteRedBuilding;
-        } else if (building.getOwner().getColor() == Player.ColorPlayer.BLUE) {
-            return spriteBlueBuilding;
-        } else if (building.getOwner().getColor() == Player.ColorPlayer.NEUTRAL) {
-            return spriteNeutralBuilding;
+              spriteReturned = redSpritesBuildings.get(building.getClass());
+        } else if (building.getOwner().getColor() == Player.ColorPlayer.BLUE /*&& is a classic castle*/) {
+            spriteReturned = blueSpritesBuildings.get(building.getClass());
+        } else if (building.getOwner().getColor() == Player.ColorPlayer.NEUTRAL /*&& is a classic castle*/) {
+            spriteReturned = spriteNeutralBuilding;
         } else {
             throw new UnknownPlayerException("There is no player associated with the building.");
         }
+        if (spriteReturned == null){
+            throw new UnknownBuildingException("There is no sprite associated with this building.");
+        }
+        return spriteReturned;
     }
 
     /**
