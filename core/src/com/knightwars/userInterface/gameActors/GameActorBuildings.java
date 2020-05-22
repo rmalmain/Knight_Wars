@@ -12,7 +12,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.knightwars.game.KnightWarsGame;
@@ -24,6 +27,7 @@ import com.knightwars.game.environment.buildings.*;
 import com.knightwars.game.players.Player;
 import com.knightwars.userInterface.UnknownBuildingException;
 import com.knightwars.userInterface.UnknownPlayerException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +43,7 @@ public class GameActorBuildings extends Actor {
     private final KnightWarsGame gameState;
     private final BitmapFont font;
     private final Sprite spriteArrow;
+    private final Sprite spriteRange;
     private Building selectedBuilding;
     private final Table upgradeTable;
     private final List<TextButton> upgradeButtons;
@@ -60,7 +65,7 @@ public class GameActorBuildings extends Actor {
         redSpritesBuildings.put(ClassicCastle.class, new Sprite(new Texture("buildings/red_building.png")));
         redSpritesBuildings.put(FortifiedCastle.class, new Sprite(new Texture("buildings/red_fortified_castle.png")));
         redSpritesBuildings.put(ForgeCastle1.class, new Sprite(new Texture("buildings/red_forge.png")));
-        redSpritesBuildings.put(ForgeCastle1.class, new Sprite(new Texture("buildings/red_forge.png")));
+        redSpritesBuildings.put(ForgeCastle2.class, new Sprite(new Texture("buildings/red_forge.png")));
         redSpritesBuildings.put(GarrisonCastle1.class, new Sprite(new Texture("buildings/red_building.png")));
         redSpritesBuildings.put(GarrisonCastle2.class, new Sprite(new Texture("buildings/red_building.png")));
         redSpritesBuildings.put(CitadelCastle1.class, new Sprite(new Texture("buildings/red_building.png")));
@@ -83,6 +88,7 @@ public class GameActorBuildings extends Actor {
 
         spriteNeutralBuilding = new Sprite(new Texture("buildings/neutral_building.png"));
         spriteArrow = new Sprite(new Texture("buildings/arrow.png"));
+        spriteRange = new Sprite(new Texture("buildings/range.png"));
 
         font = new BitmapFont(Gdx.files.internal("fonts/MontserratBold.ttf.fnt"),
                 Gdx.files.internal("fonts/MontserratBold.ttf_0.png"), false);
@@ -141,6 +147,13 @@ public class GameActorBuildings extends Actor {
                 upgradeTable.setPosition(building.getCoordinates().x*SCALE, building.getCoordinates().y*SCALE,
                         Align.center);
                 upgradeTable.draw(batch, parentAlpha);
+            }
+
+            // Show range of citadel
+            if (building instanceof CitadelCastle1) {
+                float range = ((CitadelCastle1) building).getBuildingRange();
+                batch.draw(spriteRange, building.getCoordinates().x*SCALE - range*SCALE/2f,
+                        building.getCoordinates().y*SCALE - range*SCALE/2f, range*SCALE, range*SCALE);
             }
         }
 
