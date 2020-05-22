@@ -4,6 +4,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.knightwars.game.environment.Building;
 import com.knightwars.game.players.Player;
 
+/**
+ * This is a Garrison Castle : specialized in Knights generation (level 1)
+ */
 public class GarrisonCastle1 extends FortifiedCastle {
 
     public GarrisonCastle1(Player owner, Vector2 coordinates, int knights, boolean knightGrowth) {

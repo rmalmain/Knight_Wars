@@ -5,7 +5,7 @@ import com.knightwars.game.environment.Building;
 import com.knightwars.game.players.Player;
 
 /**
- * This is a Market : specialized in gold generation
+ * This is a Market : specialized in gold generation (level 2)
  */
 public class MarketCastle2 extends MarketCastle1 {
     public MarketCastle2(Player owner, Vector2 coordinates, int knights, boolean knightGrowth) {
