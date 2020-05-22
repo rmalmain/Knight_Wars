@@ -60,7 +60,7 @@ public class BuildingTreeTest {
     public void wrongUpgradeTest() throws InvalidUpgradeException, NotEnoughGoldException {
         float initialGolds = gameMap.getBuildings().get(0).getOwner().getGold();
         try {
-            gameMap.upgradeBuilding(gameMap.getBuildings().get(0), CitadelCastle1.class);
+            gameMap.upgradeBuilding(gameMap.getBuildings().get(0), GarrisonCastle1.class);
         } finally {
             Assert.assertEquals(initialGolds, gameMap.getBuildings().get(0).getOwner().getGold(), EPSILON);
         }
@@ -90,7 +90,7 @@ public class BuildingTreeTest {
 
         gameMap.upgradeBuilding(gameMap.getBuildings().get(0), FortifiedCastle.class);
 
-        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).containsKey(CitadelCastle1.class));
+        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).containsKey(GarrisonCastle1.class));
         Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).containsKey(MarketCastle1.class));
         Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).containsKey(ForgeCastle1.class));
         Assert.assertFalse(gameMap.availableUpgrade(gameMap.getBuildings().get(0)).containsKey(FortifiedCastle.class));
@@ -110,7 +110,7 @@ public class BuildingTreeTest {
 
         gameMap.upgradeBuilding(gameMap.getBuildings().get(0).getCoordinates(), FortifiedCastle.class);
 
-        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0).getCoordinates()).containsKey(CitadelCastle1.class));
+        Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0).getCoordinates()).containsKey(GarrisonCastle1.class));
         Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0).getCoordinates()).containsKey(MarketCastle1.class));
         Assert.assertTrue(gameMap.availableUpgrade(gameMap.getBuildings().get(0).getCoordinates()).containsKey(ForgeCastle1.class));
         Assert.assertFalse(gameMap.availableUpgrade(gameMap.getBuildings().get(0).getCoordinates()).containsKey(FortifiedCastle.class));

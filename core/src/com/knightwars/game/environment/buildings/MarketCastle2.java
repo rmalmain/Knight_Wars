@@ -7,16 +7,16 @@ import com.knightwars.game.players.Player;
 /**
  * This is a Market : specialized in gold generation
  */
-public class MarketCastle1 extends FortifiedCastle {
-    public MarketCastle1(Player owner, Vector2 coordinates, int knights, boolean knightGrowth) {
+public class MarketCastle2 extends MarketCastle1 {
+    public MarketCastle2(Player owner, Vector2 coordinates, int knights, boolean knightGrowth) {
         super(owner, coordinates, knights, knightGrowth);
     }
 
-    public MarketCastle1(Building building) {
+    public MarketCastle2(Building building) {
         super(building);
     }
 
-    public MarketCastle1 Copy() {
-        return new MarketCastle1(this);
+    public MarketCastle2 Copy() {
+        return new MarketCastle2(this);
     }
 }
