@@ -5,7 +5,7 @@ import com.knightwars.game.environment.Building;
 import com.knightwars.game.players.Player;
 
 /**
- * This is a Garrison Castle : specialized in Knights generation
+ * This is a Citadel : Has a turret and throws arrows (level 1)
  */
 public class CitadelCastle1 extends Building {
     public final static float BUILDING_RANGE = 1.0f;
