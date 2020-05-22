@@ -5,7 +5,7 @@ import com.knightwars.game.environment.Building;
 import com.knightwars.game.players.Player;
 
 /**
- * This is a Citadel : Has a turret and throws arrows
+ * This is a Citadel : Has a turret and throws arrows (level 2)
  */
 public class CitadelCastle2 extends CitadelCastle1 {
     public CitadelCastle2(Player owner, Vector2 coordinates, int knights, boolean knightGrowth) {
