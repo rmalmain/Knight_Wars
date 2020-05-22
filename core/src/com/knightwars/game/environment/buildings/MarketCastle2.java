@@ -10,6 +10,8 @@ import com.knightwars.game.players.Player;
 public class MarketCastle2 extends MarketCastle1 {
     public MarketCastle2(Player owner, Vector2 coordinates, int knights, boolean knightGrowth) {
         super(owner, coordinates, knights, knightGrowth);
+        this.goldGeneration *= 1.5;
+        this.knightGeneration += 0.5;
     }
 
     public MarketCastle2(Building building) {

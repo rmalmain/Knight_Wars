@@ -11,6 +11,8 @@ public class GarrisonCastle1 extends FortifiedCastle {
 
     public GarrisonCastle1(Player owner, Vector2 coordinates, int knights, boolean knightGrowth) {
         super(owner, coordinates, knights, knightGrowth);
+        this.goldGeneration *= 0;
+        this.knightGeneration *= 2;
     }
 
     /** Construct a building from another building.
