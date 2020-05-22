@@ -153,7 +153,9 @@ public class Map {
 
         for (Arrow arrow : arrows) {
             if (arrow.isArrived(ARROW_COLLISION_THRESHOLD)) {
-                deleteUnit(arrow.getDestinationUnit());
+                try {
+                    deleteUnit(arrow.getDestinationUnit());
+                } catch (NoUnitFoundException nothing) {}
                 arrowsToRemove.add(arrow);
             } else if (units.contains(arrow.getDestinationUnit())) {
                 arrow.update(dt);

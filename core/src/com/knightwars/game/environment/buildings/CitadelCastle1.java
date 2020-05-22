@@ -11,9 +11,9 @@ import com.knightwars.game.players.Player;
  * This is a Citadel : Has a turret and throws arrows (level 1)
  */
 public class CitadelCastle1 extends Building {
-    public final static float BUILDING_RANGE = 1.0f;
-    public final static float ARROW_SPEED = 2.0f;
-    public final static float ARROW_RATE = 1.0f;
+    protected float buildingRange = 2.0f;
+    protected float arrowSpeed = 3.0f;
+    protected float arrowRate = 1f;
 
     private float timeElapsedSinceLastArrow;
 
@@ -34,20 +34,24 @@ public class CitadelCastle1 extends Building {
     }
 
     private boolean canShoot() {
-        return this.timeElapsedSinceLastArrow > ARROW_RATE;
+        return this.timeElapsedSinceLastArrow > arrowRate;
+    }
+
+    public float getBuildingRange() {
+        return this.buildingRange;
     }
 
     private void shootArrow(Map map) {
         Unit destinationUnit = null;
 
         for (Unit unit : map.getUnits()) {
-            if (unit.getCoordinates().dst(this.getCoordinates()) < BUILDING_RANGE && unit.getOwner() != this.getOwner()) {
+            if (unit.getCoordinates().dst(this.getCoordinates()) < buildingRange && unit.getOwner() != this.getOwner()) {
                 destinationUnit = unit;
                 break;
             }
         }
         if (destinationUnit != null) {
-            map.sendArrow(new Arrow(this.getCoordinates(), destinationUnit, ARROW_SPEED));
+            map.sendArrow(new Arrow(this.getCoordinates(), destinationUnit, arrowSpeed));
         }
     }
 

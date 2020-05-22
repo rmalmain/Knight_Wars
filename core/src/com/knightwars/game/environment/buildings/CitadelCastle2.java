@@ -8,9 +8,13 @@ import com.knightwars.game.players.Player;
  * This is a Citadel : Has a turret and throws arrows (level 2)
  */
 public class CitadelCastle2 extends CitadelCastle1 {
+
     public CitadelCastle2(Player owner, Vector2 coordinates, int knights, boolean knightGrowth) {
         super(owner, coordinates, knights, knightGrowth);
         this.defenseLevel *= 1.5;
+        this.buildingRange *= 1.5;
+        this.arrowRate *= 1.5;
+        this.arrowSpeed *= 1.25;
     }
 
     /** Construct a building from another building.
