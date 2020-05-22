@@ -7,16 +7,16 @@ import com.knightwars.game.players.Player;
 /**
  * This is a forge : increase Knights defense
  */
-public class ForgeCastle1 extends FortifiedCastle {
-    public ForgeCastle1(Player owner, Vector2 coordinates, int knights, boolean knightGrowth) {
+public class ForgeCastle2 extends ForgeCastle1 {
+    public ForgeCastle2(Player owner, Vector2 coordinates, int knights, boolean knightGrowth) {
         super(owner, coordinates, knights, knightGrowth);
     }
 
-    public ForgeCastle1(Building building) {
+    public ForgeCastle2(Building building) {
         super(building);
     }
 
-    public ForgeCastle1 Copy() {
-        return new ForgeCastle1(this);
+    public ForgeCastle2 Copy() {
+        return new ForgeCastle2(this);
     }
 }

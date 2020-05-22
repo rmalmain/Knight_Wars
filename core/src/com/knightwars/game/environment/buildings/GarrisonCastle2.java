@@ -7,15 +7,15 @@ import com.knightwars.game.players.Player;
 /**
  * This is a Citadel : Has a turret and throws arrows
  */
-public class GarrisonCastle1 extends FortifiedCastle {
-    public GarrisonCastle1(Player owner, Vector2 coordinates, int knights, boolean knightGrowth) {
+public class GarrisonCastle2 extends GarrisonCastle1 {
+    public GarrisonCastle2(Player owner, Vector2 coordinates, int knights, boolean knightGrowth) {
         super(owner, coordinates, knights, knightGrowth);
     }
 
     /** Construct a building from another building.
      * @param building the building to copy
      */
-    public GarrisonCastle1(Building building) {
+    public GarrisonCastle2(Building building) {
         this(building.getOwner(), building.getCoordinates(), building.getKnights(), building.getCanGenerateUnits());
     }
 
