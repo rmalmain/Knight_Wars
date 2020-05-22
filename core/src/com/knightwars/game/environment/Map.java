@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
 import com.knightwars.game.InvalidYamlFormatException;
 import com.knightwars.game.YamlParser;
+import com.knightwars.game.environment.buildings.CitadelCastle1;
 import com.knightwars.game.players.Player;
 
 import java.io.FileNotFoundException;
@@ -13,6 +14,7 @@ import java.util.NoSuchElementException;
 
 public class Map {
     public static final float BUILDING_COLLISION_THRESHOLD = 0.25f;
+    public static final float ARROW_COLLISION_THRESHOLD = 0.25f;
     public static final float TIME_BETWEEN_UNITS = 0.15f;
     public static final float EPSILON_BUILDING_COORDINATES = 0.000000001f;
     public static final String BUILDINGS_LOCATION_PACKAGE = "com.knightwars.game.environment.buildings";
@@ -123,7 +125,7 @@ public class Map {
         }
 
         for (Building building : buildings) { // Update buildings
-            building.update(dt);
+            building.update(dt, this);
         }
 
         if (unitSpawnTick > TIME_BETWEEN_UNITS) { // Send units if enough time elapsed
@@ -145,6 +147,23 @@ public class Map {
             for (Queue<Unit> unitGroup : unitGroupToDelete) { // Remove empty unit groups
                 unitsToSend.remove(unitGroup);
             }
+        }
+
+        ArrayList<Arrow> arrowsToRemove = new ArrayList<>();
+
+        for (Arrow arrow : arrows) {
+            if (arrow.isArrived(ARROW_COLLISION_THRESHOLD)) {
+                deleteUnit(arrow.getDestinationUnit());
+                arrowsToRemove.add(arrow);
+            } else if (units.contains(arrow.getDestinationUnit())) {
+                arrow.update(dt);
+            } else {
+                arrowsToRemove.add(arrow);
+            }
+        }
+
+        for (Arrow arrow : arrowsToRemove) {
+            arrows.remove(arrow);
         }
     }
 
@@ -173,6 +192,14 @@ public class Map {
 
             this.unitsToSend.add(unitsToMakeSpawn);
         }
+    }
+
+    public void sendArrow(Arrow arrow) {
+        arrows.add(arrow);
+    }
+
+    public ArrayList<Arrow> getArrows() {
+        return arrows;
     }
 
     /**

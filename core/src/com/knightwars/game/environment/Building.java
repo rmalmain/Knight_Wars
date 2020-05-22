@@ -125,7 +125,7 @@ public abstract class Building {
     /** update building-related objects.
      * @param dt time parameter
      */
-    public void update(float dt) {
+    public void update(float dt, Map map) {
         this.owner.addGold(this.getGoldGeneration()*dt);
         if(this.canGenerateUnits) {
             this.addHitPoints(this.knightGeneration * dt);
