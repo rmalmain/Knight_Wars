@@ -5,11 +5,13 @@ import com.knightwars.game.environment.Building;
 import com.knightwars.game.players.Player;
 
 /**
- * This is a forge : increase Knights defense
+ * This is a forge : increase Knights defense (level 2)
  */
 public class ForgeCastle2 extends ForgeCastle1 {
     public ForgeCastle2(Player owner, Vector2 coordinates, int knights, boolean knightGrowth) {
         super(owner, coordinates, knights, knightGrowth);
+        owner.upgradeUnits();
+        this.defenseLevel *= 1.5;
     }
 
     public ForgeCastle2(Building building) {

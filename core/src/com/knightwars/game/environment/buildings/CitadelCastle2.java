@@ -10,6 +10,7 @@ import com.knightwars.game.players.Player;
 public class CitadelCastle2 extends CitadelCastle1 {
     public CitadelCastle2(Player owner, Vector2 coordinates, int knights, boolean knightGrowth) {
         super(owner, coordinates, knights, knightGrowth);
+        this.defenseLevel *= 1.5;
     }
 
     /** Construct a building from another building.
