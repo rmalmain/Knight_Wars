@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.knightwars.game.KnightWarsGame;
+import com.knightwars.game.environment.Arrow;
 import com.knightwars.game.environment.Building;
 import com.knightwars.game.environment.InvalidUpgradeException;
 import com.knightwars.game.environment.NotEnoughGoldException;
@@ -37,6 +38,7 @@ public class GameActorBuildings extends Actor {
     private final Sprite spriteNeutralBuilding;
     private final KnightWarsGame gameState;
     private final BitmapFont font;
+    private final Sprite spriteArrow;
     private Building selectedBuilding;
     private final Table upgradeTable;
     private final List<TextButton> upgradeButtons;
@@ -80,6 +82,7 @@ public class GameActorBuildings extends Actor {
 
 
         spriteNeutralBuilding = new Sprite(new Texture("buildings/neutral_building.png"));
+        spriteArrow = new Sprite(new Texture("buildings/arrow.png"));
 
         font = new BitmapFont(Gdx.files.internal("fonts/MontserratBold.ttf.fnt"),
                 Gdx.files.internal("fonts/MontserratBold.ttf_0.png"), false);
@@ -139,6 +142,13 @@ public class GameActorBuildings extends Actor {
                         Align.center);
                 upgradeTable.draw(batch, parentAlpha);
             }
+        }
+
+        // Draw arrows shot by citadels
+        ArrayList<Arrow> arrows = gameState.getMap().getArrows();
+        for (Arrow arrow : arrows) {
+            batch.draw(spriteArrow, arrow.getCoordinates().x*SCALE - spriteArrow.getWidth()/2f,
+                    arrow.getCoordinates().y*SCALE - spriteArrow.getHeight()/2f);
         }
     }
 
