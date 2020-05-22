@@ -4,7 +4,6 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Arrow {
     private Vector2 coordinates;
-    private Path path;
     private float speed;
     private Unit destinationUnit;
 
@@ -16,6 +15,10 @@ public class Arrow {
 
     public Unit getDestinationUnit() {
         return this.destinationUnit;
+    }
+
+    public Vector2 getCoordinates() {
+        return this.coordinates;
     }
 
     public void update(float dt) {
