@@ -56,11 +56,11 @@ public class KnightWarsGame {
         // TODO That should be done at generation time
         try {
             map.getBuildings().get(0).setOwner(playerRed);
-            map.getBuildings().get(0).setKnights(50);
+            map.getBuildings().get(0).setKnights(50); //TODO don't use a magic constant
             map.getBuildings().get(0).setCanGenerateUnits(true);
 
             map.getBuildings().get(1).setOwner(playerBlue);
-            map.getBuildings().get(1).setKnights(50);
+            map.getBuildings().get(1).setKnights(50); //TODO don't use a magic constant
             map.getBuildings().get(1).setCanGenerateUnits(true);
         }
         catch (IndexOutOfBoundsException e) {
