@@ -151,7 +151,7 @@ public class GameActorBuildings extends Actor {
 
             // Show range of citadel
             if (building instanceof CitadelCastle1) {
-                float range = ((CitadelCastle1) building).getBuildingRange();
+                float range = 2*((CitadelCastle1) building).getBuildingRange();
                 batch.draw(spriteRange, building.getCoordinates().x*SCALE - range*SCALE/2f,
                         building.getCoordinates().y*SCALE - range*SCALE/2f, range*SCALE, range*SCALE);
             }
