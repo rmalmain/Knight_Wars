@@ -8,21 +8,21 @@ FortifiedCastle:
   ForgeCastle1: 150
 
 CitadelCastle1:
-#  - CitadelCastle2
+  CitadelCastle2: 250
 
 GarrisonCastle1:
-#  - GarrisonCastle2
+  GarrisonCastle2: 250
 
 MarketCastle1:
-#  - MarketCastle2
+  MarketCastle2: 250
 
 ForgeCastle1:
-#  - ForgeCastle2
-#
-#CitadelCastle2:
-#
-#GarrisonCastle2:
-#
-#MarketCastle2:
-#
-#ForgeCastle2:
+  ForgeCastle2: 250
+
+CitadelCastle2:
+
+GarrisonCastle2:
+
+MarketCastle2:
+
+ForgeCastle2:
