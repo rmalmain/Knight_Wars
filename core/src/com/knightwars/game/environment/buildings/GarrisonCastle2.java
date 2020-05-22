@@ -19,7 +19,7 @@ public class GarrisonCastle2 extends GarrisonCastle1 {
         this(building.getOwner(), building.getCoordinates(), building.getKnights(), building.getCanGenerateUnits());
     }
 
-    public ClassicCastle Copy() {
-        return new FortifiedCastle(this);
+    public GarrisonCastle2 Copy() {
+        return new GarrisonCastle2(this);
     }
 }
