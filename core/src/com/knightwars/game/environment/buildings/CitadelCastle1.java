@@ -10,7 +10,7 @@ public class CitadelCastle1 extends Building {
     }
 
     public CitadelCastle1(Building building) {
-        super(building);
+        this(building.getOwner(), building.getCoordinates(), building.getKnights(), building.getCanGenerateUnits());
     }
 
     public CitadelCastle1 Copy() {

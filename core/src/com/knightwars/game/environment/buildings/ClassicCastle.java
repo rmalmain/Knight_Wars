@@ -13,7 +13,7 @@ public class ClassicCastle extends Building {
     }
 
     public ClassicCastle(Building building) {
-        super(building);
+        this(building.getOwner(), building.getCoordinates(), building.getKnights(), building.getCanGenerateUnits());
     }
 
     public ClassicCastle Copy() {
