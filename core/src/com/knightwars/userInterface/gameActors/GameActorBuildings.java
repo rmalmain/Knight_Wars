@@ -58,17 +58,26 @@ public class GameActorBuildings extends Actor {
         redSpritesBuildings.put(ClassicCastle.class, new Sprite(new Texture("buildings/red_building.png")));
         redSpritesBuildings.put(FortifiedCastle.class, new Sprite(new Texture("buildings/red_fortified_castle.png")));
         redSpritesBuildings.put(ForgeCastle1.class, new Sprite(new Texture("buildings/red_forge.png")));
+        redSpritesBuildings.put(ForgeCastle1.class, new Sprite(new Texture("buildings/red_forge.png")));
         redSpritesBuildings.put(GarrisonCastle1.class, new Sprite(new Texture("buildings/red_building.png")));
         redSpritesBuildings.put(GarrisonCastle2.class, new Sprite(new Texture("buildings/red_building.png")));
+        redSpritesBuildings.put(CitadelCastle1.class, new Sprite(new Texture("buildings/red_building.png")));
+        redSpritesBuildings.put(CitadelCastle2.class, new Sprite(new Texture("buildings/red_building.png")));
         redSpritesBuildings.put(MarketCastle1.class, new Sprite(new Texture("buildings/red_market.png")));
+        redSpritesBuildings.put(MarketCastle2.class, new Sprite(new Texture("buildings/red_market.png")));
 
 
         blueSpritesBuildings.put(ClassicCastle.class, new Sprite(new Texture("buildings/blue_building.png")));
         blueSpritesBuildings.put(FortifiedCastle.class, new Sprite(new Texture("buildings/blue_fortified_castle.png")));
         blueSpritesBuildings.put(ForgeCastle1.class, new Sprite(new Texture("buildings/blue_forge.png")));
+        blueSpritesBuildings.put(ForgeCastle2.class, new Sprite(new Texture("buildings/blue_forge.png")));
         blueSpritesBuildings.put(GarrisonCastle1.class, new Sprite(new Texture("buildings/blue_building.png")));
         blueSpritesBuildings.put(GarrisonCastle2.class, new Sprite(new Texture("buildings/blue_building.png")));
+        blueSpritesBuildings.put(CitadelCastle1.class, new Sprite(new Texture("buildings/blue_building.png")));
+        blueSpritesBuildings.put(CitadelCastle2.class, new Sprite(new Texture("buildings/blue_building.png")));
         blueSpritesBuildings.put(MarketCastle1.class, new Sprite(new Texture("buildings/blue_market.png")));
+        blueSpritesBuildings.put(MarketCastle2.class, new Sprite(new Texture("buildings/blue_market.png")));
+
 
         spriteNeutralBuilding = new Sprite(new Texture("buildings/neutral_building.png"));
 
