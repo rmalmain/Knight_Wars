@@ -133,6 +133,13 @@ public class GameActorBuildings extends Actor {
 
         // Draw the buildings
         for (Building building : buildings) {
+            // Show range of citadel
+            if (building instanceof CitadelCastle1) {
+                float range = 2*((CitadelCastle1) building).getBuildingRange();
+                batch.draw(spriteRange, building.getCoordinates().x*SCALE - range*SCALE/2f,
+                        building.getCoordinates().y*SCALE - range*SCALE/2f, range*SCALE, range*SCALE);
+            }
+
             // Draw the building
             Sprite currentSprite = determineBuildingSprite(building);
             batch.draw(currentSprite, building.getCoordinates().x*SCALE - currentSprite.getWidth()/2f,
@@ -147,13 +154,6 @@ public class GameActorBuildings extends Actor {
                 upgradeTable.setPosition(building.getCoordinates().x*SCALE, building.getCoordinates().y*SCALE,
                         Align.center);
                 upgradeTable.draw(batch, parentAlpha);
-            }
-
-            // Show range of citadel
-            if (building instanceof CitadelCastle1) {
-                float range = 2*((CitadelCastle1) building).getBuildingRange();
-                batch.draw(spriteRange, building.getCoordinates().x*SCALE - range*SCALE/2f,
-                        building.getCoordinates().y*SCALE - range*SCALE/2f, range*SCALE, range*SCALE);
             }
         }
 
