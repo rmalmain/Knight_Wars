@@ -13,7 +13,7 @@ public class MarketCastle2 extends MarketCastle1 {
     }
 
     public MarketCastle2(Building building) {
-        super(building);
+        this(building.getOwner(), building.getCoordinates(), building.getKnights(), building.getCanGenerateUnits());
     }
 
     public MarketCastle2 Copy() {

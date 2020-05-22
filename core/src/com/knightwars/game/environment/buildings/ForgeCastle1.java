@@ -10,7 +10,7 @@ public class ForgeCastle1 extends Building {
     }
 
     public ForgeCastle1(Building building) {
-        super(building);
+        this(building.getOwner(), building.getCoordinates(), building.getKnights(), building.getCanGenerateUnits());
     }
 
     public ForgeCastle1 Copy() {
