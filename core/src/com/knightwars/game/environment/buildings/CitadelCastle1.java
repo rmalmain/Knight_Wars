@@ -1,7 +1,10 @@
 package com.knightwars.game.environment.buildings;
 
 import com.badlogic.gdx.math.Vector2;
+import com.knightwars.game.environment.Arrow;
 import com.knightwars.game.environment.Building;
+import com.knightwars.game.environment.Map;
+import com.knightwars.game.environment.Unit;
 import com.knightwars.game.players.Player;
 
 /**
@@ -34,13 +37,28 @@ public class CitadelCastle1 extends Building {
         return this.timeElapsedSinceLastArrow > ARROW_RATE;
     }
 
-    private void shootArrow() {
-        this.timeElapsedSinceLastArrow = 0f;
+    private void shootArrow(Map map) {
+        Unit destinationUnit = null;
+
+        for (Unit unit : map.getUnits()) {
+            if (unit.getCoordinates().dst(this.getCoordinates()) < BUILDING_RANGE && unit.getOwner() != this.getOwner()) {
+                destinationUnit = unit;
+                break;
+            }
+        }
+        if (destinationUnit != null) {
+            map.sendArrow(new Arrow(this.getCoordinates(), destinationUnit, ARROW_SPEED));
+        }
     }
 
     @Override
-    public void update(float dt) {
-        super.update(dt);
-
+    public void update(float dt, Map map) {
+        super.update(dt, map);
+        if (canShoot()) {
+            this.timeElapsedSinceLastArrow = 0f;
+            shootArrow(map);
+        } else {
+            this.timeElapsedSinceLastArrow += dt;
+        }
     }
 }
