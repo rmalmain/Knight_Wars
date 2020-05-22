@@ -4,6 +4,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.knightwars.game.environment.Building;
 import com.knightwars.game.players.Player;
 
+/**
+ * This is a Garrison Castle : specialized in Knights generation
+ */
 public class GarrisonCastle1 extends FortifiedCastle {
     public final static float BUILDING_RANGE = 1.0f;
     public final static float ARROW_SPEED = 2.0f;
