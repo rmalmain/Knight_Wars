@@ -54,7 +54,6 @@ public class KnightWarsGame {
 
     /** Attribute a building to each player. Every other buildings are attributed to the neutral player. */
     public void attributeBuildings(Player playerRed, Player playerBlue) throws NoBuildingFoundException {
-        // TODO That should be done at generation time
         try {
             map.getBuildings().get(0).setOwner(playerRed);
             map.getBuildings().get(0).setKnights(startNumberOfKnights);
