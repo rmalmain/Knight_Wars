@@ -2,11 +2,14 @@ package com.knightwars.game.players;
 
 import com.knightwars.game.KnightWarsGame;
 import com.knightwars.game.environment.Building;
+import com.knightwars.game.environment.InvalidUpgradeException;
+import com.knightwars.game.environment.NotEnoughGoldException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * A player who makes automated moves.
@@ -62,6 +65,23 @@ public class ComputerPlayer extends Player {
 
         // Let's find a good move
         for (Building source : buildings) {
+
+            if (ThreadLocalRandom.current().nextInt(1, 101) > 99 && source.getOwner() == this) {
+                try {
+                    Map<Class<? extends Building>, Integer> availableUpgradesMap =
+                        game.getMap().availableUpgrade(source);
+                    ArrayList<Class<? extends Building>> availableUpgradesClassList = new ArrayList<>(availableUpgradesMap.keySet());
+
+                    game.getMap().upgradeBuilding(source, availableUpgradesClassList.get(ThreadLocalRandom.current().nextInt(0, availableUpgradesClassList.size())));
+                }
+                catch (InvalidUpgradeException e) {
+                }
+                catch (NotEnoughGoldException e) {
+                }
+                finally {
+                    continue;
+                }
+            }
             for (Building destination : buildings) {
                 if (source == destination) {
                     continue;
