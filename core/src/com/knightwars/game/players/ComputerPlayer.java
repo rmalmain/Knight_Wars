@@ -27,6 +27,11 @@ public class ComputerPlayer extends Player {
     float SAFETY_MARGIN_SYNC = 2.5f;
 
     /**
+     * Probability of trying to update a building is 1/10 000.
+     */
+    int UPGRADE_PROBABILITY = 1000;
+
+    /**
      * Player constructor.
      *
      * @param name  The name of the player
@@ -66,7 +71,7 @@ public class ComputerPlayer extends Player {
         // Let's find a good move
         for (Building source : buildings) {
 
-            if (ThreadLocalRandom.current().nextInt(1, 101) > 99 && source.getOwner() == this) {
+            if (ThreadLocalRandom.current().nextInt(1, UPGRADE_PROBABILITY+1) > UPGRADE_PROBABILITY-1 && source.getOwner() == this) {
                 try {
                     Map<Class<? extends Building>, Integer> availableUpgradesMap =
                         game.getMap().availableUpgrade(source);
