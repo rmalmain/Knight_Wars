@@ -98,11 +98,12 @@ public class MapFactory {
             BufferedReader buf = new BufferedReader(new InputStreamReader(file));
             String line = buf.readLine();
             StringBuilder sb = new StringBuilder();
-            while(line != null){
+            while (line != null) {
                 sb.append(line).append("\n");
                 line = buf.readLine();
             }
             fileAsString = sb.toString();
+            buf.close();
         } catch (IOException e) {
             System.out.println("Map file not found");
             e.printStackTrace();
