@@ -12,17 +12,20 @@ public class Unit {
     private Building departureBuilding;
     private Building destinationBuilding;
 
-    /** Unit constructor.
-     * @param owner the player owning the unit
-     * @param departureBuilding the stating point of the unit
-     * @param destinationBuilding the building where the unit goes
+    /**
+     * Unit constructor.
+     *
+     * @param owner               The player owning the unit
+     * @param departureBuilding   The stating point of the unit
+     * @param destinationBuilding The building where the unit goes
+     * @param path                A list of points followed by the unit
      */
-    public Unit(Player owner, Building departureBuilding, Building destinationBuilding) {
+    public Unit(Player owner, Building departureBuilding, Building destinationBuilding, Path path) {
         this.owner = owner;
+        this.path = path;
         this.departureBuilding = departureBuilding;
         this.destinationBuilding = destinationBuilding;
         this.speed = DEFAULT_UNIT_SPEED;
-        this.path = new Path(departureBuilding.getCoordinates(), destinationBuilding.getCoordinates(), this);
     }
 
     public Player getOwner() {
