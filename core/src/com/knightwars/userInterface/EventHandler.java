@@ -48,8 +48,6 @@ public class EventHandler {
         Building destinationBuilding = getSelectedBuilding(destinationBuildingCoords);
 
         if (selectedBuilding != null && destinationBuilding != null) {
-            // TODO Extract this code to fit the principle of an event-based game (we'll use the very same
-            //  events for the AI to play)
             if (selectedBuilding == destinationBuilding) {
                 // Display upgrade options
                 actorBuildings.showUpgrade(selectedBuilding);

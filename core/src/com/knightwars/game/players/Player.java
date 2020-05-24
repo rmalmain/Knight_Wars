@@ -24,7 +24,7 @@ abstract public class Player {
         this.name = name;
         this.color = color;
         this.unitLevel = 1f;
-        this.gold = 5000f; // Default golds, to modify if necessary
+        this.gold = 1000f; // Default golds, to modify if necessary
         this.unitPercentage = 0.25f; // Default percentage of units to send
     }
 

@@ -56,7 +56,6 @@ public class ComputerPlayer extends Player {
         List<Building> buildings = game.getMap().getBuildings();
         int reserveUnits = 0; // Total number of the computer's units
 
-        // TODO Temporary workaround, that can be fixed by adding more details to buildings
         Map<Building, Integer> remainingUnits = new HashMap<>();
         for (Building building : buildings) {
             remainingUnits.put(building, building.getKnights());
@@ -127,9 +126,6 @@ public class ComputerPlayer extends Player {
                         List<Object> move = new ArrayList<>();
                         move.add(source);
                         move.add(target);
-                        // TODO This sends in the end 100% of the building units
-                        //  because the synchronized attack is sent multiple times. That won't happen
-                        //  with a more detailed game state, that also contains incoming and in progress attacks.
                         move.add(0.5f);
                         moves.add(move);
                     }
@@ -139,7 +135,6 @@ public class ComputerPlayer extends Player {
         }
 
         for (List<Object> move : moves) {
-            // TODO Remove those unchecked casts; implement an event system with a stack
             game.getMap().sendUnit((Building) move.get(0), (Building) move.get(1), (float) move.get(2));
         }
 

@@ -23,7 +23,6 @@ public class MainMenuScreen implements Screen {
     private final FillViewport viewport;
     private final Stage stage;
 
-
     public MainMenuScreen(final Display display, GameManager gameManager) {
         SpriteBatch batch = new SpriteBatch();
 
@@ -51,9 +50,6 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        // Create the options button
-        TextButton optionsButton = new TextButton("Settings", skin);
-
         // Create the quit button
         TextButton quitButton = new TextButton("Quit", skin);
         quitButton.addListener(new ClickListener() {
@@ -72,7 +68,6 @@ public class MainMenuScreen implements Screen {
         // Create a table to contain the buttons, scale them and add padding
         Table menuTable = new Table();
         menuTable.add(playButton).width(playButton.getWidth()*buttonScale).height(playButton.getHeight()*buttonScale).pad(buttonPadding).row();
-        menuTable.add(optionsButton).width(playButton.getWidth()*buttonScale).height(playButton.getHeight()*buttonScale).pad(buttonPadding).row();
         menuTable.add(quitButton).width(playButton.getWidth()*buttonScale).height(playButton.getHeight()*buttonScale).pad(buttonPadding).row();
         menuTable.setPosition(mapSize.x*SCALE/2f, buttonPosY, Align.center);
 
