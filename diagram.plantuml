@@ -177,6 +177,15 @@ package com.knightwars {
         class GarrisonCastle1
         class MarketCastle1
       }
+
+      class TroopMovement {
+        - owner: Player
+        - departureBuilding : Building
+        - destinationBuilding : Building
+        - originalPath : Path
+        + removeUnit(unit: Unit)
+        + update(dt : float)
+      }
     }
   }
 }
@@ -203,6 +212,10 @@ MapFactory ..> Map: crée
 GameManager o-- KnightWarsGame
 KnightWarsGame o-- Map
 Map o-- Unit
+Map o-- TroopMovement
+TroopMovement o-- Player
+TroopMovement o-- Path
+
 Unit o-- Building
 Unit o-- Path
 Building o-- Player
