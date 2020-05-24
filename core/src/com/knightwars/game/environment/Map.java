@@ -1,16 +1,13 @@
 package com.knightwars.game.environment;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Queue;
 import com.knightwars.game.InvalidYamlFormatException;
 import com.knightwars.game.YamlParser;
-import com.knightwars.game.environment.buildings.CitadelCastle1;
 import com.knightwars.game.players.Player;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.NoSuchElementException;
+import java.util.List;
 
 public class Map {
     public static final float BUILDING_COLLISION_THRESHOLD = 0.25f;
@@ -20,11 +17,9 @@ public class Map {
     public static final String BUILDINGS_LOCATION_PACKAGE = "com.knightwars.game.environment.buildings";
 
     private ArrayList<Building> buildings;
-    private ArrayList<Queue<Unit>> unitsToSend;
-    private ArrayList<Unit> units;
+    private List<TroopMovement> movements;
     private ArrayList<com.knightwars.game.environment.Arrow> arrows;
 
-    private float unitSpawnTick;
     private Vector2 size;
     private java.util.Map<String, java.util.Map<String, Integer>> buildingHierarchy;
 
@@ -37,10 +32,9 @@ public class Map {
     public Map(float width, float height, String yamlUpgradeHierarchyPath) {
         this.size = new Vector2(width, height);
         this.buildings = new ArrayList<>();
-        this.units = new ArrayList<>();
-        this.unitsToSend = new ArrayList<>();
         this.arrows = new ArrayList<>();
-        this.unitSpawnTick = 0f;
+
+        this.movements = new ArrayList<>();
         try {
             this.buildingHierarchy = YamlParser.yamlToJavaMap(yamlUpgradeHierarchyPath);
             YamlParser.yamlValidity(this.buildingHierarchy, Building.class, BUILDINGS_LOCATION_PACKAGE);
@@ -61,26 +55,12 @@ public class Map {
     }
 
     /**
-     * Add a unit to the map
-     *
-     * @param unit unit to add to the map
-     */
-    private void addUnit(Unit unit) {
-        try {
-            unit.getDepartureBuilding().unitDeparture();
-            units.add(unit);
-        } catch (NotEnoughKnightsException e) {
-            e.getStackTrace();
-        }
-    }
-
-    /**
      * Delete a unit from the map
      *
      * @param unit the unit to delete
      */
     public void deleteUnit(Unit unit) {
-        if (!units.remove(unit)) {
+        if (!unit.getRegiment().removeUnit(unit)) {
             throw new NoUnitFoundException("The unit wasn't found in unit list");
         }
     }
@@ -94,6 +74,10 @@ public class Map {
     }
 
     public ArrayList<Unit> getUnits() {
+        ArrayList<Unit> units = new ArrayList<>();
+        for (TroopMovement movement : this.movements) {
+            units.addAll(movement.getUnits());
+        }
         return units;
     }
 
@@ -103,50 +87,13 @@ public class Map {
      * @param dt the time parameter of the update
      */
     public void update(float dt) {
-        ArrayList<Unit> unitsToDelete = new ArrayList<>();
 
-        this.unitSpawnTick += dt;
-
-        for (Unit unit : units) { // Update units on the map
-            unit.update(dt);
-            if (unit.isArrived(BUILDING_COLLISION_THRESHOLD)) { // if units arrived to the building
-                try {
-                    unit.getDestinationBuilding().unitArrival(unit);
-                } catch (AttackerWonFightException e) {
-                    e.getAttackedBuilding().setOwner(e.getAttackingPlayer());
-                    e.getAttackedBuilding().setCanGenerateUnits(true);
-                }
-                unitsToDelete.add(unit);
-            }
-        }
-
-        for (Unit unit : unitsToDelete) { // Delete arrived units
-            this.units.remove(unit);
+        for (TroopMovement movement : this.movements) {
+            movement.update(dt);
         }
 
         for (Building building : buildings) { // Update buildings
             building.update(dt, this);
-        }
-
-        if (unitSpawnTick > TIME_BETWEEN_UNITS) { // Send units if enough time elapsed
-            unitSpawnTick = 0f;
-            ArrayList<Queue<Unit>> unitGroupToDelete = new ArrayList<>();
-
-            for (Queue<Unit> unitGroup : unitsToSend) { // all units waiting are sent
-                try {
-                    addUnit(unitGroup.first());
-                    unitGroup.removeFirst();
-                } catch (NoSuchElementException e) {
-                    continue;
-                } // May be a bad idea ?
-                if (unitGroup.isEmpty()) {
-                    unitGroupToDelete.add(unitGroup);
-                }
-            }
-
-            for (Queue<Unit> unitGroup : unitGroupToDelete) { // Remove empty unit groups
-                unitsToSend.remove(unitGroup);
-            }
         }
 
         ArrayList<Arrow> arrowsToRemove = new ArrayList<>();
@@ -155,9 +102,10 @@ public class Map {
             if (arrow.isArrived(ARROW_COLLISION_THRESHOLD)) {
                 try {
                     deleteUnit(arrow.getDestinationUnit());
-                } catch (NoUnitFoundException nothing) {}
+                } catch (NoUnitFoundException nothing) {
+                }
                 arrowsToRemove.add(arrow);
-            } else if (units.contains(arrow.getDestinationUnit())) {
+            } else if (this.getUnits().contains(arrow.getDestinationUnit())) {
                 arrow.update(dt);
             } else {
                 arrowsToRemove.add(arrow);
@@ -184,17 +132,21 @@ public class Map {
                 throw new RuntimeException("The percentage of unit to send is wrong.");
             }
 
-            int knightNumberToSend = (int) Math.floor(departureBuilding.getKnights() * percentage);
+            // Number of units to be sent
+            int number = (int) Math.floor(departureBuilding.getKnights() * percentage);
 
-            Queue<Unit> unitsToMakeSpawn = new Queue<>();
-
-            for (int i = 0; i < knightNumberToSend; i++) {
-                Path path = Path.findPath(this, departureBuilding, arrivalBuilding);
-                Unit unit = new Unit(departureBuilding.getOwner(), departureBuilding, arrivalBuilding, path);
-                unitsToMakeSpawn.addLast(unit);
+            // Prevent overlapping regiments
+            for (TroopMovement movement : this.movements) {
+                if (movement.getDepartureBuilding() == departureBuilding
+                        && movement.getDestinationBuilding() == arrivalBuilding && !movement.canSendNextAttack()) {
+                    return;
+                }
             }
 
-            this.unitsToSend.add(unitsToMakeSpawn);
+            Path path = Path.findPath(this, departureBuilding, arrivalBuilding);
+            TroopMovement movement = new TroopMovement(departureBuilding.getOwner(), departureBuilding, arrivalBuilding,
+                    path, number);
+            this.movements.add(movement);
         }
     }
 

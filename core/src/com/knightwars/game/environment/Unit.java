@@ -11,6 +11,7 @@ public class Unit {
     private float speed;
     private Building departureBuilding;
     private Building destinationBuilding;
+    private TroopMovement regiment;
 
     /**
      * Unit constructor.
@@ -20,11 +21,13 @@ public class Unit {
      * @param destinationBuilding The building where the unit goes
      * @param path                A list of points followed by the unit
      */
-    public Unit(Player owner, Building departureBuilding, Building destinationBuilding, Path path) {
+    public Unit(Player owner, Building departureBuilding, Building destinationBuilding, Path path,
+            TroopMovement regiment) {
         this.owner = owner;
         this.path = path;
         this.departureBuilding = departureBuilding;
         this.destinationBuilding = destinationBuilding;
+        this.regiment = regiment;
         this.speed = DEFAULT_UNIT_SPEED;
     }
 
@@ -36,26 +39,38 @@ public class Unit {
         return this.speed;
     }
 
+    public TroopMovement getRegiment() {
+        return this.regiment;
+    }
+
     public void setSpeed(float speed) {
         this.speed = speed;
     }
 
-    public Building getDepartureBuilding() { return this.departureBuilding; }
+    public Building getDepartureBuilding() {
+        return this.departureBuilding;
+    }
 
-    public Building getDestinationBuilding() { return this.destinationBuilding; }
+    public Building getDestinationBuilding() {
+        return this.destinationBuilding;
+    }
 
     public Vector2 getCoordinates() {
         return this.path.getCurrentPosition();
     }
 
-    /** Update the unit
+    /**
+     * Update the unit
+     *
      * @param dt time parameter
      */
     public void update(float dt) {
         this.path.update(dt);
     }
 
-    /** Know if a unit arrived at building destination
+    /**
+     * Know if a unit arrived at building destination
+     *
      * @param threshold the collision threshold
      * @return true if the unit arrived, false otherwise
      */
