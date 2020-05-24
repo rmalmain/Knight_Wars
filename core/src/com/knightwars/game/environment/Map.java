@@ -189,7 +189,9 @@ public class Map {
             Queue<Unit> unitsToMakeSpawn = new Queue<>();
 
             for (int i = 0; i < knightNumberToSend; i++) {
-                unitsToMakeSpawn.addLast(new Unit(departureBuilding.getOwner(), departureBuilding, arrivalBuilding));
+                Path path = Path.findPath(this, departureBuilding, arrivalBuilding);
+                Unit unit = new Unit(departureBuilding.getOwner(), departureBuilding, arrivalBuilding, path);
+                unitsToMakeSpawn.addLast(unit);
             }
 
             this.unitsToSend.add(unitsToMakeSpawn);
