@@ -36,12 +36,28 @@ public class Path {
         this.time = 0;
     }
 
+    public Path(Path p) {
+        this(p.getPointList(), p.getMarkerList(), p.getTotalTime());
+    }
+
     public Vector2 getArrivalPoint() {
         return this.arrivalPoint;
     }
 
     public Vector2 getCurrentPosition() {
         return this.currentPosition;
+    }
+
+    public List<Vector2> getPointList() {
+        return this.pointList;
+    }
+
+    public List<Float> getMarkerList() {
+        return this.markerList;
+    }
+
+    public float getTotalTime() {
+        return this.totalTime;
     }
 
     /**
@@ -149,5 +165,22 @@ public class Path {
 
         float totalTime = totalDistance / Unit.DEFAULT_UNIT_SPEED;
         return new Path(pointList, markerList, totalTime);
+    }
+
+    /**
+     * Create different paths for units walking in battle line.
+     */
+    static public Path pathVariant(Path originalPath, float variant) {
+        List<Vector2> pointList = originalPath.getPointList();
+        List<Float> markerList = originalPath.getMarkerList();
+
+        Vector2 direction = new Vector2(pointList.get(pointList.size() - 1)).sub(pointList.get(0)).nor();
+        Vector2 orthogonal = new Vector2(direction.y, -direction.x).scl(variant);
+
+        List<Vector2> variantPointList = new ArrayList<>();
+        for (Vector2 point : pointList) {
+            variantPointList.add(new Vector2(point).add(orthogonal));
+        }
+        return new Path(variantPointList, markerList, originalPath.getTotalTime());
     }
 }
